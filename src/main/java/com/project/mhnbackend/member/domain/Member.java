@@ -1,4 +1,4 @@
-package com.project.mhnbackend.member.model;
+package com.project.mhnbackend.member.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @Table(name="member")
 @Builder
-public class MemberEntity {
+public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

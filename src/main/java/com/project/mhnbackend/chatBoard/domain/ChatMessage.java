@@ -1,4 +1,4 @@
-package com.project.mhnbackend.chatBoard.model;
+package com.project.mhnbackend.chatBoard.domain;
 
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;

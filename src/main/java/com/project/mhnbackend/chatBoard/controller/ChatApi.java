@@ -1,6 +1,6 @@
-package com.project.mhnbackend.chatBoard.api;
+package com.project.mhnbackend.chatBoard.controller;
 
-import com.project.mhnbackend.chatBoard.model.ChatMessage;
+import com.project.mhnbackend.chatBoard.domain.ChatMessage;
 import com.project.mhnbackend.chatBoard.service.ChatMessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
