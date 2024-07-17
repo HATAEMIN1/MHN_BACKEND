@@ -42,8 +42,8 @@ dependencies {
 	implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.19'
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '3.3.0'
-  // iamport 결제모듈
-  implementation 'com.github.iamport:iamport-rest-client-java:0.2.23'   //결제 모듈
+  	// iamport 결제모듈
+  	implementation 'com.github.iamport:iamport-rest-client-java:0.2.23'   //결제 모듈
 
 
 }

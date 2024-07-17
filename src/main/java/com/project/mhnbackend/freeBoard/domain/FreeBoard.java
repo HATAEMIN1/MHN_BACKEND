@@ -26,7 +26,7 @@ public class FreeBoard {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @OneToOne

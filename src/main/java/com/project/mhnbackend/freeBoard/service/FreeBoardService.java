@@ -52,7 +52,7 @@ public class FreeBoardService {
                 .title(freeBoardRequestDTO.getTitle())
                 .content(freeBoardRequestDTO.getContent())
                 .createdAt(LocalDateTime.now())
-                .member(member)
+//                .member(member)
                 .board(board)
                 .build();
 
