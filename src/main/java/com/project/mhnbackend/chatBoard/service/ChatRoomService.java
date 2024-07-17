@@ -1,6 +1,6 @@
 package com.project.mhnbackend.chatBoard.service;
 
-import com.project.mhnbackend.chatBoard.model.ChatRoomEntity;
+import com.project.mhnbackend.chatBoard.domain.ChatRoom;
 import com.project.mhnbackend.chatBoard.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ public class ChatRoomService {
 
     public Optional<String> getChatRoomId(Long senderId, Long recipientId, boolean createNewRoomIfNotExists) {
         return chatRoomRepository.findBySenderIdAndRecipientId(senderId, recipientId)
-                .map(ChatRoomEntity::getChatId)
+                .map(ChatRoom::getChatId)
                 .or(()->{
                     if (createNewRoomIfNotExists) {
                         var chatId = createChatId(senderId, recipientId);
@@ -26,12 +26,12 @@ public class ChatRoomService {
 
     private String createChatId(Long senderId, Long recipientId) {
         var chatId = String.format("%s_%s", senderId+"", recipientId+"");
-        ChatRoomEntity senderRecipient = ChatRoomEntity.builder()
+        ChatRoom senderRecipient = ChatRoom.builder()
                 .chatId(chatId)
                 .senderId(senderId)
                 .recipientId(recipientId)
                 .build();
-        ChatRoomEntity recipientSender = ChatRoomEntity.builder()
+        ChatRoom recipientSender = ChatRoom.builder()
                 .chatId(chatId)
                 .senderId(senderId)
                 .recipientId(recipientId)

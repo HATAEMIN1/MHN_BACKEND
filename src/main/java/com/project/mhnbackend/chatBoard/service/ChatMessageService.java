@@ -1,6 +1,6 @@
 package com.project.mhnbackend.chatBoard.service;
 
-import com.project.mhnbackend.chatBoard.model.ChatMessage;
+import com.project.mhnbackend.chatBoard.domain.ChatMessage;
 import com.project.mhnbackend.chatBoard.repository.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

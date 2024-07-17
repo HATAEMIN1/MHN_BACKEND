@@ -1,8 +1,8 @@
-package com.project.mhnbackend.member.api;
+package com.project.mhnbackend.member.controller;
 
-import com.project.mhnbackend.member.api.request.CreateAndEditMemberRequest;
-import com.project.mhnbackend.member.api.response.MemberView;
-import com.project.mhnbackend.member.model.MemberEntity;
+import com.project.mhnbackend.member.controller.request.CreateAndEditMemberRequest;
+import com.project.mhnbackend.member.controller.response.MemberView;
+import com.project.mhnbackend.member.domain.Member;
 import com.project.mhnbackend.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +26,7 @@ public class MemberApi {
     }
 
     @PostMapping("/member")
-    public MemberEntity createMember(@RequestBody CreateAndEditMemberRequest request) {
+    public Member createMember(@RequestBody CreateAndEditMemberRequest request) {
         return memberService.createMember(request);
     }
 

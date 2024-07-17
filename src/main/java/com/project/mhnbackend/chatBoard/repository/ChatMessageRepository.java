@@ -1,6 +1,6 @@
 package com.project.mhnbackend.chatBoard.repository;
 
-import com.project.mhnbackend.chatBoard.model.ChatMessage;
+import com.project.mhnbackend.chatBoard.domain.ChatMessage;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

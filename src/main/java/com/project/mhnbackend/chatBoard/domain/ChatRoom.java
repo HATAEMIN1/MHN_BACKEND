@@ -1,4 +1,4 @@
-package com.project.mhnbackend.chatBoard.model;
+package com.project.mhnbackend.chatBoard.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name="chatroom")
 @Builder
-public class ChatRoomEntity {
+public class ChatRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

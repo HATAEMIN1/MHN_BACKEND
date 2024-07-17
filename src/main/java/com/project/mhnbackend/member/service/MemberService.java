@@ -1,8 +1,8 @@
 package com.project.mhnbackend.member.service;
 
-import com.project.mhnbackend.member.api.request.CreateAndEditMemberRequest;
-import com.project.mhnbackend.member.api.response.MemberView;
-import com.project.mhnbackend.member.model.MemberEntity;
+import com.project.mhnbackend.member.controller.request.CreateAndEditMemberRequest;
+import com.project.mhnbackend.member.controller.response.MemberView;
+import com.project.mhnbackend.member.domain.Member;
 import com.project.mhnbackend.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +19,9 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public MemberEntity createMember(CreateAndEditMemberRequest request) {
+    public Member createMember(CreateAndEditMemberRequest request) {
 //		MemberEntity member = new MemberEntity(request.getEmail(), ...);
-        MemberEntity member = MemberEntity.builder()
+        Member member = Member.builder()
                 .email(request.getEmail())
                 .fullName(request.getFullName())
                 .nickName(request.getNickName())
@@ -35,7 +35,7 @@ public class MemberService {
 
     @Transactional
     public void editMember(Long memberId, CreateAndEditMemberRequest request) {
-        MemberEntity member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("member does not exist"));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("member does not exist"));
         member.changeFullName(request.getFullName());
         member.changeNickName(request.getNickName());
         member.changePassword(request.getPassword());
@@ -44,12 +44,12 @@ public class MemberService {
     }
 
     public void deleteMember(Long memberId) {
-        MemberEntity member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("member does not exist"));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("member does not exist"));
         memberRepository.delete(member);
     }
 
     public List<MemberView> getAllMembers() {
-        List<MemberEntity> members = memberRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<Member> members = memberRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
         return members.stream().map(member -> MemberView.builder()
                 .id(member.getId()).email(member.getEmail())
                 .fullName(member.getFullName()).nickName(member.getNickName())
@@ -59,7 +59,7 @@ public class MemberService {
     }
 
     public MemberView getMember(Long memberId) {
-        MemberEntity member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("member does not exist"));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("member does not exist"));
         return MemberView.builder()
                 .id(member.getId()).email(member.getEmail())
                 .fullName(member.getFullName()).nickName(member.getNickName())
