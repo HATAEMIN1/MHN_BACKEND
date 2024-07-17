@@ -1,10 +1,12 @@
 package com.project.mhnbackend.chatBoard.service;
 
+import com.project.mhnbackend.chatBoard.domain.ChatMessage;
 import com.project.mhnbackend.chatBoard.domain.ChatRoom;
 import com.project.mhnbackend.chatBoard.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,17 +19,17 @@ public class ChatRoomService {
                 .map(ChatRoom::getChatId)
                 .or(()->{
                     if (createNewRoomIfNotExists) {
-                        var chatId = createChatId(senderId, recipientId);
+                        var chatId = createChatRoomId(senderId, recipientId);
                         return Optional.of(chatId);
                     }
                     return Optional.empty();
                 });
     }
 
-    private String createChatId(Long senderId, Long recipientId) {
+    private String createChatRoomId(Long senderId, Long recipientId) {
         var chatId = String.format("%s_%s", senderId+"", recipientId+"");
         ChatRoom senderRecipient = ChatRoom.builder()
-                .chatId(chatId)
+                .chatId(chatId) // chatId is the chatroom id
                 .senderId(senderId)
                 .recipientId(recipientId)
                 .build();
@@ -39,5 +41,9 @@ public class ChatRoomService {
         chatRoomRepository.save(senderRecipient);
         chatRoomRepository.save(recipientSender);
         return chatId;
+    }
+
+    public List<ChatMessage> getMessagesForRoom(String chatId) {
+        return chatRoomRepository.findByChatId(chatId);
     }
 }

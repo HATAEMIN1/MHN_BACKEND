@@ -16,7 +16,7 @@ public class ChatApi {
 
     @MessageMapping("/private-message")
     public ChatMessage receiveMessage(@Payload ChatMessage chatMessage) {
-        ChatMessage savedMsg = chatMessageService.save(chatMessage);
+        ChatMessage savedMsg = chatMessageService.saveMessage(chatMessage);
         simpMessagingTemplate.convertAndSendToUser(String.valueOf(chatMessage.getRecipientId()), "/private", chatMessage);
         System.out.println(savedMsg.toString());
         return savedMsg;
