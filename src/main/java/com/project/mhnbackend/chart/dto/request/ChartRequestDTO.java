@@ -25,4 +25,8 @@ public class ChartRequestDTO {
 
     @Builder.Default
     private List<String> uploadFileNames = new ArrayList<>();
+
+    public void setUploadFileNames(List<String> uploadFileNames) {
+        this.uploadFileNames = uploadFileNames;
+    }
 }

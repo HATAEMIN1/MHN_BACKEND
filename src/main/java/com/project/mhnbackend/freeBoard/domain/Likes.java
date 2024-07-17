@@ -2,7 +2,7 @@ package com.project.mhnbackend.freeBoard.domain;
 
 import java.time.LocalDateTime;
 
-import com.project.mhnbackend.user.domain.Member;
+import com.project.mhnbackend.member.domain.Member;
 
 import jakarta.persistence.*;
 import lombok.*;
