@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Builder
 public class ChartRequestDTO {
-    private Long petId;
+//    private Long petId;
     private String hospitalName;
     private String petName;
     private String visitDate;
