@@ -1,16 +1,16 @@
-package com.project.mhnbackend.user.domain;
+package com.project.mhnbackend.member.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "user_detail")
+@Table(name = "member_detail")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserDetail {
+public class MemberDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;

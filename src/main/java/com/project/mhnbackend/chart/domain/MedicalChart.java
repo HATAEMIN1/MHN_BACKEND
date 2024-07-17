@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "medicalChartImage")
 public class MedicalChart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +26,9 @@ public class MedicalChart {
     private String treatmentDate;
     private LocalDateTime createdAt;
     @ElementCollection
+    @Builder.Default
     private List<MedicalChartImage> medicalChartImage = new ArrayList<>();
+
     public void addImage(MedicalChartImage image) {
         image.setOrd(this.medicalChartImage.size());
         medicalChartImage.add(image);

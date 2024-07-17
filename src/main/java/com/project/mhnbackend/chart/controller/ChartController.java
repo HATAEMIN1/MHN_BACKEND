@@ -1,5 +1,6 @@
 package com.project.mhnbackend.chart.controller;
 
+import com.project.mhnbackend.chart.domain.MedicalChart;
 import com.project.mhnbackend.chart.dto.request.ChartRequestDTO;
 import com.project.mhnbackend.chart.service.ChartService;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChartController {
     private final ChartService chartService;
     @PostMapping("/charts")
-    public String createCharts(@RequestBody ChartRequestDTO chartRequestDTO){
-        chartService.createChart(chartRequestDTO);
-        return "OK";
+    public MedicalChart createCharts(ChartRequestDTO chartRequestDTO){
+        return chartService.createChart(chartRequestDTO);
     }
 }

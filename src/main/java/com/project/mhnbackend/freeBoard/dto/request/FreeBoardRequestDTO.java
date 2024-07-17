@@ -5,11 +5,10 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.project.mhnbackend.user.domain.Member;
+import com.project.mhnbackend.member.domain.Member;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

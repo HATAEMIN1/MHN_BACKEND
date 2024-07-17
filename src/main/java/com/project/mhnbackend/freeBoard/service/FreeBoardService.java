@@ -8,7 +8,7 @@ import com.project.mhnbackend.freeBoard.domain.FreeBoard;
 import com.project.mhnbackend.freeBoard.dto.request.FreeBoardRequestDTO;
 import com.project.mhnbackend.freeBoard.repository.BoardRepository;
 import com.project.mhnbackend.freeBoard.repository.FreeBoardRepository;
-import com.project.mhnbackend.user.domain.Member;
+import com.project.mhnbackend.member.domain.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;

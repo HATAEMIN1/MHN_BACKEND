@@ -1,12 +1,9 @@
-package com.project.mhnbackend.user.domain;
+package com.project.mhnbackend.member.domain;
 
-import com.project.mhnbackend.freeBoard.domain.FreeBoard;
-import com.project.mhnbackend.freeBoard.domain.Likes;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
 @Table(name = "member")

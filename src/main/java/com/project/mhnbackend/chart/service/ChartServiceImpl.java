@@ -3,18 +3,30 @@ package com.project.mhnbackend.chart.service;
 import com.project.mhnbackend.chart.domain.MedicalChart;
 import com.project.mhnbackend.chart.dto.request.ChartRequestDTO;
 import com.project.mhnbackend.chart.repository.ChartRepository;
+import com.project.mhnbackend.common.util.FileUploadUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ChartServiceImpl implements ChartService {
     private final ChartRepository chartRepository;
+    private final FileUploadUtil fileUploadUtil;
+
+    //파일 업로드 로직
+    public List<String> uploadFile(ChartRequestDTO chartRequestDTO){
+        List<MultipartFile> files = chartRequestDTO.getFiles();
+        return fileUploadUtil.saveFiles(files);
+
+    }
 
     @Override
     public MedicalChart createChart(ChartRequestDTO chartRequestDTO) {
+        List<String> uploadFileNames = uploadFile(chartRequestDTO);
         MedicalChart medicalChart = MedicalChart.builder()
                 .hospitalName(chartRequestDTO.getHospitalName())
                 .diagnosis(chartRequestDTO.getDiseaseName())
@@ -22,6 +34,12 @@ public class ChartServiceImpl implements ChartService {
                 .description(chartRequestDTO.getDescription())
                 .createdAt(LocalDateTime.now())
                 .build();
-        return chartRepository.save(medicalChart);
+        for (String fileName : uploadFileNames) {
+            medicalChart.addImageString(fileName);
+        }
+        chartRepository.save(medicalChart);
+        return medicalChart;
     }
+
+
 }
