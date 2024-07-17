@@ -38,3 +38,5 @@ out/
 
 ### application.properties ###
 application.properties
+#### .DS_Store ####
+.DS_Store
