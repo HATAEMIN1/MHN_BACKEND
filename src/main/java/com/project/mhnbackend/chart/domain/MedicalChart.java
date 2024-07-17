@@ -1,5 +1,6 @@
 package com.project.mhnbackend.chart.domain;
 
+import com.project.mhnbackend.pet.domain.Pet;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +20,9 @@ public class MedicalChart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long petId;
+//    @ManyToOne
+//    @JoinColumn(name = "pet_id")
+//    private Pet pet;
     private String hospitalName;
     private String diagnosis;
     private String description;
