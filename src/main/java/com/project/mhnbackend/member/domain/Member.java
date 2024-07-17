@@ -1,43 +1,34 @@
 package com.project.mhnbackend.member.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "member")
 @Getter
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
-@Table(name="member")
+@AllArgsConstructor
 @Builder
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String email;
-    private String password;
-    private String nickName;
-    private String fullName;
-    private ZonedDateTime createdAt;
-    private ZonedDateTime updatedAt;
-    @Builder.Default
-    private MemberRole role = MemberRole.PET_OWNER;
 
-    public void changePassword(String password) {
-        this.password = password;
-    }
-    public void changeNickName(String nickName) {
-        this.nickName = nickName;
-    }
-    public void changeFullName(String fullName) {
-        this.fullName = fullName;
-    }
-    public void changeUpdatedAt(ZonedDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MemberType memberType;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
 }
 
