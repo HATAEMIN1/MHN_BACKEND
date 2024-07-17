@@ -1,4 +1,4 @@
-package com.project.mhnbackend.user.controller;
+package com.project.mhnbackend.pet.controller;
 
 
 import java.util.List;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.mhnbackend.user.domain.Pet;
-import com.project.mhnbackend.user.dto.request.PetRequestDTO;
-import com.project.mhnbackend.user.service.PetService;
+import com.project.mhnbackend.pet.domain.Pet;
+import com.project.mhnbackend.pet.dto.request.PetRequestDTO;
+import com.project.mhnbackend.pet.service.PetService;
 
 
 

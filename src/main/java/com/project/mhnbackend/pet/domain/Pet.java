@@ -1,4 +1,4 @@
-package com.project.mhnbackend.user.domain;
+package com.project.mhnbackend.pet.domain;
 
 
 import jakarta.persistence.Entity;

@@ -1,10 +1,10 @@
-package com.project.mhnbackend.user.repository;
+package com.project.mhnbackend.pet.repository;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.project.mhnbackend.user.domain.Pet;
+import com.project.mhnbackend.pet.domain.Pet;
 
 
 @Repository

@@ -1,4 +1,4 @@
-package com.project.mhnbackend.user.dto.response;
+package com.project.mhnbackend.pet.dto.response;
 
 
 import lombok.Builder;

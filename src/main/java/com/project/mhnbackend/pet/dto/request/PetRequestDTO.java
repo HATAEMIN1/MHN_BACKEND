@@ -1,4 +1,4 @@
-package com.project.mhnbackend.user.dto.request;
+package com.project.mhnbackend.pet.dto.request;
 
 
 import lombok.Data;
