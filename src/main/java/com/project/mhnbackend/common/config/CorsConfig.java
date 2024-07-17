@@ -16,12 +16,10 @@ public class CorsConfig {
 
         // 허용할 오리진 설정
         config.addAllowedOrigin("http://localhost:3000"); // 리액트 앱 주소
-
         // 필요한 경우 여러 오리진 추가
-        // config.addAllowedOrigin("https://your-production-domain.com"/);
-
-        config.addAllowedHeader("");
-        config.addAllowedMethod("");
+        // config.addAllowedOrigin("https://your-production-domain.com");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
         config.setAllowCredentials(true);
 
         source.registerCorsConfiguration("/**", config);
