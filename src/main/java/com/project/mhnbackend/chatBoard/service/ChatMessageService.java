@@ -18,7 +18,8 @@ public class ChatMessageService {
 
     @Transactional
     public ChatMessage saveMessage(ChatMessage chatMessage) {
-        var chatId = chatRoomService.getChatRoomId(chatMessage.getSenderId(), chatMessage.getRecipientId(), true).orElseThrow(() -> new RuntimeException("Could not create or find chat room"));
+        System.out.println("here");
+        String chatId = chatRoomService.getChatRoomId(chatMessage.getSenderId(), chatMessage.getRecipientId(), true).orElseThrow(() -> new RuntimeException("Could not create or find chat room"));
         chatMessage.setChatRoomId(chatId);
         chatMessageRepository.save(chatMessage);
         return chatMessage;

@@ -29,7 +29,7 @@ public class ChatRoomService {
     }
 
     private String createChatRoomId(Long senderId, Long recipientId) {
-        var chatId = String.format("%s_%s", senderId+"", recipientId+"");
+        String chatId = String.format("%s_%s", senderId+"", recipientId+"");
         ChatRoom senderRecipient = ChatRoom.builder()
                 .chatId(chatId) // chatId is the chatroom id
                 .senderId(senderId)

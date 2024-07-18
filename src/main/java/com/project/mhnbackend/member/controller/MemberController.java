@@ -1,14 +1,14 @@
-package com.project.mhnbackend.member.controller;
-
-import com.project.mhnbackend.member.controller.request.CreateAndEditMemberRequest;
-import com.project.mhnbackend.member.controller.response.MemberView;
-import com.project.mhnbackend.member.domain.Member;
-import com.project.mhnbackend.member.service.MemberService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
+//package com.project.mhnbackend.member.controller;
+//
+//import com.project.mhnbackend.member.controller.request.CreateAndEditMemberRequest;
+//import com.project.mhnbackend.member.controller.response.MemberView;
+//import com.project.mhnbackend.member.domain.Member;
+//import com.project.mhnbackend.member.service.MemberService;
+//import lombok.RequiredArgsConstructor;
+//import org.springframework.web.bind.annotation.*;
+//
+//import java.util.List;
+//
 //@RestController
 //@RequiredArgsConstructor
 //public class MemberController {
