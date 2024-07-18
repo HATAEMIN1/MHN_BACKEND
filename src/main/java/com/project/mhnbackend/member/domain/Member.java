@@ -8,7 +8,7 @@ import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "member")
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -22,6 +22,12 @@ public class Member { // member is at the top most level i.e. Member is the mast
 
     @Column(nullable = false)
     private String password;
+
+    private String nickName;
+
+    private String name;
+
+    private String tel;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
