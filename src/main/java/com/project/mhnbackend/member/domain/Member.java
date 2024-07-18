@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "member")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -22,6 +21,12 @@ public class Member {
 
     @Column(nullable = false)
     private String password;
+
+    private String nickName;
+
+    private String name;
+
+    private String tel;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
