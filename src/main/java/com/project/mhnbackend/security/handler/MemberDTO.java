@@ -14,16 +14,17 @@ import org.springframework.security.core.userdetails.User;
 
 
 public class MemberDTO extends User{
-	private String email,pw,nickname;
+	private String email,pw,nickname,name;
 	private boolean social;
 	private List<String> roleNames= new ArrayList<>();
 	
-	public MemberDTO(String email, String pw, String nickname, boolean social, List<String> roleNames) {
+	public MemberDTO(String email, String pw, String nickname, String name, boolean social, List<String> roleNames) {
 		super(email, pw, roleNames.stream().map(str -> new SimpleGrantedAuthority("ROLE_"+str)).collect(Collectors.toList()));
 		
 		this.email= email;
 		this.pw= pw;
 		this.nickname=nickname;
+		this.name=name;
 		this.social=social;
 		this.roleNames=roleNames;
 	
@@ -35,6 +36,7 @@ public class MemberDTO extends User{
 		dataMap.put("email", email);
 		dataMap.put("pw", pw);
 		dataMap.put("nickname", nickname);
+		dataMap.put("name", name);
 		dataMap.put("social", social);
 		dataMap.put("roleNames", roleNames);
 		
