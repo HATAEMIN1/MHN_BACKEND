@@ -2,6 +2,7 @@ package com.project.mhnbackend.chatBoard.service;
 
 import com.project.mhnbackend.chatBoard.domain.ChatMessage;
 import com.project.mhnbackend.chatBoard.domain.ChatRoom;
+import com.project.mhnbackend.chatBoard.repository.ChatMessageRepository;
 import com.project.mhnbackend.chatBoard.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
     public Optional<String> getChatRoomId(Long senderId, Long recipientId, boolean createNewRoomIfNotExists) {
         return chatRoomRepository.findBySenderIdAndRecipientId(senderId, recipientId)
@@ -43,7 +45,7 @@ public class ChatRoomService {
         return chatId;
     }
 
-    public List<ChatMessage> getMessagesForRoom(String chatId) {
-        return chatRoomRepository.findByChatId(chatId);
+    public ChatRoom getChatRoomById(String chatRoomId) {
+        return chatRoomRepository.findByChatRoomId(chatRoomId).orElseThrow(() -> new RuntimeException("Chat room not found with id: " + chatRoomId));
     }
 }

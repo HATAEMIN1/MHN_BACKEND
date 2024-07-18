@@ -17,7 +17,7 @@ import java.time.ZonedDateTime;
 public class ChatMessage {
     @Id
     private Long id;
-    private String chatId;
+    private String chatRoomId;
     private Long senderId;
     private Long recipientId;
     private String content;

@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class MemberApi {
+public class MemberController {
     private final MemberService memberService;
 
     @CrossOrigin
