@@ -16,6 +16,7 @@ import org.springframework.test.annotation.Commit;
 import static org.junit.Assert.*;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -26,6 +27,7 @@ public class ChatMessageServiceTests {
     @Autowired
     private ChatMessageRepository chatMessageRepository;
 
+    @Transactional
     @Test
     public void testSaveMessage() {
         ChatMessage message = ChatMessage.builder()
@@ -80,8 +82,42 @@ public class ChatMessageServiceTests {
 //
 //    }
 
+    @Transactional
     @Test
     public void testGetMessagesByChatRoomId() {
+        // create and save a chat room
+        String chatId = "test_chat_room";
+        ChatRoom chatRoom = ChatRoom.builder()
+                .chatId(chatId)
+                .senderId(1L)
+                .recipientId(2L)
+                .build();
+        chatRoomRepository.save(chatRoom);
 
+        // then create and save some messages
+        ChatMessage message1 = ChatMessage.builder()
+                .chatRoomId(chatId)
+                .senderId(1L)
+                .recipientId(2L)
+                .content("Hello")
+                .createdAt(ZonedDateTime.now())
+                .build();
+        ChatMessage message2 = ChatMessage.builder()
+                .chatRoomId(chatId)
+                .senderId(2L)
+                .recipientId(1L)
+                .content("Hi there")
+                .createdAt(ZonedDateTime.now())
+                .build();
+        chatMessageRepository.save(message1);
+        chatMessageRepository.save(message2);
+
+        // test getting messages by chat room id
+        List<ChatMessage> messages = chatMessageRepository.findByChatRoomId(chatId);
+
+        assertNotNull(messages);
+        assertEquals(2, messages.size());
+        assertTrue(messages.stream().anyMatch(m -> m.getContent().equals("Hello")));
+        assertTrue(messages.stream().anyMatch(m -> m.getContent().equals("Hi there")));
     }
 }
