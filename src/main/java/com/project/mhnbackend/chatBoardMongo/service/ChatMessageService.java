@@ -1,8 +1,8 @@
-package com.project.mhnbackend.chatBoard.service;
+package com.project.mhnbackend.chatBoardMongo.service;
 
-import com.project.mhnbackend.chatBoard.domain.ChatMessage;
-import com.project.mhnbackend.chatBoard.repository.ChatMessageRepository;
-import com.project.mhnbackend.chatBoard.repository.ChatRoomRepository;
+import com.project.mhnbackend.chatBoard.service.ChatRoomService;
+import com.project.mhnbackend.chatBoardMongo.domain.ChatMessage;
+import com.project.mhnbackend.chatBoardMongo.repository.ChatMessageRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

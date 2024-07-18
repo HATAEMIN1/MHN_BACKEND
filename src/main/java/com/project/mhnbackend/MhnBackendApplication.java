@@ -7,9 +7,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @SpringBootApplication
-@EnableJpaRepositories(basePackages = "com.project.mhnbackend.chatBoard.repository")
-@EnableMongoRepositories(basePackages = "com.project.mhnbackend.chatBoard.repository")
-@EntityScan("com.project.mhnbackend.chatBoard.domain")
+@EnableJpaRepositories(basePackages = {
+		"com.project.mhnbackend.chatBoard.repository",
+		"com.project.mhnbackend.chart.repository",
+		"com.project.mhnbackend.pet.repository",
+})
+@EnableMongoRepositories(basePackages = "com.project.mhnbackend.chatBoardMongo.repository")
 public class MhnBackendApplication {
 
 	public static void main(String[] args) {

@@ -1,8 +1,7 @@
 package com.project.mhnbackend.repository;
 
-import com.project.mhnbackend.chatBoard.domain.ChatMessage;
-import com.project.mhnbackend.chatBoard.domain.ChatRoom;
-import com.project.mhnbackend.chatBoard.repository.ChatMessageRepository;
+import com.project.mhnbackend.chatBoardMongo.domain.ChatMessage;
+import com.project.mhnbackend.chatBoardMongo.repository.ChatMessageRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,6 +1,6 @@
 package com.project.mhnbackend.chatBoard.dto;
 
-import com.project.mhnbackend.chatBoard.domain.ChatMessage;
+import com.project.mhnbackend.chatBoardMongo.domain.ChatMessage;
 import com.project.mhnbackend.chatBoard.domain.ChatRoom;
 import lombok.AllArgsConstructor;
 import lombok.Data;

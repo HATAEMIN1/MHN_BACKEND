@@ -1,16 +1,15 @@
 package com.project.mhnbackend.chatBoard.controller;
 
 import com.project.mhnbackend.chatBoard.controller.request.JoinRoomRequest;
-import com.project.mhnbackend.chatBoard.domain.ChatMessage;
+import com.project.mhnbackend.chatBoardMongo.domain.ChatMessage;
 import com.project.mhnbackend.chatBoard.domain.ChatRoom;
 import com.project.mhnbackend.chatBoard.dto.ChatRoomDTO;
-import com.project.mhnbackend.chatBoard.service.ChatMessageService;
+import com.project.mhnbackend.chatBoardMongo.service.ChatMessageService;
 import com.project.mhnbackend.chatBoard.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +25,7 @@ public class ChatController { //handles web requests and websocket communication
     private final ChatMessageService chatMessageService; //creates chatrooms
     private final ChatRoomService chatRoomService; //saves messages
 
-    @MessageMapping("/private-message")
+    @MessageMapping("/chat.sendMessage")
     public ChatMessage receiveMessage(@Payload ChatMessage chatMessage) {
         // Associate the message with a chat room
         Optional<String> chatRoomId = chatRoomService.getChatRoomId(
@@ -48,7 +47,6 @@ public class ChatController { //handles web requests and websocket communication
     }
 
     @MessageMapping("/chat.joinRoom")
-    @SendTo("/topic/public")
     public ChatRoomDTO joinRoom(@Payload JoinRoomRequest joinRequest) {
         String chatRoomId = chatRoomService.getChatRoomId(
                 joinRequest.getSenderId(),
