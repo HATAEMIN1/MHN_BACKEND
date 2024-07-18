@@ -2,6 +2,7 @@ package com.project.mhnbackend.member.domain;
 
 
 
+
 import java.time.ZonedDateTime;
 
 import jakarta.persistence.Column;
@@ -17,6 +18,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 @Entity
 @Table(name = "member")
 @Getter
@@ -24,6 +26,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Member { // member is at the top most level i.e. Member is the master table
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -45,6 +48,7 @@ public class Member { // member is at the top most level i.e. Member is the mast
     private MemberType memberType;
 
     @Column(nullable = false, updatable = false)
+
     private ZonedDateTime createdAt;
 
     @Column(nullable = false)

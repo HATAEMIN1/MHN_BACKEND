@@ -1,5 +1,6 @@
 package com.project.mhnbackend.freeBoard.controller;
 
+
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import com.project.mhnbackend.freeBoard.dto.response.FreeBoardResponseDTO;
 import com.project.mhnbackend.freeBoard.service.FreeBoardService;
 
 import lombok.RequiredArgsConstructor;
+
 
 @RestController
 @RequestMapping("/api/v1")

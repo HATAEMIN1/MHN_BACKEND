@@ -6,10 +6,12 @@ import com.project.mhnbackend.freeBoard.domain.FreeBoard;
 import com.project.mhnbackend.freeBoard.dto.request.FreeBoardRequestDTO;
 import com.project.mhnbackend.freeBoard.repository.FreeBoardRepository;
 
+
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +35,7 @@ public class FreeBoardService {
     	Long id = freeBoardRepository.save(freeBoard).getId();
     	return id;
     }
+
 
 	private FreeBoard dtoToEntity(FreeBoardRequestDTO freeBoardRequestDTO) {
 		FreeBoard freeBoard = FreeBoard.builder()
