@@ -1,18 +1,32 @@
 package com.project.mhnbackend.member.domain;
 
-import jakarta.persistence.*;
-import lombok.*;
 
-import java.time.LocalDateTime;
+
+
+import java.time.ZonedDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 
 @Entity
 @Table(name = "member")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Member {
+public class Member { // member is at the top most level i.e. Member is the master table
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,7 +48,9 @@ public class Member {
     private MemberType memberType;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
 
+    private ZonedDateTime createdAt;
+
+    @Column(nullable = false)
+    private ZonedDateTime updatedAt;
 }
-
