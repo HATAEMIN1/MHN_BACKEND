@@ -1,11 +1,11 @@
 package com.project.mhnbackend.freeBoard.domain;
 
-import com.project.mhnbackend.user.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "freeBoard")
@@ -14,7 +14,6 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"board", "member"})
 public class FreeBoard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,14 +24,31 @@ public class FreeBoard {
 
     @Column(nullable = false)
     private String content;
-
-    @ManyToOne
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
-
-    @OneToOne
-    @JoinColumn(name = "board_id", nullable = false)
-    private Board board;
     
-    private LocalDateTime createdAt;
+    @ElementCollection
+    @Builder.Default
+    private List<BoardImage> imageList = new ArrayList<>();
+
+//     @ManyToOne
+//     @JoinColumn(name = "member_id", nullable = true)
+//     private Member member;
+
+
+    private LocalDateTime createDate;
+    
+    public void addImage(BoardImage image) {
+        image.changeOrd(this.imageList.size());
+        imageList.add(image);
+    }
+
+    public void addImageString(String fileName) {
+        BoardImage boardImage = BoardImage.builder().fileName(fileName).build();
+        addImage(boardImage);
+    }
+    @PrePersist
+	public void createDate() {
+		this.createDate = LocalDateTime.now();
+	}
+
+    
 }

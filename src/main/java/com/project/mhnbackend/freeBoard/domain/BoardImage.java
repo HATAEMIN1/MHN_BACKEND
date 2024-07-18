@@ -6,25 +6,17 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Builder
-@Data
+@Getter
+@ToString
+@Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@ToString(exclude = "board")
-@Table(name = "board_image")
 public class BoardImage {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "board_id")
-    private Board board;
-
     private String fileName;
 
-    @Builder.Default
-    private int ord = 0; // 기본값을 0으로 설정
+    private int ord;
 
-    private LocalDateTime createdAt;
+    public void changeOrd(int ord) {
+    	this.ord = ord;
+    }
 }
