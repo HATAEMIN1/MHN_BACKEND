@@ -21,5 +21,4 @@ public class ChatRoom {
     private String chatId;
     private Long senderId;
     private Long recipientId;
-    private List<Long> messageIds; // References to ChatMessage IDs
 }

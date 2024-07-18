@@ -1,5 +1,7 @@
 package com.project.mhnbackend.chatBoard.domain;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +18,7 @@ import java.time.ZonedDateTime;
 @Document
 public class ChatMessage {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String chatRoomId;
     private Long senderId;
