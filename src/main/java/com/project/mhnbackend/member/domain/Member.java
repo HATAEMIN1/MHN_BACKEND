@@ -23,6 +23,12 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
+    private String nickName;
+
+    private String name;
+
+    private String tel;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MemberType memberType;
