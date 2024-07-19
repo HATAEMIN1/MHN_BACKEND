@@ -11,7 +11,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.google.gson.Gson;
 import com.project.mhnbackend.common.util.JWTUtil;
-import com.project.mhnbackend.security.handler.MemberDTO;
+import com.project.mhnbackend.member.dto.request.MemberDTO;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -40,18 +40,18 @@ public class JWTCheckFilter extends OncePerRequestFilter{
 	            log.info("JWT claims: " + claims);
 	            //filterChain.doFilter(request, response); //이하 추가
 	            String email = (String) claims.get("email");
-	            String pw = (String) claims.get("pw");
-	            String nickname = (String) claims.get("nickname");
+	            String password = (String) claims.get("password");
 	            String name = (String) claims.get("name");
-	            Boolean social = (Boolean) claims.get("social");
-	            List<String> roleNames = (List<String>) claims.get("roleNames");
+	            String nickname = (String) claims.get("nickname");
+	            String tel = (String) claims.get("tel");
+	            List<String> memberTypeList = (List<String>) claims.get("memberTypeList");
 
-	            MemberDTO memberDTO = new MemberDTO(email, pw, nickname, name, social.booleanValue(), roleNames);
+	            MemberDTO memberDTO = new MemberDTO(email, password, name, nickname, tel, memberTypeList);
 	            log.info("-----------------------------------");
 	            log.info(memberDTO);
 	            log.info(memberDTO.getAuthorities());
 	            UsernamePasswordAuthenticationToken authenticationToken
-	                    = new UsernamePasswordAuthenticationToken(memberDTO, pw, memberDTO.getAuthorities());
+	                    = new UsernamePasswordAuthenticationToken(memberDTO, password, memberDTO.getAuthorities());
 
 	            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 	            filterChain.doFilter(request, response);
