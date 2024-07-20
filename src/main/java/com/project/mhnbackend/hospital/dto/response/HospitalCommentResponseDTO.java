@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class HospitalCommentResponseDTO {
-	//	private Long memberId;
+		private Long memberId;
 	private Long hospitalId;
 	private String comment;
 	private int rating;

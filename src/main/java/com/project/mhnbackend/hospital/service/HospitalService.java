@@ -6,11 +6,14 @@ import com.project.mhnbackend.hospital.domain.HospitalComment;
 import com.project.mhnbackend.hospital.dto.request.HospitalBMKRequestDTO;
 import com.project.mhnbackend.hospital.dto.request.HospitalCommentRequestDTO;
 import com.project.mhnbackend.hospital.dto.request.HospitalRequestDTO;
+import com.project.mhnbackend.hospital.dto.response.HospitalBMKResponseDTO;
 import com.project.mhnbackend.hospital.dto.response.HospitalCommentResponseDTO;
 import com.project.mhnbackend.hospital.dto.response.HospitalResponseDTO;
 import com.project.mhnbackend.hospital.repository.HospitalBMKRepository;
 import com.project.mhnbackend.hospital.repository.HospitalCommentRepository;
 import com.project.mhnbackend.hospital.repository.HospitalRepository;
+import com.project.mhnbackend.member.domain.Member;
+import com.project.mhnbackend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -30,7 +33,7 @@ public class HospitalService {
 	private final HospitalRepository hospitalRepository;
 	private final HospitalCommentRepository hospitalCommentRepository;
 	private final HospitalBMKRepository hospitalBMKRepository;
-	
+	private final MemberRepository memberRepository;
 	
 	//=== 모든 병원 리스트 불러오는거 직접 코딩한거 ===
 //	public List<HospitalResponseDTO> getAllHospitals () {
@@ -147,10 +150,28 @@ public class HospitalService {
 	
 	public HospitalBMK createHospitalBMK (HospitalBMKRequestDTO hospitalBMKRequestDTO) {
 		Hospital hospital = hospitalRepository.findById (hospitalBMKRequestDTO.getHospitalId ()).orElseThrow ();
+		Member member = memberRepository.findById (hospitalBMKRequestDTO.getMemberId ()).orElseThrow ();
 		HospitalBMK hospitalBMK = HospitalBMK.builder ()
+				.member (member)
 				.hospital (hospital)
 				.createdAt (LocalDateTime.now ())
 				.build ();
 		return  hospitalBMKRepository.save(hospitalBMK);  // 생성된 HospitalBMK 객체를 반환
 	}
+	
+	public HospitalBMKResponseDTO getHospitalBMK(Long hospitalId  ,Long memberId){
+		
+		HospitalBMK hospitalBMK = hospitalBMKRepository.findByHospitalBMK (hospitalId, memberId);
+		
+		if (hospitalBMK == null) {
+			return null;
+		}
+		
+		return HospitalBMKResponseDTO.builder ()
+				.id (hospitalBMK.getId ())
+				.hospitalId (hospitalBMK.getHospital ().getId ())
+				.memberId (hospitalBMK.getMember ().getId ())
+				.build ();
+	}
 }
+

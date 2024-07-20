@@ -6,6 +6,7 @@ import com.project.mhnbackend.hospital.domain.HospitalComment;
 import com.project.mhnbackend.hospital.dto.request.HospitalBMKRequestDTO;
 import com.project.mhnbackend.hospital.dto.request.HospitalCommentRequestDTO;
 import com.project.mhnbackend.hospital.dto.request.HospitalRequestDTO;
+import com.project.mhnbackend.hospital.dto.response.HospitalBMKResponseDTO;
 import com.project.mhnbackend.hospital.dto.response.HospitalCommentResponseDTO;
 import com.project.mhnbackend.hospital.dto.response.HospitalResponseDTO;
 import com.project.mhnbackend.hospital.service.HospitalService;
@@ -70,10 +71,11 @@ public class HospitalController {
 	
 	// 병원 북마크 상태 겟
 	@GetMapping("/hospitals/bmk")
-	public HospitalResponseDTO getHospitalBMK(
-			@RequestParam("id") Long id         // axios경로에서 쓸 param임,,, 프론트 url이랑은 다름
+	public HospitalBMKResponseDTO getHospitalBMK(
+			@RequestParam("hospitalId") Long hospitalId,         // axios경로에서 쓸 param임,,, 프론트 url이랑은 다름
+			@RequestParam("memberId") Long memberId         // axios경로에서 쓸 param임,,, 프론트 url이랑은 다름
 	) {
-		return hospitalService.getHospitalView(id);
+		return hospitalService.getHospitalBMK(hospitalId,memberId);
 	}
 	
 	// 병원 북마크 해제

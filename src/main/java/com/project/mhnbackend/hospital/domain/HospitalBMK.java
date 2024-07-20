@@ -1,5 +1,6 @@
 package com.project.mhnbackend.hospital.domain;
 
+import com.project.mhnbackend.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,9 +19,9 @@ public class HospitalBMK {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-//	@ManyToOne
-//	@JoinColumn(name="member_id")
-//	private Member member;
+	@ManyToOne
+	@JoinColumn(name="member_id")
+	private Member member;
 	
 	@ManyToOne
 	@JoinColumn(name="hospital_id")

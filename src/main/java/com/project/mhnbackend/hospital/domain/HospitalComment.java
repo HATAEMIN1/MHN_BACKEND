@@ -1,5 +1,6 @@
 package com.project.mhnbackend.hospital.domain;
 
+import com.project.mhnbackend.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,9 +23,9 @@ public class HospitalComment {
 	@JoinColumn(name="hospital_id")
 	private Hospital hospital;
 	
-//	@ManyToOne                      // 나중에 회원가입 로그인 하고나서 주석풀고 다시 확인해봐야함!!
-//	@JoinColumn(name="member_id")
-//	private Member member;
+	@ManyToOne                      // 나중에 회원가입 로그인 하고나서 주석풀고 다시 확인해봐야함!!
+	@JoinColumn(name="member_id")
+	private Member member;
 	
 	private String content;
 	private LocalDateTime createdAt;
