@@ -41,6 +41,7 @@ public class FreeBoard {
     private List<BoardImage> imageList = new ArrayList<>();
 
     private LocalDateTime createDate;
+    private LocalDateTime updateDate;
 
     public void addImage(BoardImage image) {
         image.changeOrd(this.imageList.size());
@@ -55,5 +56,12 @@ public class FreeBoard {
     @PrePersist
     public void createDate() {
         this.createDate = LocalDateTime.now();
+    }
+    
+    
+    public void changeTitleAndContent(String title, String content) {
+    	this.title = title;
+    	this.content= content;
+    	this.updateDate = LocalDateTime.now();
     }
 }
