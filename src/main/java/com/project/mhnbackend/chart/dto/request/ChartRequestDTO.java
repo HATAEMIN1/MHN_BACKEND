@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Builder
 public class ChartRequestDTO {
-    private Long petId;
+//    private Long petId;
     private String hospitalName;
     private String petName;
     private String visitDate;
@@ -25,4 +25,8 @@ public class ChartRequestDTO {
 
     @Builder.Default
     private List<String> uploadFileNames = new ArrayList<>();
+
+    public void setUploadFileNames(List<String> uploadFileNames) {
+        this.uploadFileNames = uploadFileNames;
+    }
 }
