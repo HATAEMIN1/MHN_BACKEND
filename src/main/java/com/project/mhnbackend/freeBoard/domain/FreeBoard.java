@@ -4,14 +4,22 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.project.mhnbackend.member.domain.Member;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,6 +50,19 @@ public class FreeBoard {
 
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
+    
+    @JoinColumn(name="member_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Member member;
+    
+    @OneToMany(mappedBy = "freeBoard", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FreeBoardLikes> likes = new ArrayList<>();
+    
+    @Transient 
+	private boolean likeState;
+	
+	@Transient
+	private int likeCount;
 
     public void addImage(BoardImage image) {
         image.changeOrd(this.imageList.size());
