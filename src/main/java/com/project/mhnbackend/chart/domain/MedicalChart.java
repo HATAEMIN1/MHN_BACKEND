@@ -2,10 +2,7 @@ package com.project.mhnbackend.chart.domain;
 
 import com.project.mhnbackend.pet.domain.Pet;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,14 +12,15 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 @ToString(exclude = "medicalChartImage")
 public class MedicalChart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-//    @ManyToOne
-//    @JoinColumn(name = "pet_id")
-//    private Pet pet;
+    @ManyToOne
+    @JoinColumn(name = "pet_id")
+    private Pet pet;
     private String hospitalName;
     private String diagnosis;
     private String description;
@@ -37,11 +35,11 @@ public class MedicalChart {
         medicalChartImage.add(image);
     }
     public void addImageString(String fileName){
-        MedicalChartImage productImage = MedicalChartImage
+        MedicalChartImage medicalChartImage = MedicalChartImage
                 .builder()
                 .fileName(fileName)
                 .build();
-        addImage(productImage);
+        addImage(medicalChartImage);
     }
 
 }
