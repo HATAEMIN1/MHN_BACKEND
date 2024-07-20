@@ -10,20 +10,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class FreeBoardResponseDTO {
-    private Long id;
     private String title;
     private String content;
-    private LocalDateTime createdAt;
-    private String memberName;
+    private String fileName;
+    private LocalDateTime createDate;
 
-    public FreeBoardResponseDTO(Long id, String title, String content, LocalDateTime createdAt, String memberName) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.createdAt = createdAt;
-        this.memberName = memberName;
-    }
-
- 
 }
