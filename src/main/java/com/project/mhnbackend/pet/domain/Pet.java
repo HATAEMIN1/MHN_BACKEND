@@ -1,11 +1,8 @@
 package com.project.mhnbackend.pet.domain;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.project.mhnbackend.member.domain.Member;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,6 +24,9 @@ public class Pet {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 //	private Integer user_id;
+	@ManyToOne
+	@JoinColumn(name = "member_id")
+	private Member member;
 	private String name;
 	private String kind;
 	private int age;
