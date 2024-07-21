@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,5 +16,6 @@ public class HospitalCommentResponseDTO {
 		private Long memberId;
 	private Long hospitalId;
 	private String comment;
+	private LocalDateTime createdAt;
 	private int rating;
 }

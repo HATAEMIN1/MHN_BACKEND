@@ -79,6 +79,14 @@ public class HospitalController {
 	}
 	
 	// 병원 북마크 해제
-	
+	@DeleteMapping("/hospitals/bmk")
+//	public HospitalBMKResponseDTO deleteHospitalBMK(
+	public String deleteHospitalBMK(
+//			@RequestParam("hospitalId") Long hospitalId,         // axios경로에서 쓸 param임,,, 프론트 url이랑은 다름
+//			@RequestParam("memberId") Long memberId         // axios경로에서 쓸 param임,,, 프론트 url이랑은 다름
+			@RequestParam("id") Long id
+	) {
+		return hospitalService.deleteHospitalBMK(id);
+	}
 	
 }

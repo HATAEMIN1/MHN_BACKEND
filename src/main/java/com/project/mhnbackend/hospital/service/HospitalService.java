@@ -132,7 +132,7 @@ public class HospitalService {
 		return hospitalComments.stream ().map ((comment) -> HospitalCommentResponseDTO.builder ()
 						.hospitalId (comment.getHospital ().getId ())
 						.comment (comment.getContent ())
-//				.createdAt(comment.getCreatedAt ())
+						.createdAt (comment.getCreatedAt ())
 						.rating (comment.getRating ())
 						.build ())
 				.collect (Collectors.toList ());
@@ -156,10 +156,10 @@ public class HospitalService {
 				.hospital (hospital)
 				.createdAt (LocalDateTime.now ())
 				.build ();
-		return  hospitalBMKRepository.save(hospitalBMK);  // 생성된 HospitalBMK 객체를 반환
+		return hospitalBMKRepository.save (hospitalBMK);  // 생성된 HospitalBMK 객체를 반환
 	}
 	
-	public HospitalBMKResponseDTO getHospitalBMK(Long hospitalId  ,Long memberId){
+	public HospitalBMKResponseDTO getHospitalBMK (Long hospitalId, Long memberId) {
 		
 		HospitalBMK hospitalBMK = hospitalBMKRepository.findByHospitalBMK (hospitalId, memberId);
 		
@@ -172,6 +172,13 @@ public class HospitalService {
 				.hospitalId (hospitalBMK.getHospital ().getId ())
 				.memberId (hospitalBMK.getMember ().getId ())
 				.build ();
+	}
+	
+	//	public HospitalBMKResponseDTO deleteHospitalBMK (Long id) {
+	public String deleteHospitalBMK (Long id) {
+		hospitalBMKRepository.deleteById (id);
+		
+		return "삭제가 완료되었습니다";
 	}
 }
 

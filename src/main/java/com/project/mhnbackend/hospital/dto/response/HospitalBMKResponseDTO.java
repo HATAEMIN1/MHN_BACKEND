@@ -14,4 +14,5 @@ public class HospitalBMKResponseDTO {
 	private Long id;
 	private Long memberId;
 	private Long hospitalId;
+	
 }
