@@ -9,12 +9,13 @@ import org.springframework.data.repository.query.Param;
 
 import com.project.mhnbackend.member.domain.Member;
 
-
 public interface MemberRepository extends JpaRepository<Member, Long>{
 
-	@EntityGraph(attributePaths = "memberTypeList")
-	@Query("select m from Member m where m.email = :email")
-	Member getWithRole(@Param("email")String email);
+    @EntityGraph(attributePaths = "memberTypeList")
+    @Query("select m from Member m where m.email = :email")
+    Member getWithRole(@Param("email")String email);
 	
-	Optional<Member> findByName(String name);
+    Optional<Member> findByName(String name);
+
+    Optional<Member> findByEmail(String email);
 }

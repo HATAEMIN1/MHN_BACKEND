@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.project.mhnbackend.freeBoard.domain.BoardImage;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FreeBoardResponseDTO {
+public class FreeBoardResponseWithCommentsDTO {
     private Long id;
     private String title;
     private String content;
@@ -23,4 +24,5 @@ public class FreeBoardResponseDTO {
     private boolean likeState;
     private int likeCount;
     private int commentCount;
+    private List<BoardCommentResponseDTO> comments;
 }
