@@ -60,6 +60,14 @@ public class HospitalController {
 		return hospitalService.getHospitalAllComment(hospitalId);
 	}
 	
+	// 병원 후기 리뷰 삭제
+	@DeleteMapping("/hospitals/review")
+	public String deleteHospitalComment(
+			@RequestParam("id") Long id
+	) {
+		return hospitalService.deleteHospitalComment(id);
+	}
+	
 	
 	// 병원 북마크 등록
 	@PostMapping("/hospitals/bmk")

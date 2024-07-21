@@ -14,6 +14,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Getter
+@Table(uniqueConstraints = {
+		@UniqueConstraint(columnNames = {"member_id", "hospital_id"})
+})
 public class HospitalBMK {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

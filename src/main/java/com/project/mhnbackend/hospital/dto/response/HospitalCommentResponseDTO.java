@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class HospitalCommentResponseDTO {
+	private Long id;
 		private Long memberId;
 	private Long hospitalId;
 	private String comment;

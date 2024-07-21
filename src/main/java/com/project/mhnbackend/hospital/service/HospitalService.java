@@ -132,6 +132,7 @@ public class HospitalService {
 		return hospitalComments.stream ().map ((comment) -> HospitalCommentResponseDTO.builder ()
 						.hospitalId (comment.getHospital ().getId ())
 						.comment (comment.getContent ())
+						.id(comment.getId ())
 						.createdAt (comment.getCreatedAt ())
 						.rating (comment.getRating ())
 						.build ())
@@ -147,6 +148,12 @@ public class HospitalService {
 //				.build ();
 //		return hospitalBMK;
 //	}
+	
+	public String deleteHospitalComment (Long id) {
+		hospitalCommentRepository.deleteById (id);
+		
+		return "삭제가 완료되었습니다";
+	}
 	
 	public HospitalBMK createHospitalBMK (HospitalBMKRequestDTO hospitalBMKRequestDTO) {
 		Hospital hospital = hospitalRepository.findById (hospitalBMKRequestDTO.getHospitalId ()).orElseThrow ();
@@ -180,5 +187,7 @@ public class HospitalService {
 		
 		return "삭제가 완료되었습니다";
 	}
+	
+	
 }
 
