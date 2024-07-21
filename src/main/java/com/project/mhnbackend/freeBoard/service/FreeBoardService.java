@@ -6,6 +6,8 @@ import com.project.mhnbackend.freeBoard.domain.FreeBoardLikes;
 import com.project.mhnbackend.freeBoard.dto.request.EditFreeBoardDTO;
 import com.project.mhnbackend.freeBoard.dto.request.FreeBoardDTO;
 import com.project.mhnbackend.freeBoard.dto.request.FreeBoardRequestDTO;
+import com.project.mhnbackend.freeBoard.dto.response.BoardCommentResponseDTO;
+import com.project.mhnbackend.freeBoard.dto.response.FreeBoardResponseWithCommentsDTO;
 import com.project.mhnbackend.freeBoard.dto.response.FreeBoardResponseDTO;
 import com.project.mhnbackend.freeBoard.repository.FreeBoardLikesRepository;
 import com.project.mhnbackend.freeBoard.repository.FreeBoardRepository;
@@ -65,6 +67,7 @@ public class FreeBoardService {
         return freeBoards.map(freeBoard -> {
             boolean likeState = freeBoardLikesRepository.existsByFreeBoardAndMember(freeBoard, currentUser);
             int likeCount = freeBoard.getLikes().size();
+            int commentCount = freeBoard.getComments().size(); 
             return FreeBoardResponseDTO.builder()
                     .id(freeBoard.getId())
                     .title(freeBoard.getTitle())
@@ -74,16 +77,29 @@ public class FreeBoardService {
                     .imageList(freeBoard.getImageList())
                     .likeState(likeState)
                     .likeCount(likeCount)
+                    .commentCount(commentCount)
                     .build();
         });
     }
 
-    public FreeBoardResponseDTO getFreeBoard(Long freeBoardId, Long memberId) {
+    public FreeBoardResponseWithCommentsDTO getFreeBoard(Long freeBoardId, Long memberId) {
         FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId).orElseThrow();
         Member member = memberRepository.findById(memberId).orElseThrow();
         boolean likeState = freeBoardLikesRepository.existsByFreeBoardAndMember(freeBoard, member);
         int likeCount = freeBoard.getLikes().size();
-        return FreeBoardResponseDTO.builder()
+        int commentCount = freeBoard.getComments().size();
+
+        List<BoardCommentResponseDTO> comments = freeBoard.getComments().stream()
+                .map(comment -> BoardCommentResponseDTO.builder()
+                        .id(comment.getId())
+                        .content(comment.getContent())
+                        .memberName(comment.getMember().getName())
+                        .createDate(comment.getCreateDate())
+                        .depth(comment.getDepth())
+                        .build())
+                .collect(Collectors.toList());
+
+        return FreeBoardResponseWithCommentsDTO.builder()
                 .id(freeBoard.getId())
                 .title(freeBoard.getTitle())
                 .content(freeBoard.getContent())
@@ -92,6 +108,8 @@ public class FreeBoardService {
                 .imageList(freeBoard.getImageList())
                 .likeState(likeState)
                 .likeCount(likeCount)
+                .commentCount(commentCount)
+                .comments(comments)
                 .build();
     }
 
@@ -176,6 +194,7 @@ public class FreeBoardService {
         return freeBoards.map(freeBoard -> {
             boolean likeState = freeBoardLikesRepository.existsByFreeBoardAndMember(freeBoard, currentUser);
             int likeCount = freeBoard.getLikes().size();
+            int commentCount = freeBoard.getComments().size();
             return FreeBoardResponseDTO.builder()
                     .id(freeBoard.getId())
                     .title(freeBoard.getTitle())
@@ -185,6 +204,7 @@ public class FreeBoardService {
                     .imageList(freeBoard.getImageList())
                     .likeState(likeState)
                     .likeCount(likeCount)
+                    .commentCount(commentCount)
                     .build();
         });
     }

@@ -24,6 +24,7 @@ import com.project.mhnbackend.freeBoard.dto.request.EditFreeBoardDTO;
 import com.project.mhnbackend.freeBoard.dto.request.FreeBoardDTO;
 import com.project.mhnbackend.freeBoard.dto.request.FreeBoardRequestDTO;
 import com.project.mhnbackend.freeBoard.dto.response.FreeBoardResponseDTO;
+import com.project.mhnbackend.freeBoard.dto.response.FreeBoardResponseWithCommentsDTO;
 import com.project.mhnbackend.freeBoard.service.FreeBoardService;
 import com.project.mhnbackend.member.domain.Member;
 import com.project.mhnbackend.member.repository.MemberRepository;
@@ -72,12 +73,13 @@ public class FreeBoardController {
         return new ResponseEntity<>(new CMRespDTO<>(1, "성공", freeBoards), HttpStatus.OK);
     }
 
-    @GetMapping("/boards/view")
-    public ResponseEntity<?> getFreeBoard(@RequestParam("freeBoardId") Long freeBoardId, Authentication authentication) {
-        Member currentUser = getCurrentUser(authentication);
-        FreeBoardResponseDTO freeBoard = freeBoardService.getFreeBoard(freeBoardId, currentUser.getId());
-        return new ResponseEntity<>(new CMRespDTO<>(1, "성공", freeBoard), HttpStatus.OK);
-    }
+	 @GetMapping("/boards/view")
+	    public ResponseEntity<?> getFreeBoard(@RequestParam("freeBoardId") Long freeBoardId, Authentication authentication) {
+	        Member currentUser = getCurrentUser(authentication);
+	        // FreeBoardResponseDTO에서 FreeBoardResponseWithCommentsDTO로 변경
+	        FreeBoardResponseWithCommentsDTO freeBoard = freeBoardService.getFreeBoard(freeBoardId, currentUser.getId());
+	        return new ResponseEntity<>(new CMRespDTO<>(1, "성공", freeBoard), HttpStatus.OK);
+	    }
     
     @PutMapping("/boards/view")
     public void editFreeBoard(@RequestParam("freeBoardId") Long freeBoardId, @RequestBody EditFreeBoardDTO editFreeBoardDTO) {
