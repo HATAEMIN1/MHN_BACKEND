@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +23,7 @@ import com.project.mhnbackend.freeBoard.domain.FreeBoard;
 import com.project.mhnbackend.freeBoard.dto.request.EditFreeBoardDTO;
 import com.project.mhnbackend.freeBoard.dto.request.FreeBoardDTO;
 import com.project.mhnbackend.freeBoard.dto.request.FreeBoardRequestDTO;
+import com.project.mhnbackend.freeBoard.dto.response.FreeBoardResponseDTO;
 import com.project.mhnbackend.freeBoard.service.FreeBoardService;
 import com.project.mhnbackend.member.domain.Member;
 import com.project.mhnbackend.member.repository.MemberRepository;
@@ -52,28 +55,38 @@ public class FreeBoardController {
 //    	return Map.of("Result", id);
 //    }
     
-    @GetMapping("/boards")
-    public ResponseEntity<?> freeBoardList(@PageableDefault(size = 4) Pageable pageable) {
-        Page<Object[]> freeBoards = freeBoardService.pageFreeBoard(pageable);
+//    @GetMapping("/boards")
+//    public ResponseEntity<?> freeBoardList(@PageableDefault(size = 4) Pageable pageable) {
+//        Page<Object[]> freeBoards = freeBoardService.pageFreeBoard(pageable);
+//        return new ResponseEntity<>(new CMRespDTO<>(1, "성공", freeBoards), HttpStatus.OK);
+//    }
+//    
+//    @GetMapping("/boards/view")
+//    public FreeBoard getFreeBoard(@RequestParam("freeBoardId") Long freeBoardId) {
+//    	return freeBoardService.getFreeBoard(freeBoardId);
+//    }
+	@GetMapping("/boards")
+    public ResponseEntity<?> freeBoardList(@PageableDefault(size = 4) Pageable pageable, Authentication authentication) {
+        Member currentUser = getCurrentUser(authentication);
+        Page<FreeBoardResponseDTO> freeBoards = freeBoardService.pageFreeBoard(pageable);
         return new ResponseEntity<>(new CMRespDTO<>(1, "성공", freeBoards), HttpStatus.OK);
     }
-    
+
     @GetMapping("/boards/view")
-    public FreeBoard getFreeBoard(@RequestParam("freeBoardId") Long freeBoardId) {
-    	return freeBoardService.getFreeBoard(freeBoardId);
+    public ResponseEntity<?> getFreeBoard(@RequestParam("freeBoardId") Long freeBoardId, Authentication authentication) {
+        Member currentUser = getCurrentUser(authentication);
+        FreeBoardResponseDTO freeBoard = freeBoardService.getFreeBoard(freeBoardId, currentUser.getId());
+        return new ResponseEntity<>(new CMRespDTO<>(1, "성공", freeBoard), HttpStatus.OK);
     }
     
     @PutMapping("/boards/view")
-    public void editFreeBoard(
-    		@RequestParam("freeBoardId") Long freeBoardId,
-    		@RequestBody EditFreeBoardDTO editFreeBoardDTO
-    		) {
-    	freeBoardService.editFreeBoard(freeBoardId, editFreeBoardDTO);
+    public void editFreeBoard(@RequestParam("freeBoardId") Long freeBoardId, @RequestBody EditFreeBoardDTO editFreeBoardDTO) {
+        freeBoardService.editFreeBoard(freeBoardId, editFreeBoardDTO);
     }
-    
+
     @DeleteMapping("/boards/view")
     public void deleteFreeBoard(@RequestParam("freeBoardId") Long freeBoardId) {
-    	freeBoardService.deleteFreeBoard(freeBoardId);
+        freeBoardService.deleteFreeBoard(freeBoardId);
     }
    
     
@@ -139,18 +152,28 @@ public class FreeBoardController {
     }
     
     @PostMapping("/boards/like")
-    public ResponseEntity<String> likeFreeBoard(
-            @RequestParam("freeBoardId") Long freeBoardId,
-            @RequestParam("memberId") Long memberId) {
-        freeBoardService.likeFreeBoard(freeBoardId, memberId);
+    public ResponseEntity<String> likeFreeBoard(@RequestParam("freeBoardId") Long freeBoardId, Authentication authentication) {
+        Member currentUser = getCurrentUser(authentication);
+        freeBoardService.likeFreeBoard(freeBoardId, currentUser.getId());
         return ResponseEntity.ok("Liked successfully");
     }
 
     @PostMapping("/boards/unlike")
-    public ResponseEntity<String> unlikeFreeBoard(
-            @RequestParam("freeBoardId") Long freeBoardId,
-            @RequestParam("memberId") Long memberId) {
-        freeBoardService.unlikeFreeBoard(freeBoardId, memberId);
+    public ResponseEntity<String> unlikeFreeBoard(@RequestParam("freeBoardId") Long freeBoardId, Authentication authentication) {
+        Member currentUser = getCurrentUser(authentication);
+        freeBoardService.unlikeFreeBoard(freeBoardId, currentUser.getId());
         return ResponseEntity.ok("Unliked successfully");
+    }
+    
+    @GetMapping("/boards/likes")
+    public ResponseEntity<?> freeBoardListByLikes(@PageableDefault(size = 4) Pageable pageable, Authentication authentication) {
+        Member currentUser = getCurrentUser(authentication);
+        Page<FreeBoardResponseDTO> freeBoards = freeBoardService.pageFreeBoardByLikes(pageable);
+        return new ResponseEntity<>(new CMRespDTO<>(1, "성공", freeBoards), HttpStatus.OK);
+    }
+
+    private Member getCurrentUser(Authentication authentication) {
+        String email = ((UserDetails) authentication.getPrincipal()).getUsername();
+        return memberRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("Invalid member email"));
     }
 }
