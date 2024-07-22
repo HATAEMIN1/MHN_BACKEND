@@ -1,8 +1,6 @@
-package com.project.mhnbackend.subscription.dto.request;
+package com.project.mhnbackend.payment.dto.request;
 
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 
 @Getter
@@ -10,8 +8,11 @@ public class PaymentRequestDTO {
     private Long userId;
     private String pg;
     private String merchantUid;
+    private String customerUid;
     private String impUid;
-    private String email;  //주문자 이메일
+    private String productName;
+    private String buyerName;
     private int amount;
     private String buyerTel;
+
 }
