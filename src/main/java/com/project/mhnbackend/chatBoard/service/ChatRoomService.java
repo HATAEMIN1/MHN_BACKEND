@@ -53,4 +53,8 @@ public class ChatRoomService {
         }
         return null;
     }
+
+    public List<ChatRoom> getAllChatRooms() {
+        return chatRoomRepository.findAll();
+    }
 }

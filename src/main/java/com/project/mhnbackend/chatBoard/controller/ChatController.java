@@ -66,6 +66,11 @@ public class ChatController { //handles web requests and websocket communication
         return new ChatRoomDTO(chatRoom, messages);
     }
 
+    @GetMapping("/api/chatrooms")
+    public ResponseEntity<List<ChatRoom>> getAllChatRooms() {
+        return ResponseEntity.ok(chatRoomService.getAllChatRooms());
+    }
+
     @GetMapping("/api/chat/room/{chatRoomId}")
     public ResponseEntity<ChatRoomDTO> getChatRoomDTO(@PathVariable("chatRoomId") String chatRoomId) {
         log.info("Received chat room ID: {}", chatRoomId);

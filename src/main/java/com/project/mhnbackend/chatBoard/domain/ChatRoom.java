@@ -21,6 +21,6 @@ public class ChatRoom {
     private Long recipientId;
     private String title;
     private String address;
-    private Long like;
+    private Long likes;
 }
 
