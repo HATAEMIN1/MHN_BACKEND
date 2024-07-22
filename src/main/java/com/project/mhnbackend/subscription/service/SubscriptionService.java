@@ -22,8 +22,8 @@ public class SubscriptionService {
     public SubscriptionResponseDTO createSubscription(PaymentRequestDTO paymentRequestDTO) {
         Subscription subscription = Subscription.builder()
                 .status(Subscription.SubscriptionStatus.ACTIVE)
-                .startDate(LocalDateTime.now())
-                .endDate(LocalDateTime.now().plusMinutes(1))
+//                .startDate(LocalDateTime.now())
+//                .endDate(LocalDateTime.now().plusMinutes(1))
                 .nextBillingDate(LocalDateTime.now().plusMinutes(1))
                 .build();
         subscriptionRepository.save(subscription);
@@ -43,7 +43,7 @@ public class SubscriptionService {
         paymentRepository.save(payment);
 
         return SubscriptionResponseDTO.builder()
-                .startDate(subscription.getStartDate())
+//                .startDate(subscription.getStartDate())
                 .nextBillingDate(subscription.getNextBillingDate())
                 .status(subscription.getStatus())
                 .build();
