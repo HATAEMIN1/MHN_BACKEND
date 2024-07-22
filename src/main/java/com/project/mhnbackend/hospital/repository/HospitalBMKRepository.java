@@ -12,6 +12,10 @@ import java.util.List;
 
 @Repository
 public interface HospitalBMKRepository extends JpaRepository<HospitalBMK,Long> {
+	
 	@Query("select bmk from HospitalBMK bmk  where bmk.hospital.id = :hospitalId and  bmk.member.id = :memberId")
 	HospitalBMK findByHospitalBMK(@Param ("hospitalId") Long hospitalId, @Param ("memberId") Long memberId);
+	
+	
+
 }

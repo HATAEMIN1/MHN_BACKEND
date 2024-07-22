@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class HospitalRequestDTO {
 	private Long id;
 	
-//	private Long boardId;
+	//	private Long boardId;
 	private String name;
 	private double latitude;
 	private double longitude;

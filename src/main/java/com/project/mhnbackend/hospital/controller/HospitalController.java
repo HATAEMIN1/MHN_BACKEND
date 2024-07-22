@@ -1,11 +1,9 @@
 package com.project.mhnbackend.hospital.controller;
 
-import com.project.mhnbackend.hospital.domain.Hospital;
 import com.project.mhnbackend.hospital.domain.HospitalBMK;
 import com.project.mhnbackend.hospital.domain.HospitalComment;
 import com.project.mhnbackend.hospital.dto.request.HospitalBMKRequestDTO;
 import com.project.mhnbackend.hospital.dto.request.HospitalCommentRequestDTO;
-import com.project.mhnbackend.hospital.dto.request.HospitalRequestDTO;
 import com.project.mhnbackend.hospital.dto.response.HospitalBMKResponseDTO;
 import com.project.mhnbackend.hospital.dto.response.HospitalCommentResponseDTO;
 import com.project.mhnbackend.hospital.dto.response.HospitalResponseDTO;
@@ -77,6 +75,14 @@ public class HospitalController {
 		return hospitalService.createHospitalBMK(hospitalBMKRequestDTO);
 	}
 	
+//	// 병원 북마크 상태 겟
+//	@GetMapping("/hospitals/bmk")
+//	public HospitalBMKResponseDTO getHospitalBMK(
+//			@RequestParam("hospitalId") Long hospitalId,         // axios경로에서 쓸 param임,,, 프론트 url이랑은 다름
+//			@RequestParam("memberId") Long memberId         // axios경로에서 쓸 param임,,, 프론트 url이랑은 다름
+//	) {
+//		return hospitalService.getHospitalBMK(hospitalId,memberId);
+//	}
 	// 병원 북마크 상태 겟
 	@GetMapping("/hospitals/bmk")
 	public HospitalBMKResponseDTO getHospitalBMK(
@@ -96,5 +102,7 @@ public class HospitalController {
 	) {
 		return hospitalService.deleteHospitalBMK(id);
 	}
+	
+	
 	
 }

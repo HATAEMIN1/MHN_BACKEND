@@ -5,7 +5,6 @@ import com.project.mhnbackend.hospital.domain.HospitalBMK;
 import com.project.mhnbackend.hospital.domain.HospitalComment;
 import com.project.mhnbackend.hospital.dto.request.HospitalBMKRequestDTO;
 import com.project.mhnbackend.hospital.dto.request.HospitalCommentRequestDTO;
-import com.project.mhnbackend.hospital.dto.request.HospitalRequestDTO;
 import com.project.mhnbackend.hospital.dto.response.HospitalBMKResponseDTO;
 import com.project.mhnbackend.hospital.dto.response.HospitalCommentResponseDTO;
 import com.project.mhnbackend.hospital.dto.response.HospitalResponseDTO;
@@ -169,6 +168,9 @@ public class HospitalService {
 	public HospitalBMKResponseDTO getHospitalBMK (Long hospitalId, Long memberId) {
 		
 		HospitalBMK hospitalBMK = hospitalBMKRepository.findByHospitalBMK (hospitalId, memberId);
+//		//totalBMKCount추가
+//		int totalBMKCount = hospitalBMKRepository.countTotalBMKByHospital(hospitalId);
+		
 		
 		if (hospitalBMK == null) {
 			return null;
@@ -178,6 +180,8 @@ public class HospitalService {
 				.id (hospitalBMK.getId ())
 				.hospitalId (hospitalBMK.getHospital ().getId ())
 				.memberId (hospitalBMK.getMember ().getId ())
+//				// totalBMKCount 추가
+//				.totalBMKCount(totalBMKCount)
 				.build ();
 	}
 	
