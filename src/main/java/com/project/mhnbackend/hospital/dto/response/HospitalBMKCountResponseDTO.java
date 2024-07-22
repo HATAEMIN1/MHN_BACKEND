@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class HospitalBMKCountResponseDTO {
-	private Long id;
+//	private Long id;
 	private Long hospitalId;
 	// 수정본
 	private int totalBMKCount;

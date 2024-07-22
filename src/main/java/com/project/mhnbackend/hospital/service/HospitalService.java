@@ -5,6 +5,7 @@ import com.project.mhnbackend.hospital.domain.HospitalBMK;
 import com.project.mhnbackend.hospital.domain.HospitalComment;
 import com.project.mhnbackend.hospital.dto.request.HospitalBMKRequestDTO;
 import com.project.mhnbackend.hospital.dto.request.HospitalCommentRequestDTO;
+import com.project.mhnbackend.hospital.dto.response.HospitalBMKCountResponseDTO;
 import com.project.mhnbackend.hospital.dto.response.HospitalBMKResponseDTO;
 import com.project.mhnbackend.hospital.dto.response.HospitalCommentResponseDTO;
 import com.project.mhnbackend.hospital.dto.response.HospitalResponseDTO;
@@ -194,4 +195,13 @@ public class HospitalService {
 	}
 	
 	
+	public HospitalBMKCountResponseDTO getHospitalBMKCount (Long hospitalId) {
+		int totalBMKByHospital = hospitalBMKRepository.countTotalBMKByHospital (hospitalId);
+		
+		
+		return HospitalBMKCountResponseDTO.builder ()
+				.hospitalId (hospitalId)
+				.totalBMKCount (totalBMKByHospital)
+				.build ();
+	}
 }

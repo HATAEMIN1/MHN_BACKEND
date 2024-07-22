@@ -4,6 +4,7 @@ import com.project.mhnbackend.hospital.domain.HospitalBMK;
 import com.project.mhnbackend.hospital.domain.HospitalComment;
 import com.project.mhnbackend.hospital.dto.request.HospitalBMKRequestDTO;
 import com.project.mhnbackend.hospital.dto.request.HospitalCommentRequestDTO;
+import com.project.mhnbackend.hospital.dto.response.HospitalBMKCountResponseDTO;
 import com.project.mhnbackend.hospital.dto.response.HospitalBMKResponseDTO;
 import com.project.mhnbackend.hospital.dto.response.HospitalCommentResponseDTO;
 import com.project.mhnbackend.hospital.dto.response.HospitalResponseDTO;
@@ -104,13 +105,13 @@ public class HospitalController {
 	}
 	
 	
-//	// 병원 북마크 총 개수 카운트
-//	@GetMapping("/hospitals/bmk/count")
-//	public @ResponseBody HospitalBMKCountResponseDTO getHospitalBMKCount(
-//			@RequestParam("hospitalId") Long hospitalId
-//	){
-//		return hospitalService.getHospitalBMKCount(hospitalId);
-//	}
-////
-	
+	// 병원 북마크 총 개수 카운트
+	@GetMapping("/hospitals/bmk/count")
+	public HospitalBMKCountResponseDTO getHospitalBMKCount(
+			@RequestParam("hospitalId") Long hospitalId
+	){
+		return hospitalService.getHospitalBMKCount(hospitalId);
+	}
+//
+
 }
