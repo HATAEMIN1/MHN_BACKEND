@@ -7,6 +7,7 @@ import com.project.mhnbackend.payment.dto.request.PaymentRequestDTO;
 import com.project.mhnbackend.payment.dto.response.ImpTokenResponseDTO;
 import com.project.mhnbackend.payment.dto.response.PaymentResponseDTO;
 import com.project.mhnbackend.payment.service.IamportService;
+import com.project.mhnbackend.payment.service.PaymentService;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.IamportResponse;
@@ -25,6 +26,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class PaymentController {
     private final IamportService iamportService;
+    private final PaymentService paymentService;
 
     //    @PostMapping("/iamport/token")
 //    public Mono<ImpTokenResponseDTO> getIamportToken() {
@@ -50,6 +52,7 @@ public class PaymentController {
 
     @GetMapping("/payments")
     public Payment getPayment() {
+        paymentService.getPayment();
         return null;
     }
 
