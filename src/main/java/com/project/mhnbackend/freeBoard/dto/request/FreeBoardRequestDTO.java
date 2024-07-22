@@ -21,7 +21,7 @@ public class FreeBoardRequestDTO {
 	private Long id;
     private String title;
     private String content;
-//    private Member member;
+    private Long memberId;
     @Builder.Default
     private List<MultipartFile> files = new ArrayList<>();
     @Builder.Default

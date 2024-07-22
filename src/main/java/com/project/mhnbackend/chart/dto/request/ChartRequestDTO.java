@@ -4,6 +4,7 @@ package com.project.mhnbackend.chart.dto.request;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 @Getter
 @Builder
 public class ChartRequestDTO {
-//    private Long petId;
+    private Long petId;
     private String hospitalName;
     private String petName;
     private String visitDate;
@@ -26,7 +27,7 @@ public class ChartRequestDTO {
     @Builder.Default
     private List<String> uploadFileNames = new ArrayList<>();
 
-    public void setUploadFileNames(List<String> uploadFileNames) {
-        this.uploadFileNames = uploadFileNames;
-    }
+//    public void setUploadFileNames(List<String> uploadFileNames) {
+//        this.uploadFileNames = uploadFileNames;
+//    }
 }
