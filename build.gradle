@@ -37,7 +37,10 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
 
+	// https://mvnrepository.com/artifact/net.coobird/thumbnailator
 	implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.19'
 
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '3.3.0'
@@ -51,7 +54,6 @@ dependencies {
   	// iamport 결제모듈
   	implementation 'com.github.iamport:iamport-rest-client-java:0.2.23'   //결제 모듈
 	//webflux
-	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
 
