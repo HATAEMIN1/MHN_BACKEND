@@ -72,6 +72,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         String msg = gson.toJson(Map.of("error", errorMessage));
 
         response.setContentType("application/json");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         PrintWriter printWriter = response.getWriter();
         printWriter.println(msg);
         printWriter.close();
@@ -82,7 +83,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         log.info("check uri " + path);
 
-        if (path.startsWith("/api/member/")) {
+        // 회원가입 요청 예외 처리 추가
+        if (path.startsWith("/api/member/") || path.startsWith("/api/v1/users")) {
             return true;
         }
 

@@ -58,29 +58,49 @@ public class CustomSecurityConfig {
 		return http.build();
 	};
 
+//	@Bean
+//	public CorsConfigurationSource corsConfigurationSource() {
+//		CorsConfiguration configuration = new CorsConfiguration();
+////		configuration.setAllowedOrigins(Arrays.asList("*"));
+////		configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS"));
+////		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+////		configuration.setAllowCredentials(true);
+//		configuration.setAllowedOriginPatterns(List.of("")); // 로컬호스트 허용
+//        configuration.addAllowedMethod(""); // 모든 HTTP 메소드 허용 (GET, POST, 등)
+//        configuration.addAllowedHeader("*"); // 모든 헤더 허용
+//        configuration.setAllowCredentials(true); // 자격 증명 허용
+//
+//		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//		source.registerCorsConfiguration("/**", configuration);
+//
+//		return source;
+//
+//	}
+//
+//	@Bean
+//	public PasswordEncoder passwordEncoder() {
+//		return new BCryptPasswordEncoder();
+//	}
+//
+//}
+//
+
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-//		configuration.setAllowedOrigins(Arrays.asList("*"));
-//		configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS"));
-//		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
-//		configuration.setAllowCredentials(true);
-		configuration.setAllowedOriginPatterns(List.of("")); // 로컬호스트 허용
-        configuration.addAllowedMethod(""); // 모든 HTTP 메소드 허용 (GET, POST, 등)
-        configuration.addAllowedHeader("*"); // 모든 헤더 허용
-        configuration.setAllowCredentials(true); // 자격 증명 허용
+		configuration.setAllowedOriginPatterns(List.of("http://localhost:3000")); // 프론트엔드 주소 허용
+		configuration.setAllowedMethods(List.of("HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS")); // 모든 HTTP 메소드 허용
+		configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type")); // 모든 헤더 허용
+		configuration.setAllowCredentials(true); // 자격 증명 허용
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 
 		return source;
-
 	}
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
 }
-
