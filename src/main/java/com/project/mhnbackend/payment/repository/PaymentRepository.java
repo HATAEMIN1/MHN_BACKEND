@@ -1,6 +1,6 @@
 package com.project.mhnbackend.payment.repository;
 
-import com.project.mhnbackend.subscription.domain.Payment;
+import com.project.mhnbackend.payment.domain.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -38,15 +38,15 @@ public class IamportService {
                 .bodyToMono(ImpTokenResponseDTO.class);
     }
 
-    public Mono<PaymentResponseDTO> requestPayment(String token, PaymentRequestDTO paymentRequestDTO) {
-        return webClient.post()
-                .uri("/subscribe/payments/again")
-                .header("Authorization", token)
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(paymentRequestDTO) 
-                .retrieve()
-                .bodyToMono(PaymentResponseDTO.class);
-    }
+//    public Mono<PaymentResponseDTO> requestPayment(String token, PaymentRequestDTO paymentRequestDTO) {
+//        return webClient.post()
+//                .uri("/subscribe/payments/again")
+//                .header("Authorization", token)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .bodyValue(paymentRequestDTO)
+//                .retrieve()
+//                .bodyToMono(PaymentResponseDTO.class);
+//    }
 
     public Mono<PaymentResponseDTO> registerBillingKeyAndSchedulePayment(String token, BillingKeyRequestDTO billingKeyRequestDTO) {
         return webClient.post()

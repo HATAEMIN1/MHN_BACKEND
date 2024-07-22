@@ -1,5 +1,6 @@
 package com.project.mhnbackend.payment.controller;
 
+import com.project.mhnbackend.payment.domain.Payment;
 import com.project.mhnbackend.payment.dto.request.BillingKeyRequestDTO;
 import com.project.mhnbackend.payment.dto.request.ImpTokenRequestDTO;
 import com.project.mhnbackend.payment.dto.request.PaymentRequestDTO;
@@ -9,7 +10,6 @@ import com.project.mhnbackend.payment.service.IamportService;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.IamportResponse;
-import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -39,7 +39,7 @@ public class PaymentController {
 //                });
 //    }
 
-    @PostMapping("/billing")
+    @PostMapping("/payments/billing")
     public Mono<PaymentResponseDTO> registerBillingKeyAndSchedulePayment(@RequestBody BillingKeyRequestDTO request) {
         return iamportService.getToken()
                 .flatMap(tokenResponse -> {
@@ -47,4 +47,11 @@ public class PaymentController {
                     return iamportService.registerBillingKeyAndSchedulePayment(token, request);
                 });
     }
+
+    @GetMapping("/payments")
+    public Payment getPayment() {
+        return null;
+    }
+
+
 }

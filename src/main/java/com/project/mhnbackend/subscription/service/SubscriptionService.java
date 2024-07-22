@@ -1,7 +1,7 @@
 package com.project.mhnbackend.subscription.service;
 
 import com.project.mhnbackend.payment.dto.request.PaymentRequestDTO;
-import com.project.mhnbackend.subscription.domain.Payment;
+import com.project.mhnbackend.payment.domain.Payment;
 import com.project.mhnbackend.subscription.domain.Subscription;
 import com.project.mhnbackend.subscription.dto.response.SubscriptionResponseDTO;
 import com.project.mhnbackend.payment.repository.PaymentRepository;
@@ -31,8 +31,12 @@ public class SubscriptionService {
         Payment payment = Payment.builder()
                 .pg(paymentRequestDTO.getPg())
                 .merchantUid(paymentRequestDTO.getMerchantUid())
-                .amount(paymentRequestDTO.getAmount())
+                .customerUid(paymentRequestDTO.getCustomerUid())
                 .impUid(paymentRequestDTO.getImpUid())
+                .productName(paymentRequestDTO.getProductName())
+                .buyerName(paymentRequestDTO.getBuyerName())
+                .amount(paymentRequestDTO.getAmount())
+                .buyerTel(paymentRequestDTO.getBuyerTel())
                 .createdAt(LocalDateTime.now())
                 .subscription(subscription)
                 .build();
