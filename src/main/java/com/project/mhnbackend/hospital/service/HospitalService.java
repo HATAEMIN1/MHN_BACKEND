@@ -111,10 +111,11 @@ public class HospitalService {
 	public void createHospitalComment (HospitalCommentRequestDTO hospitalCommentRequestDTO) {
 		
 		Hospital hospital = hospitalRepository.findById (hospitalCommentRequestDTO.getHospitalId ()).orElseThrow ();
-		
+		Member member = memberRepository.findById (hospitalCommentRequestDTO.getMemberId ()).orElseThrow ();
 		
 		HospitalComment hospitalComment = HospitalComment.builder ()
 				.hospital (hospital)
+				.member(member)
 				.content (hospitalCommentRequestDTO.getComment ())
 				.createdAt (LocalDateTime.now ())
 				.rating (hospitalCommentRequestDTO.getRating ())
