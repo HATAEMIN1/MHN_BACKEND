@@ -1,8 +1,6 @@
-package com.project.mhnbackend.subscription.dto.request;
+package com.project.mhnbackend.payment.dto.request;
 
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 
 @Getter

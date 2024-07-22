@@ -1,4 +1,4 @@
-package com.project.mhnbackend.subscription.repository;
+package com.project.mhnbackend.payment.repository;
 
 import com.project.mhnbackend.subscription.domain.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;

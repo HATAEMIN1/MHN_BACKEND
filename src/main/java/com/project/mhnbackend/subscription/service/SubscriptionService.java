@@ -1,10 +1,10 @@
 package com.project.mhnbackend.subscription.service;
 
+import com.project.mhnbackend.payment.dto.request.PaymentRequestDTO;
 import com.project.mhnbackend.subscription.domain.Payment;
 import com.project.mhnbackend.subscription.domain.Subscription;
-import com.project.mhnbackend.subscription.dto.request.PaymentRequestDTO;
 import com.project.mhnbackend.subscription.dto.response.SubscriptionResponseDTO;
-import com.project.mhnbackend.subscription.repository.PaymentRepository;
+import com.project.mhnbackend.payment.repository.PaymentRepository;
 import com.project.mhnbackend.subscription.repository.SubscriptionRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
