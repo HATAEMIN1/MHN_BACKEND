@@ -1,6 +1,7 @@
 package com.project.mhnbackend.subscription.controller;
 
-import com.project.mhnbackend.subscription.dto.request.PaymentRequestDTO;
+
+import com.project.mhnbackend.payment.dto.request.PaymentRequestDTO;
 import com.project.mhnbackend.subscription.dto.response.SubscriptionResponseDTO;
 import com.project.mhnbackend.subscription.service.SubscriptionService;
 import lombok.RequiredArgsConstructor;

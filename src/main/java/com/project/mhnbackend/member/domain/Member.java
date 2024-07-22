@@ -53,19 +53,19 @@ public class Member {
     @Column(nullable = false, updatable = false)
     private ZonedDateTime createdAt;
 
-    @Column(nullable = false)
-    private ZonedDateTime updatedAt;
+//    @Column(nullable = false)
+//    private ZonedDateTime updatedAt;
 
     @PrePersist
     protected void onCreate() {
         createdAt = ZonedDateTime.now();
-        updatedAt = ZonedDateTime.now();
+//        updatedAt = ZonedDateTime.now();
     }
 
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = ZonedDateTime.now();
-    }
+//    @PreUpdate
+//    protected void onUpdate() {
+//        updatedAt = ZonedDateTime.now();
+//    }
 
     public void addType(MemberType memberType) {
         memberTypeList.add(memberType);
