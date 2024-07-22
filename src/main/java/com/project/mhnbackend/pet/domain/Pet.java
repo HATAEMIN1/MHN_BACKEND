@@ -1,6 +1,10 @@
 package com.project.mhnbackend.pet.domain;
 
 
+import java.time.LocalDate;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import com.project.mhnbackend.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,5 +33,7 @@ public class Pet {
 	private Member member;
 	private String name;
 	private String kind;
-	private int age;
+//	private int age;
+	private LocalDate age;
+	private String petImage;
 }
