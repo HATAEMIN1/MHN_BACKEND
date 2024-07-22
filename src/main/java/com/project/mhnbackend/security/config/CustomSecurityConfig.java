@@ -68,6 +68,7 @@ public class CustomSecurityConfig {
 	
 	;
 
+
 //	@Bean
 //	public CorsConfigurationSource corsConfigurationSource() {
 //		CorsConfiguration configuration = new CorsConfiguration();
@@ -79,6 +80,7 @@ public class CustomSecurityConfig {
 ////        configuration.addAllowedMethod(""); // 모든 HTTP 메소드 허용 (GET, POST, 등)
 ////        configuration.addAllowedHeader("*"); // 모든 헤더 허용
 ////        configuration.setAllowCredentials(true); // 자격 증명 허용
+
 //
 //		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 //		source.registerCorsConfiguration("/**", configuration);
@@ -86,6 +88,7 @@ public class CustomSecurityConfig {
 //		return source;
 //
 //	}
+
 	
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource () {
@@ -98,6 +101,7 @@ public class CustomSecurityConfig {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource ();
 		source.registerCorsConfiguration ("/**", configuration);
 		
+
 		return source;
 	}
 	
@@ -105,6 +109,10 @@ public class CustomSecurityConfig {
 	public PasswordEncoder passwordEncoder () {
 		return new BCryptPasswordEncoder ();
 	}
+
+}
+
 	
 }
+
 
