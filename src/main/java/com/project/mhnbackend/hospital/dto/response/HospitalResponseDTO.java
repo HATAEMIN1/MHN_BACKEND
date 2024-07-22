@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class HospitalResponseDTO {
 	private Long id;
 	
-//	private Long boardId;
+	//	private Long boardId;
 	private String name;
 	private double latitude;
 	private double longitude;

@@ -104,5 +104,13 @@ public class HospitalController {
 	}
 	
 	
+//	// 병원 북마크 총 개수 카운트
+//	@GetMapping("/hospitals/bmk/count")
+//	public @ResponseBody HospitalBMKCountResponseDTO getHospitalBMKCount(
+//			@RequestParam("hospitalId") Long hospitalId
+//	){
+//		return hospitalService.getHospitalBMKCount(hospitalId);
+//	}
+////
 	
 }
