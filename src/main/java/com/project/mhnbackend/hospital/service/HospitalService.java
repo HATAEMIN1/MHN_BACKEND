@@ -5,10 +5,7 @@ import com.project.mhnbackend.hospital.domain.HospitalBMK;
 import com.project.mhnbackend.hospital.domain.HospitalComment;
 import com.project.mhnbackend.hospital.dto.request.HospitalBMKRequestDTO;
 import com.project.mhnbackend.hospital.dto.request.HospitalCommentRequestDTO;
-import com.project.mhnbackend.hospital.dto.response.HospitalBMKCountResponseDTO;
-import com.project.mhnbackend.hospital.dto.response.HospitalBMKResponseDTO;
-import com.project.mhnbackend.hospital.dto.response.HospitalCommentResponseDTO;
-import com.project.mhnbackend.hospital.dto.response.HospitalResponseDTO;
+import com.project.mhnbackend.hospital.dto.response.*;
 import com.project.mhnbackend.hospital.repository.HospitalBMKRepository;
 import com.project.mhnbackend.hospital.repository.HospitalCommentRepository;
 import com.project.mhnbackend.hospital.repository.HospitalRepository;
@@ -49,7 +46,7 @@ public class HospitalService {
 //				.collect (Collectors.toList ());
 //	}
 	
-	//=== gpt버전 3km이내 반경 ===
+	//=== gpt버전 3km이내 반경의 병원 리스트들 겟 ===
 	public List<HospitalResponseDTO> getHospitalsInArea (double lat, double lon) {
 		double minLat = lat - SEARCH_DISTANCE;
 		double maxLat = lat + SEARCH_DISTANCE;
@@ -90,6 +87,7 @@ public class HospitalService {
 //				.build ();
 //	}
 	
+	// 병원 상세정보 get
 	public HospitalResponseDTO getHospitalView (Long hospitalId) {
 		Hospital hospital = hospitalRepository.findById (hospitalId)
 				.orElseThrow (() -> new NoSuchElementException ("Hospital not found with id: " + hospitalId));
@@ -108,6 +106,7 @@ public class HospitalService {
 	}
 	
 	
+	// 병원 코멘트 작성 (post)
 	//	public void createHospitalComment (Long userId, Long hospitalId...로 각각쓰는대신 HospitalCommentRequestDTO hospitalCommentRequestDTO로 퉁침) {
 	public void createHospitalComment (HospitalCommentRequestDTO hospitalCommentRequestDTO) {
 		
@@ -116,7 +115,7 @@ public class HospitalService {
 		
 		HospitalComment hospitalComment = HospitalComment.builder ()
 				.hospital (hospital)
-				.member(member)
+				.member (member)
 				.content (hospitalCommentRequestDTO.getComment ())
 				.createdAt (LocalDateTime.now ())
 				.rating (hospitalCommentRequestDTO.getRating ())
@@ -125,6 +124,8 @@ public class HospitalService {
 		hospitalCommentRepository.save (hospitalComment);
 	}
 	
+	
+	// 병원 진료후기 댓글들 get
 	public List<HospitalCommentResponseDTO> getHospitalAllComment (Long hospitalId) {
 //		List<HospitalComment> hospitalComments = hospitalCommentRepository.findAll();
 //		List<HospitalComment> hospitalComments = hospitalCommentRepository.findByHospitalId (hospitalId);
@@ -133,7 +134,7 @@ public class HospitalService {
 		return hospitalComments.stream ().map ((comment) -> HospitalCommentResponseDTO.builder ()
 						.hospitalId (comment.getHospital ().getId ())
 						.comment (comment.getContent ())
-						.id(comment.getId ())
+						.id (comment.getId ())
 						.createdAt (comment.getCreatedAt ())
 						.rating (comment.getRating ())
 						.build ())
@@ -156,6 +157,7 @@ public class HospitalService {
 		return "삭제가 완료되었습니다";
 	}
 	
+	// 북마크 등록 post
 	public HospitalBMK createHospitalBMK (HospitalBMKRequestDTO hospitalBMKRequestDTO) {
 		Hospital hospital = hospitalRepository.findById (hospitalBMKRequestDTO.getHospitalId ()).orElseThrow ();
 		Member member = memberRepository.findById (hospitalBMKRequestDTO.getMemberId ()).orElseThrow ();
@@ -167,8 +169,9 @@ public class HospitalService {
 		return hospitalBMKRepository.save (hospitalBMK);  // 생성된 HospitalBMK 객체를 반환
 	}
 	
+	
+	// 병원 북마크 상태값 가져오려고 넣은 겟 _ 상세뷰 진입시 이미 체크되어있을지 아닐지 확인해야해서 넣은 api
 	public HospitalBMKResponseDTO getHospitalBMK (Long hospitalId, Long memberId) {
-		
 		HospitalBMK hospitalBMK = hospitalBMKRepository.findByHospitalBMK (hospitalId, memberId);
 //		//totalBMKCount추가
 //		int totalBMKCount = hospitalBMKRepository.countTotalBMKByHospital(hospitalId);
@@ -187,6 +190,7 @@ public class HospitalService {
 				.build ();
 	}
 	
+	// BMK 해제 (delete)
 	//	public HospitalBMKResponseDTO deleteHospitalBMK (Long id) {
 	public String deleteHospitalBMK (Long id) {
 		hospitalBMKRepository.deleteById (id);
@@ -195,13 +199,36 @@ public class HospitalService {
 	}
 	
 	
+	// 북마크 총 개수
 	public HospitalBMKCountResponseDTO getHospitalBMKCount (Long hospitalId) {
 		int totalBMKByHospital = hospitalBMKRepository.countTotalBMKByHospital (hospitalId);
-		
-		
 		return HospitalBMKCountResponseDTO.builder ()
 				.hospitalId (hospitalId)
 				.totalBMKCount (totalBMKByHospital)
 				.build ();
+	}
+	
+	// 병원 별점 평균
+	public HospitalRatingAVGResponseDTO getHospitalRatingAVG (Long hospitalId) {
+		double ratingAVGByHospitalId = hospitalCommentRepository.getAVGRating (hospitalId);
+		
+		return HospitalRatingAVGResponseDTO.builder ()
+				.hospitalId (hospitalId)
+				.ratingAVG (ratingAVGByHospitalId)
+				.build ();
+	}
+	
+
+	
+	// 즐겨찾기한 병원 리스트 겟
+	public List<HospitalAccountBMKListResponseDTO> getHospitalAccountBMKList (Long memberId) {
+		List<HospitalBMK> bookmarks = hospitalBMKRepository.findByMemberId (memberId);
+		return bookmarks.stream ()
+				.map (bmk -> HospitalAccountBMKListResponseDTO.builder ()
+						.id (bmk.getId ())
+						.memberId (bmk.getMember ().getId ())
+						.hospital (bmk.getHospital ())  // Hospital 객체 그대로 사용
+						.build ())
+				.collect (Collectors.toList ());
 	}
 }
