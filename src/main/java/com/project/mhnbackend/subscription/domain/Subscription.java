@@ -1,5 +1,6 @@
 package com.project.mhnbackend.subscription.domain;
 
+import com.project.mhnbackend.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,9 +20,11 @@ public class Subscription {
     private Long id;
     private LocalDateTime paymentDate;
     private LocalDateTime nextBillingDate;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
     @Enumerated(EnumType.STRING)
     private SubscriptionStatus status;
-
     private LocalDateTime createdAt;
     public enum SubscriptionStatus {
         ACTIVE, PAUSED, CANCELLED

@@ -10,6 +10,7 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
 
 
-    public void getPayment() {
+    public void getPayment(String billingKey) {
+//        paymentRepository.findBybillingkey(billingKey);
     }
 }

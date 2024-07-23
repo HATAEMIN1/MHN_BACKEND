@@ -14,6 +14,6 @@ public class SubscriptionResponseDTO {
     private Long id;
     private Long userId;
     private Subscription.SubscriptionStatus status;
-    private LocalDateTime startDate;
+    private LocalDateTime paymentDate;
     private LocalDateTime nextBillingDate;
 }

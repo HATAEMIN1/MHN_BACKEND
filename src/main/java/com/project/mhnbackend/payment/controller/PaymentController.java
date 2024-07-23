@@ -50,11 +50,14 @@ public class PaymentController {
                 });
     }
 
-    @GetMapping("/payments")
-    public Payment getPayment() {
-        paymentService.getPayment();
-        return null;
-    }
+//    @PostMapping("/payments/unschedule")
+//    public Payment getPayment() {
+//        return iamportService.getToken()
+//                .flatMap(tokenResponse -> {
+//                    String token = tokenResponse.getResponse().getAccess_token();
+//                    return iamportService.unSchedule(token, request);
+//                });;
+//    }
 
 
 }
