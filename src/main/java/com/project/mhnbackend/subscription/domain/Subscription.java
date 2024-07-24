@@ -26,8 +26,14 @@ public class Subscription {
     @Enumerated(EnumType.STRING)
     private SubscriptionStatus status;
     private LocalDateTime createdAt;
+    public void setStatus(SubscriptionStatus status) {
+        this.status = status;
+    }
+
+
     public enum SubscriptionStatus {
         ACTIVE, PAUSED, CANCELLED
     }
+
 
 }

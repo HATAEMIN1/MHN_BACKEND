@@ -23,6 +23,4 @@ public class SubscriptionController {
     public SubscriptionResponseDTO getSubscription(@RequestParam("userId") Long memberId) {
         return subscriptionService.getSubscription(memberId);
     }
-
-
 }

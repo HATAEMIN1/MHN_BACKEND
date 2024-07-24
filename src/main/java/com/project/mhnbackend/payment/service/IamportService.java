@@ -4,8 +4,10 @@ package com.project.mhnbackend.payment.service;
 import com.project.mhnbackend.payment.dto.request.BillingKeyRequestDTO;
 import com.project.mhnbackend.payment.dto.request.ImpTokenRequestDTO;
 import com.project.mhnbackend.payment.dto.request.PaymentRequestDTO;
+import com.project.mhnbackend.payment.dto.request.UnScheduleRequestDTO;
 import com.project.mhnbackend.payment.dto.response.ImpTokenResponseDTO;
 import com.project.mhnbackend.payment.dto.response.PaymentResponseDTO;
+import com.project.mhnbackend.payment.dto.response.UnScheduleResponseDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -73,4 +75,13 @@ public class IamportService {
     }
 
 
+    public Mono<UnScheduleResponseDTO> unSchedule(String token, UnScheduleRequestDTO unScheduleRequestDTO) {
+        return webClient.post()
+                .uri("/subscribe/payments/unschedule")
+                .header("Authorization", token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(unScheduleRequestDTO)
+                .retrieve()
+                .bodyToMono(UnScheduleResponseDTO.class);
+    }
 }
