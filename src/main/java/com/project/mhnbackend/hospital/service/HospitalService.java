@@ -209,14 +209,29 @@ public class HospitalService {
 	}
 	
 	// 병원 별점 평균
-	public HospitalRatingAVGResponseDTO getHospitalRatingAVG (Long hospitalId) {
-		double ratingAVGByHospitalId = hospitalCommentRepository.getAVGRating (hospitalId);
+	public HospitalRatingAVGResponseDTO getHospitalRatingAVG(Long hospitalId) {
+		Double ratingAVGByHospitalId = hospitalCommentRepository.getAVGRating(hospitalId);
 		
-		return HospitalRatingAVGResponseDTO.builder ()
-				.hospitalId (hospitalId)
-				.ratingAVG (ratingAVGByHospitalId)
-				.build ();
+		// null 체크 추가
+		double avgRating = (ratingAVGByHospitalId != null) ? ratingAVGByHospitalId : 0.0;
+		
+		return HospitalRatingAVGResponseDTO.builder()
+				.hospitalId(hospitalId)
+				.ratingAVG(avgRating)
+				.build();
 	}
+//	public HospitalRatingAVGResponseDTO getHospitalRatingAVG (Long hospitalId) {
+////		double ratingAVGByHospitalId = hospitalCommentRepository.getAVGRating (hospitalId);
+//		Double ratingAVGByHospitalId = hospitalCommentRepository.getAVGRating(hospitalId);
+//
+//		// null 체크를 추가
+//		double avgRating = (ratingAVGByHospitalId != null) ? ratingAVGByHospitalId : 0.0;
+//
+//		return HospitalRatingAVGResponseDTO.builder ()
+//				.hospitalId (hospitalId)
+//				.ratingAVG (ratingAVGByHospitalId)
+//				.build ();
+//	}
 	
 
 	
