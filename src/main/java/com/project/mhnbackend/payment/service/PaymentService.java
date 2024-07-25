@@ -14,6 +14,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Log4j2
@@ -22,7 +24,10 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final SubscriptionRepository subscriptionRepository;
 
+    @Transactional
     public Mono<UnScheduleResponseDTO> unschedulePayment(UnScheduleRequestDTO unScheduleRequestDTO) {
+        Optional<Payment> memberIdOrderByCreatedAtDesc = paymentRepository.findTopByMemberIdOrderByCreatedAtDesc(unScheduleRequestDTO.getMemberId());
+        unScheduleRequestDTO.setCustomer_uid(memberIdOrderByCreatedAtDesc.get().getCustomerUid());
         return iamportService.getToken()
                 .flatMap(tokenResponse -> {
                     String token = tokenResponse.getResponse().getAccess_token();

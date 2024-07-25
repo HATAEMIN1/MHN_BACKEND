@@ -32,10 +32,10 @@ public class PaymentController {
     private final SubscriptionService subscriptionService;
     private final PaymentService paymentService;
 
-//    @PostMapping("/iamport/token")
-//    public Mono<ImpTokenResponseDTO> getIamportToken() {
-//        return iamportService.getToken();
-//    }
+    @PostMapping("/iamport/token")
+    public Mono<ImpTokenResponseDTO> getIamportToken() {
+        return iamportService.getToken();
+    }
 //    @PostMapping("/payment")
 //    public Mono<PaymentResponseDTO> requestPayment(@RequestBody PaymentRequestDTO paymentRequest) {
 //        return iamportService.getToken()
