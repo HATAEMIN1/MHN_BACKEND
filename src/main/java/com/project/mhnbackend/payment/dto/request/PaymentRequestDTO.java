@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class PaymentRequestDTO {
-    private Long userId;
+    private Long memberId;
     private String pg;
     private String merchantUid;
     private String customerUid;
