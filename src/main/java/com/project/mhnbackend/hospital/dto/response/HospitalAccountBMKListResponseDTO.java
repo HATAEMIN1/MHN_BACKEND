@@ -1,6 +1,6 @@
 package com.project.mhnbackend.hospital.dto.response;
 
-
+import com.project.mhnbackend.hospital.domain.Hospital;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,13 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class HospitalResponseDTO {
+public class HospitalAccountBMKListResponseDTO {
 	private Long id;
-	
-	//	private Long boardId;
-	private String name;
-	private double latitude;
-	private double longitude;
-	private String address;
-	private String phone;
+	private Long memberId;
+	private Hospital hospital;
 }
