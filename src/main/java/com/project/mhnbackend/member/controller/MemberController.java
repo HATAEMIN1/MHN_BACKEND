@@ -56,9 +56,9 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류가 발생했습니다.");
     }
 
-    @PostMapping("/users/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequestDTO loginRequestDTO) {
-        String token = memberService.login(loginRequestDTO);
-        return ResponseEntity.ok(token);
-    }
+//    @PostMapping("/users/login")
+//    public ResponseEntity<String> login(@RequestBody LoginRequestDTO loginRequestDTO) {
+//        String token = memberService.login(loginRequestDTO);
+//        return ResponseEntity.ok(token);
+//    }
 }

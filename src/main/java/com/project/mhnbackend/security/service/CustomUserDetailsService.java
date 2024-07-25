@@ -1,4 +1,4 @@
-package com.project.mhnbackend.member.service;
+package com.project.mhnbackend.security.service;
 
 import java.util.stream.Collectors;
 
@@ -18,20 +18,15 @@ import lombok.extern.log4j.Log4j2;
 @Service
 @Log4j2
 public class CustomUserDetailsService implements UserDetailsService{
-
-	
 	private final MemberRepository memberRepository;
-	private Member member;
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		log.info("========================#2 loadUserByUserName==============================" + username);
-		log.info("Member: " + member);
-		
+		log.info("username은"+ username);
 		Member member = memberRepository.getWithRole(username);
 		if(member == null) {
 			throw new UsernameNotFoundException("not found");
 		}
-		
 		MemberDTO memberDTO = new MemberDTO(
 				member.getEmail(),
 				member.getPassword(),
@@ -40,12 +35,8 @@ public class CustomUserDetailsService implements UserDetailsService{
 				member.getTel(),
 				member.getMemberTypeList().stream().map(
 						memberTypeList -> memberTypeList.name()).collect(Collectors.toList()));
-		
+		log.info("멤버 dto는");
 		log.info(memberDTO);
-				
-		
-		
 		return memberDTO;
 	}
-
 }

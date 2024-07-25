@@ -49,19 +49,19 @@ public class MemberService {
 
         memberRepository.save(member);
     }
-    public String login(LoginRequestDTO loginRequestDTO) {
-        Optional<Member> optionalMember = memberRepository.findByEmail(loginRequestDTO.getEmail());
-
-        if (optionalMember.isPresent()) {
-            Member member = optionalMember.get();
-            if (passwordEncoder.matches(loginRequestDTO.getPassword(), member.getPassword())) {
-                Map<String, Object> claims = new HashMap<>();
-                claims.put("email", member.getEmail());
-                claims.put("nickName", member.getNickName());
-                // 필요한 추가 정보도 claims에 넣을 수 있습니다.
-                return JWTUtil.generateToken(claims, 60); // 토큰 유효기간을 60분으로 설정
-            }
-        }
-        throw new RuntimeException("Invalid login credentials");
-    }
+//    public String login(LoginRequestDTO loginRequestDTO) {
+//        Optional<Member> optionalMember = memberRepository.findByEmail(loginRequestDTO.getEmail());
+//
+//        if (optionalMember.isPresent()) {
+//            Member member = optionalMember.get();
+//            if (passwordEncoder.matches(loginRequestDTO.getPassword(), member.getPassword())) {
+//                Map<String, Object> claims = new HashMap<>();
+//                claims.put("email", member.getEmail());
+//                claims.put("nickName", member.getNickName());
+//                // 필요한 추가 정보도 claims에 넣을 수 있습니다.
+//                return JWTUtil.generateToken(claims, 60); // 토큰 유효기간을 60분으로 설정
+//            }
+//        }
+//        throw new RuntimeException("Invalid login credentials");
+//    }
 }
