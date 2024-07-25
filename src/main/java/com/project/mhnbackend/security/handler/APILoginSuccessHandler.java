@@ -25,14 +25,10 @@ public class APILoginSuccessHandler implements AuthenticationSuccessHandler {
 		log.info("####################################");
 		log.info(authentication);
 		log.info("####################################");
-
-		response.getWriter().write("Login Successful!");
-
 		MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
-
+		log.info("멤버디티오는");
+		log.info(memberDTO);
 		Map<String, Object> claims = memberDTO.getClaims();
-		
-		
 		String accessToken = JWTUtil.generateToken(claims, 30);
 		String refreshToken = JWTUtil.generateToken(claims, 60*24);
 		
