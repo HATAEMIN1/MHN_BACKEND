@@ -11,6 +11,7 @@ import com.project.mhnbackend.hospital.repository.HospitalCommentRepository;
 import com.project.mhnbackend.hospital.repository.HospitalRepository;
 import com.project.mhnbackend.member.domain.Member;
 import com.project.mhnbackend.member.repository.MemberRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -245,5 +246,23 @@ public class HospitalService {
 						.hospital (bmk.getHospital ())  // Hospital 객체 그대로 사용
 						.build ())
 				.collect (Collectors.toList ());
+	}
+	
+	// 검색한 병원 리스트 겟
+	@Transactional
+	public List<HospitalResponseDTO> getSearchedHospitalListByName (String name) {
+		List<Hospital> searchHospitals = hospitalRepository.searchedHospitalListByName(name);
+		return searchHospitals.stream ().map (
+				(searchList) -> HospitalResponseDTO.builder ()
+						.id (searchList.getId ())
+						.name (searchList.getName ())
+						.latitude (searchList.getLatitude ())
+						.longitude (searchList.getLongitude ())
+						.address (searchList.getAddress ())
+						.phone(searchList.getPhone ())
+						.build ()
+				)
+				.collect (Collectors.toList ());
+				
 	}
 }

@@ -117,5 +117,11 @@ public class HospitalController {
 	}
 	
 	
-
+	// 검색결과 리스트 겟
+		@GetMapping("hospitals/search")
+	public List<HospitalResponseDTO> getSearchedHospitalListByName(
+			@RequestParam("name") String name
+	){
+		return hospitalService.getSearchedHospitalListByName(name);
+	}
 }

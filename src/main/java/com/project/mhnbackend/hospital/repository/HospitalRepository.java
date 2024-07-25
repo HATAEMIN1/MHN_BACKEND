@@ -21,4 +21,6 @@ public interface HospitalRepository extends JpaRepository<Hospital, Long> {
 	                                   @Param("minLon") double minLon,
 	                                   @Param("maxLon") double maxLon);
 	
+	@Query("SELECT h FROM Hospital h WHERE h.name LIKE %:name%")
+	List<Hospital> searchedHospitalListByName (@Param ("name") String name);
 }
