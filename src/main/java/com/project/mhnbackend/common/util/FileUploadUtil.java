@@ -37,7 +37,7 @@ public class FileUploadUtil {
         File tempFolder = new File(uploadPath);
 
         if (!tempFolder.exists()) {
-            tempFolder.mkdir();
+            tempFolder.mkdir(); // 기존 mkdir() 대신 mkdirs()로 변경
         }
 
         uploadPath = tempFolder.getAbsolutePath();

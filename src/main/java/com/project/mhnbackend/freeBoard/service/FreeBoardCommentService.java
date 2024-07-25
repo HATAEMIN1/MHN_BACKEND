@@ -30,8 +30,43 @@ public class FreeBoardCommentService {
     @Autowired
     private MemberRepository memberRepository;
 
+//    public CommentResponseDTO addComment(CommentRequestDTO commentRequestDTO) {
+//    	 System.out.println("Received CommentRequestDTO: " + commentRequestDTO);
+//        FreeBoard freeBoard = freeBoardRepository.findById(commentRequestDTO.getFreeBoardId())
+//                .orElseThrow(() -> new IllegalArgumentException("Invalid FreeBoard ID"));
+//
+//        Member member = memberRepository.findById(commentRequestDTO.getMemberId())
+//                .orElseThrow(() -> new IllegalArgumentException("Invalid Member ID"));
+//
+//        FreeBoardComment parentComment = null;
+//        if (commentRequestDTO.getParentId() != null) {
+//            parentComment = freeBoardCommentRepository.findById(commentRequestDTO.getParentId())
+//                    .orElseThrow(() -> new IllegalArgumentException("Invalid Parent Comment ID"));
+//        }
+//
+//        FreeBoardComment comment = FreeBoardComment.builder()
+//                .content(commentRequestDTO.getContent())
+//                .member(member)
+//                .freeBoard(freeBoard)
+//                .parent(parentComment)
+//                .step(parentComment != null ? parentComment.getStep() + 1 : 0)
+//                .depth(parentComment != null ? parentComment.getDepth() + 1 : 0)
+//                .level(parentComment != null ? parentComment.getLevel() + 1 : 0)
+//                .build();
+//
+//        freeBoardCommentRepository.save(comment);
+//        
+//        System.out.println("Saved Comment: " + comment);
+//
+//        return toCommentResponseDTO(comment);
+//    }
+//
+//    public List<CommentResponseDTO> getCommentsByFreeBoardId(Long freeBoardId) {
+//        List<FreeBoardComment> comments = freeBoardCommentRepository.findByFreeBoardIdAndParentIsNull(freeBoardId);
+//        return comments.stream().map(this::toCommentResponseDTO).collect(Collectors.toList());
+//    }
     public CommentResponseDTO addComment(CommentRequestDTO commentRequestDTO) {
-    	 System.out.println("Received CommentRequestDTO: " + commentRequestDTO);
+        System.out.println("Received CommentRequestDTO: " + commentRequestDTO);
         FreeBoard freeBoard = freeBoardRepository.findById(commentRequestDTO.getFreeBoardId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid FreeBoard ID"));
 
