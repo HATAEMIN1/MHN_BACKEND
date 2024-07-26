@@ -39,15 +39,15 @@ public class CustomSecurityConfig {
       http.csrf(config -> config.disable());
 
       http.formLogin(config -> {
-         config.loginProcessingUrl("/api/member/login")
+         config.loginProcessingUrl("/api/v1/member/login")
                .successHandler(new APILoginSuccessHandler())
                .failureHandler(new APILoginFailHandler())
                .permitAll();
       });
 
       http.logout(logout -> {
-         logout.logoutUrl("/api/member/logout")
-               .logoutSuccessUrl("/api/member/login")
+         logout.logoutUrl("/api/vi/member/logout")
+               .logoutSuccessUrl("/api/v1/member/login")
                .permitAll();
       });
 
