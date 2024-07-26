@@ -25,10 +25,12 @@ spring.servlet.multipart.max-request-size=30MB
 spring.servlet.multipart.max-file-size=10MB
 
 com.study.spring.upload.path=upload
+spring.web.resources.static-locations=classpath:/static/,file:./upload/
+spring.mvc.static-path-pattern=/upload/**
+
+spring.config.import=optional:mailAuth.properties
+
 
 #iamport
 iamport.api.key = 8257206582012400
 iamport.api.secret = dsAwLAEXzrX04XcgQHIpyaQFTmS0iLmwPs1KrpOn1UbPQNjK7IWTiHAI7rf5N40HkrvmpLleL2NWhBUu
-
-spring.web.resources.static-locations=classpath:/static/,file:./upload/
-spring.mvc.static-path-pattern=/upload/**

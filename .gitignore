@@ -38,5 +38,6 @@ out/
 
 ### application.properties ###
 application.properties
+mailAuth.properties
 #### .DS_Store ####
 .DS_Store
