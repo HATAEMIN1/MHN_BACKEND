@@ -1,6 +1,7 @@
 package com.project.mhnbackend.hospital.dto.response;
 
 
+import com.project.mhnbackend.member.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 public class HospitalCommentResponseDTO {
 	private Long id;
-	private Long memberId;
+	private Member member;
 	private Long hospitalId;
 	private String comment;
 	private LocalDateTime createdAt;

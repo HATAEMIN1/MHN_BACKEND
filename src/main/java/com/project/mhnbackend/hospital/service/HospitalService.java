@@ -134,6 +134,7 @@ public class HospitalService {
 		
 		return hospitalComments.stream ().map ((comment) -> HospitalCommentResponseDTO.builder ()
 						.hospitalId (comment.getHospital ().getId ())
+						.member (comment.getMember())
 						.comment (comment.getContent ())
 						.id (comment.getId ())
 						.createdAt (comment.getCreatedAt ())
