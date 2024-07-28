@@ -14,6 +14,7 @@ public class CommentResponseDTO {
     private Long memberId;
     private Long freeBoardId;
     private LocalDateTime createDate;
+    private String nickName;
     private int step;
     private int depth;
     private int level;
