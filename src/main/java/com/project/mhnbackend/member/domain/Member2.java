@@ -28,7 +28,7 @@ import lombok.ToString;
 @Table(name="member")
 @Getter
 @ToString(exclude = "memberTypeList")
-public class Member {
+public class Member2 {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,8 +45,6 @@ public class Member {
     private String name;
 
     private String tel;
-
-    private String profileImageUrl;
 
     @Builder.Default
     @ElementCollection
@@ -83,9 +81,5 @@ public class Member {
 
     public void changeNickName(String nickName) {
         this.nickName = nickName;
-    }
-
-    public void changeProfileImageUrl(String profileImageUrl) {
-        this.profileImageUrl = profileImageUrl;
     }
 }
