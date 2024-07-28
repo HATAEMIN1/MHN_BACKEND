@@ -147,19 +147,38 @@ public class FreeBoardController {
 //        return ResponseEntity.ok(savedFreeBoard);
 //    }
 
+//	@PostMapping("/boards")
+//	public ResponseEntity<FreeBoard> createFreeBoard(@RequestParam("title") String title,
+//			@RequestParam("content") String content, @RequestParam("memberId") Long memberId,
+//			@RequestParam("files") List<MultipartFile> files) {
+//
+//		FreeBoardRequestDTO freeBoardRequestDTO = FreeBoardRequestDTO.builder().title(title).content(content)
+//				.memberId(memberId).files(files)
+//				.uploadFileNames(files.stream().map(MultipartFile::getOriginalFilename).collect(Collectors.toList()))
+//				.build();
+//
+//		FreeBoard freeBoard = freeBoardService.createFreeBoard(freeBoardRequestDTO);
+//		return ResponseEntity.status(HttpStatus.CREATED).body(freeBoard);
+//	}
 	@PostMapping("/boards")
-	public ResponseEntity<FreeBoard> createFreeBoard(@RequestParam("title") String title,
-			@RequestParam("content") String content, @RequestParam("memberId") Long memberId,
-			@RequestParam("files") List<MultipartFile> files) {
+    public ResponseEntity<FreeBoard> createFreeBoard(
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam("files") List<MultipartFile> files,
+            @RequestParam("memberId") Long memberId) {
 
-		FreeBoardRequestDTO freeBoardRequestDTO = FreeBoardRequestDTO.builder().title(title).content(content)
-				.memberId(memberId).files(files)
-				.uploadFileNames(files.stream().map(MultipartFile::getOriginalFilename).collect(Collectors.toList()))
-				.build();
+        FreeBoardRequestDTO freeBoardRequestDTO = FreeBoardRequestDTO.builder()
+                .title(title)
+                .content(content)
+                .memberId(memberId)
+                .files(files)
+                .uploadFileNames(files.stream().map(MultipartFile::getOriginalFilename).collect(Collectors.toList()))
+                .build();
 
-		FreeBoard freeBoard = freeBoardService.createFreeBoard(freeBoardRequestDTO);
-		return ResponseEntity.status(HttpStatus.CREATED).body(freeBoard);
-	}
+        FreeBoard freeBoard = freeBoardService.createFreeBoard(freeBoardRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(freeBoard);
+    }
+	
 
 //    @PostMapping("/boards/like")
 //    public ResponseEntity<String> likeFreeBoard(@RequestParam("freeBoardId") Long freeBoardId, Authentication authentication) {
