@@ -1,14 +1,21 @@
 package com.project.mhnbackend.member.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.project.mhnbackend.common.exception.ex.CustomException;
 import com.project.mhnbackend.common.util.JWTUtil;
 import com.project.mhnbackend.member.domain.Member;
 import com.project.mhnbackend.member.dto.request.LoginRequestDTO;
@@ -16,6 +23,7 @@ import com.project.mhnbackend.member.dto.request.SignUpRequestDTO;
 import com.project.mhnbackend.member.repository.MemberRepository;
 
 @Service
+@Transactional
 public class MemberService {
 
     @Autowired
@@ -168,5 +176,59 @@ public class MemberService {
 //        }
 //        throw new RuntimeException("Invalid login credentials");
 //    }
+    public void updateNickName(Long id, String nickName) {
+        if (nickName.length() < 2 || nickName.length() > 8) {
+            throw new CustomException("닉네임은 2글자 이상 8글자 이하로 입력해주세요.");
+        }
+
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new CustomException("Member not found for this id :: " + id));
+
+        if (isNicknameExists(nickName)) {
+            throw new CustomException("이미 존재하는 닉네임입니다.");
+        }
+
+        member.changeNickName(nickName);
+        memberRepository.save(member);
+    }
+
+    public void updatePassword(Long id, String password) {
+        String passwordPattern = "^(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}$";
+        if (!Pattern.matches(passwordPattern, password)) {
+            throw new CustomException("비밀번호는 특수문자가 포함된 8글자 이상이어야 합니다.");
+        }
+
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new CustomException("Member not found for this id :: " + id));
+
+        member.changePassword(passwordEncoder.encode(password));
+        memberRepository.save(member);
+    }
+
+    public void updateProfileImageUrl(Long id, String profileImageUrl) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new CustomException("Member not found for this id :: " + id));
+
+        // 기존 프로필 이미지가 있으면 삭제
+        String existingProfileImageUrl = member.getProfileImageUrl();
+        if (existingProfileImageUrl != null && !existingProfileImageUrl.isEmpty()) {
+            deleteFile(existingProfileImageUrl);
+        }
+
+        member.changeProfileImageUrl(profileImageUrl);
+        memberRepository.save(member);
+    }
+
+    private void deleteFile(String fileUrl) {
+        String fileName = fileUrl.substring(fileUrl.lastIndexOf("=") + 1);
+        Path filePath = Paths.get("uploadPath", fileName);
+        Path thumbnailPath = Paths.get("uploadPath", "s_" + fileName);
+        try {
+            Files.deleteIfExists(filePath);
+            Files.deleteIfExists(thumbnailPath);
+        } catch (IOException e) {
+            throw new RuntimeException("파일 삭제 중 오류가 발생했습니다.");
+        }
+    }
 
 }
