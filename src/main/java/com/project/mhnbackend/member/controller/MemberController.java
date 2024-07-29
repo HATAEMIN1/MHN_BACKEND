@@ -1,5 +1,6 @@
 package com.project.mhnbackend.member.controller;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,7 +12,10 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +24,7 @@ import com.project.mhnbackend.common.exception.ex.CustomException;
 import com.project.mhnbackend.common.util.FileUploadUtil;
 import com.project.mhnbackend.member.dto.request.LoginRequestDTO;
 import com.project.mhnbackend.member.dto.request.SignUpRequestDTO;
+import com.project.mhnbackend.member.dto.response.MemberEditResponseDTO;
 import com.project.mhnbackend.member.service.MemberService;
 
 import net.coobird.thumbnailator.Thumbnails;
@@ -208,5 +213,29 @@ public class MemberController {
 
 		return ResponseEntity.ok(fileUrl);
 	}
+	
+	
+	@GetMapping("/members/edit")
+	public ResponseEntity<MemberEditResponseDTO> getMemberEditResponse(@RequestParam("id") Long id) {
+        MemberEditResponseDTO responseDTO = memberService.getMemberEditResponse(id);
+        return ResponseEntity.ok(responseDTO);
+    }
+	
+	 @GetMapping("/files")
+	    public ResponseEntity<Resource> getFile(@RequestParam("fileName") String fileName) {
+	        try {
+	            Path filePath = Paths.get(uploadPath).resolve(fileName).normalize();
+	            Resource resource = new UrlResource(filePath.toUri());
 
+	            if (!resource.exists()) {
+	                throw new FileNotFoundException("File not found " + fileName);
+	            }
+
+	            return ResponseEntity.ok()
+	                    .contentType(MediaType.parseMediaType(Files.probeContentType(filePath)))
+	                    .body(resource);
+	        } catch (Exception e) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	        }
+	    }
 }
