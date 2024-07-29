@@ -416,4 +416,26 @@ public class FreeBoardService {
                     .build();
         });
     }
+    public Page<FreeBoardResponseDTO> getFreeBoardsByUser(Long memberId, Pageable pageable) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid member ID"));
+
+        Page<FreeBoard> freeBoards = freeBoardRepository.findAllByMember(member, pageable);
+
+        return freeBoards.map(freeBoard -> {
+            int likeCount = freeBoard.getLikes().size();
+            int commentCount = freeBoard.getComments().size();
+            return FreeBoardResponseDTO.builder()
+                    .id(freeBoard.getId())
+                    .title(freeBoard.getTitle())
+                    .content(freeBoard.getContent())
+                    .createDate(freeBoard.getCreateDate())
+                    .updateDate(freeBoard.getUpdateDate())
+                    .imageList(freeBoard.getImageList())
+                    .likeState(false) // 기본값으로 설정
+                    .likeCount(likeCount)
+                    .commentCount(commentCount)
+                    .build();
+        });
+    }
 }
