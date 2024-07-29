@@ -2,6 +2,7 @@ package com.project.mhnbackend.chatBoard.service;
 
 import com.project.mhnbackend.chatBoard.domain.ChatRoom;
 import com.project.mhnbackend.chatBoard.repository.ChatRoomRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,30 @@ public class ChatRoomService {
         }
         return null;
     }
+
+//    @Transactional
+//    public ChatRoom createChatRoom(String chatRoomId, Long senderId, Long recipientId, String chatRoomTitle, String chatRoomAddress, Long likes) {
+//        List<ChatRoom> chatRoomList = chatRoomRepository.findAll();
+//        for (ChatRoom chatRoom : chatRoomList) {
+//            if (chatRoom.getChatRoomId().equals(chatRoomId)) {
+//                log.info("chat room already exists in chatRoomRepository with the following id:" + chatRoom.getChatRoomId());
+//                return chatRoom;
+//            }
+//        }
+//        // no chatroom with the chatRoomId found
+//        ChatRoom chatRoom = ChatRoom.builder()
+//                .chatRoomId(chatRoomId)
+//                .senderId(senderId)
+//                .recipientId(recipientId)
+//                .title(chatRoomTitle)
+//                .address(chatRoomAddress)
+//                .likes(likes)
+//                .build();
+//        chatRoomRepository.save(chatRoom);
+//        // save chatRoom to chatRoomRepository
+//        // save messages to chatRoom
+//        return chatRoom;
+//    }
 
     public List<ChatRoom> getAllChatRooms() {
         return chatRoomRepository.findAll();
