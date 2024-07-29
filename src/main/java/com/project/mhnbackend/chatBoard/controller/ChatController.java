@@ -16,9 +16,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
@@ -90,18 +88,26 @@ public class ChatController { //handles web requests and websocket communication
 
     @GetMapping("/chatrooms")
     public ResponseEntity<List<ChatRoom>> getAllChatRooms() {
-        return ResponseEntity.ok(chatRoomService.getAllChatRooms());
+        List<ChatRoom> chatRooms = chatRoomService.getAllChatRooms();
+        log.info("all chatrooms: {}", chatRooms);
+        return ResponseEntity.ok(chatRooms);
     }
 
     @GetMapping("/chat/room/{chatRoomId}")
     public ResponseEntity<ChatRoomDTO> getChatRoomDTO(@PathVariable("chatRoomId") String chatRoomId) {
-        log.info("Received chat room ID: {}", chatRoomId);
+        log.info("Received chat room ID inside getChatRoomDTO function: {}", chatRoomId);
         ChatRoom chatRoom = chatRoomService.getChatRoomByChatRoomId(chatRoomId);
         if (chatRoom == null) {
             return ResponseEntity.notFound().build();
         }
+        log.info("Chatroom exists");
         List<ChatMessage> messages = chatMessageService.getMessagesByChatRoomId(chatRoomId);
         return ResponseEntity.ok(new ChatRoomDTO(chatRoom, messages));
+    }
+
+    @PostMapping("/chat/room")
+    public ResponseEntity<ChatRoom> saveChatRoom(@RequestBody ChatRoom chatRoom) {
+        return ResponseEntity.ok(chatRoomService.saveChatRoom(chatRoom));
     }
 
     @GetMapping("/chat/room/{senderId}/{recipientId}")
