@@ -23,8 +23,8 @@ public class ChartController {
     }
 
     @GetMapping("/charts")
-    public List<ChartResponseDTO> getCharts(){
-        return chartService.getCharts();
+    public List<ChartResponseDTO> getCharts(@RequestParam("memberId") Long memberId){
+        return chartService.getCharts(memberId);
     }
 
     @GetMapping("/charts/view")

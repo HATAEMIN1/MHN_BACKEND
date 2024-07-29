@@ -49,7 +49,10 @@ public class ChartServiceImpl implements ChartService {
                 .description(chartRequestDTO.getDescription())
                 .createdAt(LocalDateTime.now())
                 .build();
-
+        if(uploadFileNames == null){
+            chartRepository.save(medicalChart);
+            return medicalChart;
+        }
         for (String fileName : uploadFileNames) {
             medicalChart.addImageString(fileName);
         }
@@ -58,8 +61,8 @@ public class ChartServiceImpl implements ChartService {
     }
 
     @Override
-    public List<ChartResponseDTO> getCharts() {
-        return chartRepository.findMedicalCharts();
+    public List<ChartResponseDTO> getCharts(Long memberId) {
+        return chartRepository.findMedicalCharts(memberId);
     }
 
     @Override
