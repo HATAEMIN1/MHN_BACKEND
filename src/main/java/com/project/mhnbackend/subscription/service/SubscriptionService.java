@@ -1,6 +1,8 @@
 package com.project.mhnbackend.subscription.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.mhnbackend.member.domain.Member;
+import com.project.mhnbackend.member.domain.MemberType;
 import com.project.mhnbackend.member.repository.MemberRepository;
 import com.project.mhnbackend.payment.dto.request.PaymentRequestDTO;
 import com.project.mhnbackend.payment.domain.Payment;
@@ -14,11 +16,16 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,12 +36,46 @@ public class SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
     private final PaymentRepository paymentRepository;
     private final MemberRepository memberRepository;
-    private final PaymentService paymentService;
+
+    private final List<SseEmitter> emitters = new ArrayList<>();
+
+    @Autowired
+    private  ObjectMapper objectMapper;
+    public void addEmitter(SseEmitter emitter) {
+        emitters.add(emitter);
+    }
+
+    public void removeEmitter(SseEmitter emitter) {
+        emitters.remove(emitter);
+    }
+    private static class StatusUpdate {
+        public String status;
+
+        public StatusUpdate(String status) {
+            this.status = status;
+        }
+    }
+    public void notifyStatusChange(String status) {
+        List<SseEmitter> deadEmitters = new ArrayList<>();
+        emitters.forEach(emitter -> {
+            try {
+                String jsonStatus = objectMapper.writeValueAsString(new StatusUpdate(status));
+                emitter.send(SseEmitter.event().data(jsonStatus));
+                log.info("이미터는"+SseEmitter.event().data(jsonStatus));
+            } catch (IOException e) {
+                deadEmitters.add(emitter);
+            }
+        });
+        emitters.removeAll(deadEmitters);
+    }
+
+
+
     @Transactional
     public SubscriptionResponseDTO createSubscription(PaymentRequestDTO paymentRequestDTO) {
         Member member = memberRepository.findById(paymentRequestDTO.getMemberId())
                 .orElseThrow(() -> new EntityNotFoundException("Member not found with id: " + paymentRequestDTO.getMemberId()));
-
+        member.addType(MemberType.SUB_USER);
         Subscription subscription = Subscription.builder()
                 .member(member)
                 .status(Subscription.SubscriptionStatus.ACTIVE)
@@ -78,22 +119,45 @@ public class SubscriptionService {
                 .status(subscription.get().getStatus())
                 .build();
     }
-
-    @Scheduled(fixedRate = 3600000) // 매 1분마다 실행
+@Scheduled(fixedRate = 10000) // 매 10초마다 실행
+//@Scheduled(fixedRate = 3600000)
+@Transactional
     public void checkAndCancelSubscriptions() {
         LocalDateTime now = LocalDateTime.now();
         log.info("현재시간은"+now);
-        List<Subscription> expiredSubscriptions = subscriptionRepository.findByNextBillingDateBeforeAndStatus(now, Subscription.SubscriptionStatus.PAUSED);
-        log.info("expiredSubscriptions는" + expiredSubscriptions);
-        for (Subscription subscription : expiredSubscriptions) {
-            subscription.setStatus(Subscription.SubscriptionStatus.CANCELLED);
-            subscriptionRepository.save(subscription);  // 명시적으로 저장
-            log.info("Subscription cancelled: " + subscription.getId());
+        List<Subscription.SubscriptionStatus> statusList = Arrays.asList(
+                Subscription.SubscriptionStatus.ACTIVE,
+                Subscription.SubscriptionStatus.PAUSED
+        );
+//        List<Subscription> expiredSubscriptions = subscriptionRepository.findByNextBillingDateBeforeAndStatusIn(now,statusList);
+//    List<Subscription> expiredSubscriptions = new ArrayList<>(subscriptionRepository.findByNextBillingDateBeforeAndStatusIn(now, statusList));
+//        log.info("expiredSubscriptions는" + expiredSubscriptions);
+//        for (Subscription subscription : expiredSubscriptions) {
+//            subscription.setStatus(Subscription.SubscriptionStatus.CANCELLED);
+//            subscriptionRepository.save(subscription);  // 명시적으로 저장
+//            notifyStatusChange("USER");
+//            log.info("Subscription cancelled: " + subscription.getId());
+//            Member member = memberRepository.findById(subscription.getMember().getId()).orElse(null);
+//            if (member != null) {
+//                member.removeType(MemberType.SUB_USER);
+//                memberRepository.save(member);
+//                log.info("SUB_USER role removed from member: " + member.getId());
+//            }
+//        }
+
+    List<Subscription> expiredSubscriptions = new ArrayList<>(subscriptionRepository.findByNextBillingDateBeforeAndStatusIn(now, statusList));
+    log.info("expiredSubscriptions는" + expiredSubscriptions);
+
+    for (Subscription subscription : expiredSubscriptions) {
+        subscription.setStatus(Subscription.SubscriptionStatus.CANCELLED);
+        subscriptionRepository.save(subscription);  // 명시적으로 저장
+        log.info("Subscription cancelled: " + subscription.getId());
+        Member member = memberRepository.findById(subscription.getMember().getId()).orElse(null);
+        if (member != null) {
+            member.removeType(MemberType.SUB_USER);
+            memberRepository.save(member);
+            log.info("SUB_USER role removed from member: " + member.getId());
         }
-
     }
-
-
-
-
+}
 }

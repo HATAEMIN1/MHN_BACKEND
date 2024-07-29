@@ -72,6 +72,9 @@ public class Member {
     public void addType(MemberType memberType) {
         memberTypeList.add(memberType);
     }
+    public void removeType(MemberType memberType) {
+        memberTypeList.remove(memberType);
+    }
 
     public void clearRoles() {
         memberTypeList.clear();
