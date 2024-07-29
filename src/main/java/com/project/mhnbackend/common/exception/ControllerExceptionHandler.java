@@ -14,14 +14,23 @@ import com.project.mhnbackend.common.util.Script;
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
+//	@ExceptionHandler(CustomException.class)
+//	public String exception(CustomException e) {
+//			return Script.back(e.getMessage());
+//		}
+//	
+//	@ExceptionHandler(CustomApiException.class)
+//	public ResponseEntity<?> apiException(CustomApiException e) {
+//		return new ResponseEntity<>(new CMRespDTO<>(-1, e.getMessage(), null), HttpStatus.BAD_REQUEST);
+//	}
 	@ExceptionHandler(CustomException.class)
-	public String exception(CustomException e) {
-			return Script.back(e.getMessage());
-		}
-	
-	@ExceptionHandler(CustomApiException.class)
-	public ResponseEntity<?> apiException(CustomApiException e) {
-		return new ResponseEntity<>(new CMRespDTO<>(-1, e.getMessage(), null), HttpStatus.BAD_REQUEST);
-	}
+    public ResponseEntity<String> handleCustomException(CustomException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(CustomApiException.class)
+    public ResponseEntity<?> handleCustomApiException(CustomApiException e) {
+        return new ResponseEntity<>(new CMRespDTO<>(-1, e.getMessage(), null), HttpStatus.BAD_REQUEST);
+    }
 	
 }

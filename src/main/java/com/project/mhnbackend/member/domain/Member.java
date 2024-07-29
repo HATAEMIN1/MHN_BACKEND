@@ -46,6 +46,8 @@ public class Member {
 
     private String tel;
 
+    private String profileImageUrl;
+
     @Builder.Default
     @ElementCollection
     private List<MemberType> memberTypeList = new ArrayList<>();
@@ -53,19 +55,19 @@ public class Member {
     @Column(nullable = false, updatable = false)
     private ZonedDateTime createdAt;
 
-//    @Column(nullable = false)
-//    private ZonedDateTime updatedAt;
+    @Column(nullable = false)
+    private ZonedDateTime updatedAt;
 
     @PrePersist
     protected void onCreate() {
         createdAt = ZonedDateTime.now();
-//        updatedAt = ZonedDateTime.now();
+        updatedAt = ZonedDateTime.now();
     }
 
-//    @PreUpdate
-//    protected void onUpdate() {
-//        updatedAt = ZonedDateTime.now();
-//    }
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = ZonedDateTime.now();
+    }
 
     public void addType(MemberType memberType) {
         memberTypeList.add(memberType);
@@ -81,5 +83,9 @@ public class Member {
 
     public void changeNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public void changeProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 }

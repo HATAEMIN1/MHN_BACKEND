@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 public class HospitalCommentResponseDTO {
 	private Long id;
-		private Long memberId;
+	private Long memberId;
 	private Long hospitalId;
 	private String comment;
 	private LocalDateTime createdAt;

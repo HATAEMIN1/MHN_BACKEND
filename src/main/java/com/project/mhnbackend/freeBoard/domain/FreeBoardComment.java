@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.mhnbackend.member.domain.Member;
 
 import jakarta.persistence.CascadeType;
@@ -29,13 +30,14 @@ import lombok.ToString;
 @Data
 @Entity
 @Table(name = "free_board_comment")
+@ToString(exclude = {"parent", "replies"})
 public class FreeBoardComment {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(length = 100, nullable = false)
+	@Column(length = 150, nullable = false)
 	private String content;
 
 	@JoinColumn(name = "member_id")
@@ -44,6 +46,7 @@ public class FreeBoardComment {
 
 	@JoinColumn(name = "freeBoard_id", nullable = false)
 	@ManyToOne
+	@JsonIgnore
 	private FreeBoard freeBoard;
 
 	@ManyToOne
@@ -51,7 +54,7 @@ public class FreeBoardComment {
 	private FreeBoardComment parent; // 부모 댓글
 
 	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
-	@ToString.Exclude
+	 @JsonIgnore
 	private List<FreeBoardComment> replies = new ArrayList<>();
 
 	private int step; // 댓글 순서
