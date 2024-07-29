@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import com.project.mhnbackend.freeBoard.domain.FreeBoard;
 import com.project.mhnbackend.freeBoard.dto.response.FreeBoardResponseDTO;
+import com.project.mhnbackend.member.domain.Member;
 
 @Repository
 public interface FreeBoardRepository extends JpaRepository<FreeBoard, Long> {
@@ -26,4 +27,6 @@ public interface FreeBoardRepository extends JpaRepository<FreeBoard, Long> {
 
 	@Query("SELECT fb FROM FreeBoard fb LEFT JOIN FETCH fb.imageList ORDER BY fb.createDate ASC")
 	Page<FreeBoard> pageFreeBoardByOldest(Pageable pageable);
+	
+	 Page<FreeBoard> findAllByMember(Member member, Pageable pageable);
 }
