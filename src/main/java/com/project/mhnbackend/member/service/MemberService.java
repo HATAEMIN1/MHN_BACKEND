@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
+import com.project.mhnbackend.member.domain.MemberType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -104,8 +105,8 @@ public class MemberService {
                 .password(passwordEncoder.encode(signUpRequestDTO.getPassword()))
                 .nickName(signUpRequestDTO.getNickName())
                 .build();
+        member.addType(MemberType.USER);
         memberRepository.save(member);
-
         // Clean up temporary storage
         verifiedEmails.remove(email);
     }
