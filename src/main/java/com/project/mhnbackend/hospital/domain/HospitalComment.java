@@ -27,7 +27,9 @@ public class HospitalComment {
 	@JoinColumn(name="member_id")
 	private Member member;
 	
+	@Column(length=200)
 	private String content;
+	
 	private LocalDateTime createdAt;
 	private int rating;
 	

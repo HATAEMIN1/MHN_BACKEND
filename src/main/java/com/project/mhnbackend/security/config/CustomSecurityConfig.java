@@ -1,11 +1,9 @@
 package com.project.mhnbackend.security.config;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.convert.ReadingConverter;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -25,94 +23,64 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Configuration
-@ReadingConverter
 @EnableMethodSecurity
 public class CustomSecurityConfig {
-	
-	@Bean
-	public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
-		log.info ("=================#1 SecurityFilterChain=====================");
 
-//		http.cors(httpSecurityCorsConfigurer -> {
-//			httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource());
-//		});
-		http.cors (cors -> cors.configurationSource (corsConfigurationSource ()));
-		http.sessionManagement (sessionConfig -> sessionConfig.sessionCreationPolicy (SessionCreationPolicy.STATELESS));
-		
-		http.csrf (config -> config.disable ());
-		
-		// 모든 요청에 대해 허용
-		http.authorizeHttpRequests(authorize -> authorize
-				.anyRequest().permitAll()
-		);
+   @Bean
+   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+      log.info("=================#1 SecurityFilterChain=====================");
 
-//		http.formLogin (config -> {
-//					config.loginPage ("/api/member/login"); // security
-//					config.successHandler (new APILoginSuccessHandler ());
-//					config.failureHandler (new APILoginFailHandler ());
-//				}
-//		);
+      http.cors(httpSecurityCorsConfigurer -> {
+         httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource());
+      });
 
-		
-//		http.addFilterBefore (new JWTCheckFilter (), UsernamePasswordAuthenticationFilter.class);
-		
-		// 폼 로그인 비활성화
-		http.formLogin(config -> config.disable());
-		
-		http.exceptionHandling (config -> {
-			config.accessDeniedHandler (new CustomAccessDeniedHandler ());
-		});
-		
-		return http.build ();
-	}
-	
-	;
+      http.sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+      http.csrf(config -> config.disable());
 
-//	@Bean
-//	public CorsConfigurationSource corsConfigurationSource() {
-//		CorsConfiguration configuration = new CorsConfiguration();
-//		configuration.setAllowedOrigins(Arrays.asList("*"));
-//		configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS"));
-//		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
-//		configuration.setAllowCredentials(true);
-////		configuration.setAllowedOriginPatterns(List.of("")); // 로컬호스트 허용
-////        configuration.addAllowedMethod(""); // 모든 HTTP 메소드 허용 (GET, POST, 등)
-////        configuration.addAllowedHeader("*"); // 모든 헤더 허용
-////        configuration.setAllowCredentials(true); // 자격 증명 허용
+      http.formLogin(config -> {
+         config.loginProcessingUrl("/api/v1/member/login")
+               .successHandler(new APILoginSuccessHandler())
+               .failureHandler(new APILoginFailHandler())
+               .permitAll();
+      });
 
-//
-//		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//		source.registerCorsConfiguration("/**", configuration);
-//
-//		return source;
-//
-//	}
+      http.logout(logout -> {
+         logout.logoutUrl("/api/vi/member/logout")
+               .logoutSuccessUrl("/api/v1/member/login")
+               .permitAll();
+      });
 
-	
-	@Bean
-	public CorsConfigurationSource corsConfigurationSource () {
-		CorsConfiguration configuration = new CorsConfiguration ();
-		configuration.setAllowedOrigins (Arrays.asList ("http://localhost:3000")); // 리액트 앱 주소
-		configuration.setAllowedMethods (Arrays.asList ("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-		configuration.setAllowedHeaders (Arrays.asList ("Authorization", "Cache-Control", "Content-Type"));
-		configuration.setAllowCredentials (true);
-		
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource ();
-		source.registerCorsConfiguration ("/**", configuration);
-		
+      http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
 
-		return source;
-	}
-	
-	@Bean
-	public PasswordEncoder passwordEncoder () {
-		return new BCryptPasswordEncoder ();
-	}
+      http.authorizeHttpRequests(auth -> {
+         auth.requestMatchers("/**").permitAll() // 모든 엔드포인트를 인증 없이 허용
+             .anyRequest().permitAll();
+      });
 
+      http.exceptionHandling(config -> {
+         config.accessDeniedHandler(new CustomAccessDeniedHandler());
+      });
+
+      return http.build();
+   }
+
+   @Bean
+   public CorsConfigurationSource corsConfigurationSource() {
+      CorsConfiguration configuration = new CorsConfiguration();
+      configuration.setAllowedOriginPatterns(List.of("http://localhost:3000")); // 프론트엔드 주소 허용
+      configuration.setAllowedMethods(List.of("HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS")); // 모든 HTTP 메소드 허용
+      configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type")); // 모든 헤더 허용
+      configuration.setAllowCredentials(true); // 자격 증명 허용
+
+      UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+      source.registerCorsConfiguration("/**", configuration);
+
+      return source;
+   }
+
+   @Bean
+   public PasswordEncoder passwordEncoder() {
+      return new BCryptPasswordEncoder();
+   }
 }
-
-	
-
-
-

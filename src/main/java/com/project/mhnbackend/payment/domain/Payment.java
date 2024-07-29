@@ -5,6 +5,7 @@ import com.project.mhnbackend.subscription.domain.Subscription;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -13,15 +14,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long userId;
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "member_id")
-//    private Member member;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+    @ManyToOne
     @JoinColumn(name = "subscription_id")
     private Subscription subscription;
     private String pg;
@@ -34,4 +35,6 @@ public class Payment {
     private String buyerTel;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+
 }
