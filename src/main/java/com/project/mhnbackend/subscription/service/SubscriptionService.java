@@ -69,7 +69,7 @@ public class SubscriptionService {
     }
 
     public SubscriptionResponseDTO getSubscription(Long memberId) {
-        Optional<Subscription> subscription = subscriptionRepository.findById(memberId);
+        Optional<Subscription> subscription = subscriptionRepository.findByMemberId(memberId);
         return SubscriptionResponseDTO.builder()
                 .id(subscription.get().getId())
                 .userId(memberId)

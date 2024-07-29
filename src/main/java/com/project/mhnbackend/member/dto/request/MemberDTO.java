@@ -16,7 +16,7 @@ import org.springframework.security.core.userdetails.User;
 public class MemberDTO extends User{
 	private Long id;
 	private String email,password,name,nickname,tel;
-	private List<String> memberTypeList= new ArrayList<>();
+	private List<String> memberTypeList;
 	
 	public MemberDTO(Long id,String email, String password,String name, String nickname, String tel, List<String> memberTypeList) {
 		super(email, password, memberTypeList.stream().map(str -> new SimpleGrantedAuthority("ROLE_"+str)).collect(Collectors.toList()));
