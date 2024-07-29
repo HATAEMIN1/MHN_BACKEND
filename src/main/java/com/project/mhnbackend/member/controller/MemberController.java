@@ -34,6 +34,8 @@ public class MemberController {
 		}
 	}
 
+	
+	// 이메일 중복체크 - 필요함
 	@GetMapping("/users/check-email")
 	public ResponseEntity<Boolean> checkEmailExists(@RequestParam("email") String email) {
 		boolean exists = memberService.isEmailExists(email);
@@ -85,6 +87,8 @@ public class MemberController {
 //            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이메일 인증 중 오류가 발생했습니다.");
 //        }
 //    }
+	
+	// 회원가입 - 필요함
 	@PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody SignUpRequestDTO signUpRequestDTO) {
         try {
@@ -100,6 +104,7 @@ public class MemberController {
         }
 	}
 
+	// 인증번호로 인증하는 api - 필요함
 	@PostMapping("/verify")
     public ResponseEntity<String> verifyEmail(@RequestParam("email") String email, @RequestParam("code") String code) {
         try {
@@ -112,6 +117,7 @@ public class MemberController {
         }
     }
 
+	// 이메일을 보내는 api - 필요함
 	@PostMapping("/sendemail")
 	public ResponseEntity<String> sendVerificationEmail(@RequestParam("email") String email) {
 		try {

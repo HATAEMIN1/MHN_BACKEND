@@ -2,13 +2,18 @@ package com.project.mhnbackend.doctor.domain;
 
 import com.project.mhnbackend.hospital.domain.Hospital;
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
+@Setter
+@Table(name="doctor")
 public class Doctor {
 //	id , hospital_id, eamil.password, status,createdAt
 	@Id
@@ -26,6 +31,10 @@ public class Doctor {
 	
 	@Enumerated(EnumType.STRING)
 	private DoctorStatus doctorStatus;
+	
+	public void changeDoctorStatus (DoctorStatus doctorStatus) {
+		this.doctorStatus = doctorStatus;
+	}
 	
 	public enum DoctorStatus {
 		FULFILLED , PENDING
