@@ -19,6 +19,10 @@ public class ChatRoomService {
     public String getChatRoomId(Long senderId, Long recipientId) { // creates chatroom and returns the chatroom id if it doesn't exist
         List<ChatRoom> chatRooms = chatRoomRepository.findBySenderIdAndRecipientId(senderId, recipientId);
         ChatRoom chatRoom = null;
+        if (senderId == null || recipientId == null) {
+
+            return"";
+        }
         if (!chatRooms.isEmpty()) {
             chatRoom = chatRooms.get(0);
             log.info("chat room id retrieved:" + chatRoom.getChatRoomId());
@@ -30,19 +34,14 @@ public class ChatRoomService {
         if (chatRoom!=null) {
             return chatRoom.getChatRoomId();
         } else {
+
             String chatRoomId = String.format("%s_%s_%s", senderId+"", recipientId+"", UUID.randomUUID().toString());
             ChatRoom senderRecipient = ChatRoom.builder()
                     .chatRoomId(chatRoomId) // chatId is the chatroom id
                     .senderId(senderId)
                     .recipientId(recipientId)
                     .build();
-            ChatRoom recipientSender = ChatRoom.builder()
-                    .chatRoomId(chatRoomId)
-                    .senderId(senderId)
-                    .recipientId(recipientId)
-                    .build();
             chatRoomRepository.save(senderRecipient);
-            chatRoomRepository.save(recipientSender);
             return chatRoomId;
         }
     }
@@ -55,29 +54,13 @@ public class ChatRoomService {
         return null;
     }
 
-//    @Transactional
-//    public ChatRoom createChatRoom(String chatRoomId, Long senderId, Long recipientId, String chatRoomTitle, String chatRoomAddress, Long likes) {
-//        List<ChatRoom> chatRoomList = chatRoomRepository.findAll();
-//        for (ChatRoom chatRoom : chatRoomList) {
-//            if (chatRoom.getChatRoomId().equals(chatRoomId)) {
-//                log.info("chat room already exists in chatRoomRepository with the following id:" + chatRoom.getChatRoomId());
-//                return chatRoom;
-//            }
-//        }
-//        // no chatroom with the chatRoomId found
-//        ChatRoom chatRoom = ChatRoom.builder()
-//                .chatRoomId(chatRoomId)
-//                .senderId(senderId)
-//                .recipientId(recipientId)
-//                .title(chatRoomTitle)
-//                .address(chatRoomAddress)
-//                .likes(likes)
-//                .build();
-//        chatRoomRepository.save(chatRoom);
-//        // save chatRoom to chatRoomRepository
-//        // save messages to chatRoom
-//        return chatRoom;
-//    }
+    @Transactional
+    public ChatRoom saveChatRoom(ChatRoom chatRoom) {
+        ChatRoom existingChatRoom = getChatRoomByChatRoomId(chatRoom.getChatRoomId());
+        chatRoomRepository.delete(existingChatRoom);
+        return chatRoomRepository.save(chatRoom);
+    }
+
 
     public List<ChatRoom> getAllChatRooms() {
         return chatRoomRepository.findAll();
