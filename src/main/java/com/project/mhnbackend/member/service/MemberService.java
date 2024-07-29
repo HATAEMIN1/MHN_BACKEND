@@ -10,7 +10,9 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
+import com.project.mhnbackend.member.domain.MemberType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,7 @@ import com.project.mhnbackend.common.util.JWTUtil;
 import com.project.mhnbackend.member.domain.Member;
 import com.project.mhnbackend.member.dto.request.LoginRequestDTO;
 import com.project.mhnbackend.member.dto.request.SignUpRequestDTO;
+import com.project.mhnbackend.member.dto.response.MemberEditResponseDTO;
 import com.project.mhnbackend.member.repository.MemberRepository;
 
 @Service
@@ -33,6 +36,11 @@ public class MemberService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RegisterMail registerMail;
+    
+    @Value("${com.study.spring.upload.path}")
+    private String uploadPath;
+    
+   
     
     private Map<String, SignUpRequestDTO> tempMembers = new ConcurrentHashMap<>();
     private Map<String, String> verificationCodes = new ConcurrentHashMap<>();
@@ -97,8 +105,8 @@ public class MemberService {
                 .password(passwordEncoder.encode(signUpRequestDTO.getPassword()))
                 .nickName(signUpRequestDTO.getNickName())
                 .build();
+        member.addType(MemberType.USER);
         memberRepository.save(member);
-
         // Clean up temporary storage
         verifiedEmails.remove(email);
     }
@@ -229,6 +237,18 @@ public class MemberService {
         } catch (IOException e) {
             throw new RuntimeException("파일 삭제 중 오류가 발생했습니다.");
         }
+    }
+    public MemberEditResponseDTO getMemberEditResponse(Long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new CustomException("Member not found for this id :: " + id));
+        
+        return new MemberEditResponseDTO(
+                member.getEmail(),
+                member.getNickName(),
+                member.getProfileImageUrl(),
+                member.getTel(),
+                member.getName()
+        );
     }
 
 }
