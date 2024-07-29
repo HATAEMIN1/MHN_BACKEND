@@ -241,4 +241,12 @@ public class FreeBoardController {
 	        Page<FreeBoardResponseDTO> freeBoards = freeBoardService.pageFreeBoardByOldest(pageable, memberId);
 	        return new ResponseEntity<>(new CMRespDTO<>(1, "성공", freeBoards), HttpStatus.OK);
 	    }
+	 
+	 @GetMapping("/boards/user")
+	 public ResponseEntity<?> getFreeBoardsByUser(
+	         @RequestParam("memberId") Long memberId,
+	         @PageableDefault(size = 4, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable) {
+	     Page<FreeBoardResponseDTO> freeBoards = freeBoardService.getFreeBoardsByUser(memberId, pageable);
+	     return new ResponseEntity<>(new CMRespDTO<>(1, "성공", freeBoards), HttpStatus.OK);
+	 }
 }

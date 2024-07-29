@@ -184,6 +184,7 @@ public class FreeBoardCommentService {
                 .freeBoardId(comment.getFreeBoard().getId())
                 .createDate(comment.getCreateDate())
                 .nickName(comment.getMember().getNickName()) // 추가
+                .profileImage(comment.getMember().getProfileImageUrl()) 
                 .step(comment.getStep())
                 .depth(comment.getDepth())
                 .level(comment.getLevel())
