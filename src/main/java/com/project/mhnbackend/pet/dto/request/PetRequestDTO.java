@@ -9,6 +9,7 @@ import lombok.Data;
 
 @Data
 public class PetRequestDTO {
+	private Long memberId;
 	private String name;
 	private String kind;
 //	private int age;

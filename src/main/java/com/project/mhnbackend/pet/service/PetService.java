@@ -4,6 +4,10 @@ package com.project.mhnbackend.pet.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.project.mhnbackend.member.domain.Member;
+import com.project.mhnbackend.member.repository.MemberRepository;
+import com.project.mhnbackend.pet.dto.response.PetResponseDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,13 +21,11 @@ import com.project.mhnbackend.pet.repository.PetRepository;
 
 
 @Service
+@RequiredArgsConstructor
 public class PetService {
-	
-    @Autowired
-    private PetRepository petRepository;
-    
-    @Autowired
-    private PetFileUploadUtil fileUploadUtil;
+    private final PetRepository petRepository;
+    private final PetFileUploadUtil fileUploadUtil;
+    private final MemberRepository memberRepository;
   
   // 모든 펫 가져오는거   
     public ResponseEntity<List<Pet>> allPetGet(Pet petentity) {
@@ -44,8 +46,9 @@ public class PetService {
         if (petdto.getPetImage() != null && !petdto.getPetImage().isEmpty()) {
             imageFileName = fileUploadUtil.saveFile(petdto.getPetImage());
         }
-        
+        Optional<Member> member = memberRepository.findById(petdto.getMemberId());
         Pet petEntity = Pet.builder()
+                .member(member.get())
                 .name(petdto.getName())
                 .kind(petdto.getKind())
                 .age(petdto.getAge())
@@ -70,5 +73,18 @@ public class PetService {
             return ResponseEntity.notFound().build();
         }
     }
-    
+
+
+    public List<PetResponseDTO> getAllPet(Long memberId) {
+         List<Pet> pets = petRepository.findByMemberId(memberId);
+         return pets.stream().map((pet)->
+                 PetResponseDTO.builder()
+                         .id(pet.getId())
+                         .name(pet.getName())
+                         .kind(pet.getKind())
+                         .age(pet.getAge())
+                         .petImage(pet.getPetImage())
+                         .build()
+                 ).toList();
+    }
 }

@@ -11,7 +11,7 @@ public interface ChartService {
 
     MedicalChart createChart(ChartRequestDTO chartRequestDTO);
 
-    List<ChartResponseDTO> getCharts();
+    List<ChartResponseDTO> getCharts(Long memberId);
 
 
     ChartViewResponseDTO getViewChart(Long id);
