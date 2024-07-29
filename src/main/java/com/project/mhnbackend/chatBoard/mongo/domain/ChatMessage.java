@@ -1,7 +1,6 @@
 package com.project.mhnbackend.chatBoard.mongo.domain;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,20 +9,21 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Document
 public class ChatMessage {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //    @Id
     private Long id;
+    @Id
     private String chatRoomId;
     private Long senderId;
     private Long recipientId;
     private String content;
-    @Builder.Default
-    private Instant createdAt = Instant.now();
+    private String createdAt;
+//    @Builder.Default
+//    private Instant createdAt = Instant.now();
 }
+
