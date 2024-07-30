@@ -119,8 +119,8 @@ public class SubscriptionService {
                 .status(subscription.get().getStatus())
                 .build();
     }
-@Scheduled(fixedRate = 10000) // 매 10초마다 실행
-//@Scheduled(fixedRate = 3600000)
+//@Scheduled(fixedRate = 10000) // 매 10초마다 실행
+@Scheduled(fixedRate = 3600000)
 @Transactional
     public void checkAndCancelSubscriptions() {
         LocalDateTime now = LocalDateTime.now();
@@ -130,34 +130,33 @@ public class SubscriptionService {
                 Subscription.SubscriptionStatus.PAUSED
         );
 //        List<Subscription> expiredSubscriptions = subscriptionRepository.findByNextBillingDateBeforeAndStatusIn(now,statusList);
-//    List<Subscription> expiredSubscriptions = new ArrayList<>(subscriptionRepository.findByNextBillingDateBeforeAndStatusIn(now, statusList));
-//        log.info("expiredSubscriptions는" + expiredSubscriptions);
-//        for (Subscription subscription : expiredSubscriptions) {
-//            subscription.setStatus(Subscription.SubscriptionStatus.CANCELLED);
-//            subscriptionRepository.save(subscription);  // 명시적으로 저장
-//            notifyStatusChange("USER");
-//            log.info("Subscription cancelled: " + subscription.getId());
-//            Member member = memberRepository.findById(subscription.getMember().getId()).orElse(null);
-//            if (member != null) {
-//                member.removeType(MemberType.SUB_USER);
-//                memberRepository.save(member);
-//                log.info("SUB_USER role removed from member: " + member.getId());
-//            }
-//        }
-
     List<Subscription> expiredSubscriptions = new ArrayList<>(subscriptionRepository.findByNextBillingDateBeforeAndStatusIn(now, statusList));
-    log.info("expiredSubscriptions는" + expiredSubscriptions);
-
-    for (Subscription subscription : expiredSubscriptions) {
-        subscription.setStatus(Subscription.SubscriptionStatus.CANCELLED);
-        subscriptionRepository.save(subscription);  // 명시적으로 저장
-        log.info("Subscription cancelled: " + subscription.getId());
-        Member member = memberRepository.findById(subscription.getMember().getId()).orElse(null);
-        if (member != null) {
-            member.removeType(MemberType.SUB_USER);
-            memberRepository.save(member);
-            log.info("SUB_USER role removed from member: " + member.getId());
+        log.info("expiredSubscriptions는" + expiredSubscriptions);
+        for (Subscription subscription : expiredSubscriptions) {
+            subscription.setStatus(Subscription.SubscriptionStatus.CANCELLED);
+            subscriptionRepository.save(subscription);  // 명시적으로 저장
+            notifyStatusChange("USER");
+            log.info("Subscription cancelled: " + subscription.getId());
+            Member member = memberRepository.findById(subscription.getMember().getId()).orElse(null);
+            if (member != null) {
+                member.removeType(MemberType.SUB_USER);
+                memberRepository.save(member);
+                log.info("SUB_USER role removed from member: " + member.getId());
+            }
         }
-    }
+
+//    List<Subscription> expiredSubscriptions = new ArrayList<>(subscriptionRepository.findByNextBillingDateBeforeAndStatusIn(now, statusList));
+//    log.info("expiredSubscriptions는" + expiredSubscriptions);
+//    for (Subscription subscription : expiredSubscriptions) {
+//        subscription.setStatus(Subscription.SubscriptionStatus.CANCELLED);
+//        subscriptionRepository.save(subscription);  // 명시적으로 저장
+//        log.info("Subscription cancelled: " + subscription.getId());
+//        Member member = memberRepository.findById(subscription.getMember().getId()).orElse(null);
+//        if (member != null) {
+//            member.removeType(MemberType.SUB_USER);
+//            memberRepository.save(member);
+//            log.info("SUB_USER role removed from member: " + member.getId());
+//        }
+//    }
 }
 }
