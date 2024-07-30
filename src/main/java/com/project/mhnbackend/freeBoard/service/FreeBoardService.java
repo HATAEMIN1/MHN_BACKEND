@@ -173,13 +173,17 @@ public class FreeBoardService {
         FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid freeBoard ID"));
 
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid member ID"));
+        Member member = null;
+        boolean likedByCurrentUser = false;
+
+        if (memberId != null) {
+            member = memberRepository.findById(memberId)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid member ID"));
+            likedByCurrentUser = freeBoardLikesRepository.existsByFreeBoardAndMember(freeBoard, member);
+        }
 
         int likeCount = freeBoard.getLikes().size();
         int commentCount = freeBoard.getComments().size();
-
-        boolean likedByCurrentUser = freeBoardLikesRepository.existsByFreeBoardAndMember(freeBoard, member);
 
         List<BoardCommentResponseDTO> comments = freeBoard.getComments().stream()
                 .map(comment -> BoardCommentResponseDTO.builder()
@@ -205,6 +209,7 @@ public class FreeBoardService {
                 .member(freeBoard.getMember()) // 멤버 정보 설정
                 .build();
     }
+
 
     private Member getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -264,8 +269,10 @@ public class FreeBoardService {
                 .member(member)
                 .build();
 
-        List<String> savedFileNames = fileUploadUtil.saveFiles(freeBoardDTO.getFiles());
-        savedFileNames.forEach(freeBoard::addImageString);
+        if (freeBoardDTO.getFiles() != null && !freeBoardDTO.getFiles().isEmpty()) {
+            List<String> savedFileNames = fileUploadUtil.saveFiles(freeBoardDTO.getFiles());
+            savedFileNames.forEach(freeBoard::addImageString);
+        }
 
         return freeBoardRepository.save(freeBoard);
     }
