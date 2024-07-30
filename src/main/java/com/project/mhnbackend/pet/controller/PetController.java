@@ -62,7 +62,7 @@ public class PetController {
     }
 
     @GetMapping("/pets")
-    public List<PetResponseDTO> getAllPets(@RequestParam Long memberId) {
+    public List<PetResponseDTO> getAllPets(@RequestParam("memberId") Long memberId) {
         return petService.getAllPet(memberId)  ;
     }
     
