@@ -119,8 +119,8 @@ public class SubscriptionService {
                 .status(subscription.get().getStatus())
                 .build();
     }
-@Scheduled(fixedRate = 10000) // 매 10초마다 실행
-//@Scheduled(fixedRate = 3600000)
+//@Scheduled(fixedRate = 10000) // 매 10초마다 실행
+@Scheduled(fixedRate = 3600000)
 @Transactional
     public void checkAndCancelSubscriptions() {
         LocalDateTime now = LocalDateTime.now();
