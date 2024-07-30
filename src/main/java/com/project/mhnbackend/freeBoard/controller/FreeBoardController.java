@@ -1,5 +1,6 @@
 package com.project.mhnbackend.freeBoard.controller;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -78,9 +79,9 @@ public class FreeBoardController {
 //	}
 	@GetMapping("/boards/view")
 	public ResponseEntity<?> getFreeBoard(@RequestParam("freeBoardId") Long freeBoardId,
-			@RequestParam("memberId") Long memberId) {
-		FreeBoardResponseWithCommentsDTO freeBoard = freeBoardService.getFreeBoard(freeBoardId, memberId);
-		return new ResponseEntity<>(new CMRespDTO<>(1, "성공", freeBoard), HttpStatus.OK);
+	                                      @RequestParam(value = "memberId", required = false) Long memberId) {
+	    FreeBoardResponseWithCommentsDTO freeBoard = freeBoardService.getFreeBoard(freeBoardId, memberId);
+	    return new ResponseEntity<>(new CMRespDTO<>(1, "성공", freeBoard), HttpStatus.OK);
 	}
 
 	@PutMapping("/boards/view")
@@ -161,23 +162,27 @@ public class FreeBoardController {
 //		return ResponseEntity.status(HttpStatus.CREATED).body(freeBoard);
 //	}
 	@PostMapping("/boards")
-    public ResponseEntity<FreeBoard> createFreeBoard(
-            @RequestParam("title") String title,
-            @RequestParam("content") String content,
-            @RequestParam("files") List<MultipartFile> files,
-            @RequestParam("memberId") Long memberId) {
+	public ResponseEntity<FreeBoard> createFreeBoard(
+	        @RequestParam("title") String title,
+	        @RequestParam("content") String content,
+	        @RequestParam("memberId") Long memberId,
+	        @RequestParam(value = "files", required = false) List<MultipartFile> files) {
 
-        FreeBoardRequestDTO freeBoardRequestDTO = FreeBoardRequestDTO.builder()
-                .title(title)
-                .content(content)
-                .memberId(memberId)
-                .files(files)
-                .uploadFileNames(files.stream().map(MultipartFile::getOriginalFilename).collect(Collectors.toList()))
-                .build();
+	    List<String> uploadFileNames = (files != null) ? 
+	            files.stream().map(MultipartFile::getOriginalFilename).collect(Collectors.toList()) : 
+	            Collections.emptyList();
 
-        FreeBoard freeBoard = freeBoardService.createFreeBoard(freeBoardRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(freeBoard);
-    }
+	    FreeBoardRequestDTO freeBoardRequestDTO = FreeBoardRequestDTO.builder()
+	            .title(title)
+	            .content(content)
+	            .memberId(memberId)
+	            .files(files)
+	            .uploadFileNames(uploadFileNames)
+	            .build();
+
+	    FreeBoard freeBoard = freeBoardService.createFreeBoard(freeBoardRequestDTO);
+	    return ResponseEntity.status(HttpStatus.CREATED).body(freeBoard);
+	}
 	
 
 //    @PostMapping("/boards/like")
