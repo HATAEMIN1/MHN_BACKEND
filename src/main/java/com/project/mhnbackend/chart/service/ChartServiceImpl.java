@@ -38,6 +38,7 @@ public class ChartServiceImpl implements ChartService {
     @Override
     public MedicalChart createChart(ChartRequestDTO chartRequestDTO) {
         List<String> uploadFileNames = uploadFile(chartRequestDTO);
+        log.info("펫 아이디는 "+ chartRequestDTO.getPetId());
         Pet pet = petRepository.findById(chartRequestDTO.getPetId())
                 .orElseThrow(() -> new EntityNotFoundException("Pet not found"));
 
