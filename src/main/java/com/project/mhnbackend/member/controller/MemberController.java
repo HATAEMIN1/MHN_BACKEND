@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +23,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.mhnbackend.common.exception.ex.CustomException;
 import com.project.mhnbackend.common.util.FileUploadUtil;
+import com.project.mhnbackend.common.util.JWTUtil;
 import com.project.mhnbackend.member.dto.request.LoginRequestDTO;
+import com.project.mhnbackend.member.dto.request.MemberDTO;
 import com.project.mhnbackend.member.dto.request.SignUpRequestDTO;
 import com.project.mhnbackend.member.dto.response.MemberEditResponseDTO;
 import com.project.mhnbackend.member.service.MemberService;
 
+import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnails;
 
 @RestController
+@Log4j2
 @RequestMapping("/api/v1")
 public class MemberController {
 
@@ -243,5 +248,20 @@ public class MemberController {
 	        } catch (Exception e) {
 	            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	        }
+	    }
+	 @GetMapping("/member/kakao")
+	    public Map<String, Object> getMemberFromKakao(@RequestParam("accessToken") String accessToken) {
+	        log.info(accessToken);
+
+	        MemberDTO memberDTO = memberService.getKakaoMember(accessToken);
+
+	        Map<String, Object> claims = memberDTO.getClaims();
+	        String jwtAccessToken = JWTUtil.generateToken(claims, 10);
+	        String jwtRefreshToken = JWTUtil.generateToken(claims, 60 * 24);
+
+	        claims.put("accessToken", jwtAccessToken);
+	        claims.put("refreshToken", jwtRefreshToken);
+
+	        return claims;
 	    }
 }
