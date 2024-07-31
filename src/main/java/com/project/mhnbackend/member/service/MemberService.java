@@ -351,4 +351,16 @@ public class MemberService {
 
         return kakaoProfile;
     }
+    public Member updateName(Long id, String name) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new CustomException("Member not found"));
+        member.changeName(name);
+        return memberRepository.save(member);
+    }
+    public Member updateTel(Long id, String tel) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new CustomException("Member not found"));
+        member.changeTel(tel);
+        return memberRepository.save(member);
+    }
 }
