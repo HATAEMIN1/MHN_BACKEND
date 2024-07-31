@@ -34,10 +34,9 @@ public class CustomUserDetailsService implements UserDetailsService{
 				member.getName(),
 				member.getNickName(),
 				member.getTel(),
+				member.getProfileImageUrl(),
 				member.getMemberTypeList().stream().map(
 						memberTypeList -> memberTypeList.name()).collect(Collectors.toList()));
-		log.info("멤버 dto는");
-		log.info(memberDTO);
 		return memberDTO;
 	}
 }

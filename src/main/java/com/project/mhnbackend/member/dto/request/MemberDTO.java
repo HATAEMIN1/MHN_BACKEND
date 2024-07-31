@@ -16,9 +16,11 @@ import org.springframework.security.core.userdetails.User;
 public class MemberDTO extends User{
 	private Long id;
 	private String email,password,name,nickname,tel;
+	private final String profileImageUrl;
 	private List<String> memberTypeList;
+
 	
-	public MemberDTO(Long id,String email, String password,String name, String nickname, String tel, List<String> memberTypeList) {
+	public MemberDTO(Long id,String email, String password,String name, String nickname, String tel, String profileImageUrl, List<String> memberTypeList) {
 		super(email, password, memberTypeList.stream().map(str -> new SimpleGrantedAuthority("ROLE_"+str)).collect(Collectors.toList()));
 		this.id = id;
 		this.email= email;
@@ -27,12 +29,11 @@ public class MemberDTO extends User{
 		this.nickname=nickname;
 		this.tel=tel;
 		this.memberTypeList=memberTypeList;
-	
+		this.profileImageUrl="default.jpg";
 	}
 
 	public Map<String, Object> getClaims(){
 		Map<String, Object> dataMap = new HashMap<>();
-
 		dataMap.put("id", id);
 		dataMap.put("email", email);
 		dataMap.put("password", password);
@@ -40,7 +41,7 @@ public class MemberDTO extends User{
 		dataMap.put("nickname", nickname);
 		dataMap.put("tel", tel);
 		dataMap.put("memberTypeList", memberTypeList);
-		
+		dataMap.put("profileImageUrl", profileImageUrl);
 		return dataMap;
 	}
 	
