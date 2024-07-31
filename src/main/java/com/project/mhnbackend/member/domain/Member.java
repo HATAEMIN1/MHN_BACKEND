@@ -15,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,9 +42,13 @@ public class Member {
     private String password;
 
     private String nickName;
-
+    
+    @Size(min = 2, max = 5)
+    @Column(nullable = true, length = 5)
     private String name;
 
+    @Size(min = 11, max = 11)
+    @Column(nullable = true, length = 11)
     private String tel;
 
     private String profileImageUrl;
@@ -91,4 +96,12 @@ public class Member {
     public void changeProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
     }
+
+	public void changeName(String name) {
+		this.name = name;
+	}
+
+	public void changeTel(String tel) {
+		this.tel = tel;
+	}
 }
