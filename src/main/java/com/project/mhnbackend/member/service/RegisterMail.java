@@ -52,11 +52,11 @@ public class RegisterMail implements MailServiceInter {
         SimpleMailMessage message = new SimpleMailMessage();
 
         message.setTo(to);
-        message.setSubject("멍핸냥 MHN 회원가입 이메일 인증");
+        message.setSubject("멍햄냥 MHN 회원가입 이메일 인증");
 
         String msgg = "";
         msgg += "안녕하세요\n";
-        msgg += "애완동물 커뮤니티 어플 멍핸냥 입니다\n";
+        msgg += "애완동물 커뮤니티 어플 멍햄냥 입니다\n";
         msgg += "\n";
         msgg += "아래 코드를 회원가입 창으로 돌아가 입력해주세요\n";
         msgg += "\n";
