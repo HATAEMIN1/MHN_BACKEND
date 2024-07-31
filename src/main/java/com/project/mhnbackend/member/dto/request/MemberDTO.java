@@ -29,7 +29,7 @@ public class MemberDTO extends User{
 		this.nickname=nickname;
 		this.tel=tel;
 		this.memberTypeList=memberTypeList;
-		this.profileImageUrl="default.jpg";
+		this.profileImageUrl="/api/v1/files?fileName=default.jpg";
 	}
 
 	public Map<String, Object> getClaims(){

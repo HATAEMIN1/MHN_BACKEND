@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -36,39 +37,37 @@ public class SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
     private final PaymentRepository paymentRepository;
     private final MemberRepository memberRepository;
+    private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 
-    private final List<SseEmitter> emitters = new ArrayList<>();
-
-    @Autowired
-    private  ObjectMapper objectMapper;
     public void addEmitter(SseEmitter emitter) {
         emitters.add(emitter);
     }
-
     public void removeEmitter(SseEmitter emitter) {
         emitters.remove(emitter);
     }
     private static class StatusUpdate {
         public String status;
+        public Long userId;  //추가
 
-        public StatusUpdate(String status) {
-            this.status = status;
+//        public StatusUpdate(String status, Long userId) {
+//            this.status = status;
+//            this.userId = userId; //추가
+//        }
+    }
+public void notifyStatusChange(String newStatus, Long userId) {
+    String eventData = String.format("{\"status\":\"%s\",\"userId\":%d}", newStatus, userId);
+    List<SseEmitter> deadEmitters = new ArrayList<>();
+
+    emitters.forEach(emitter -> {
+        try {
+            emitter.send(SseEmitter.event().data(eventData));
+        } catch (IOException e) {
+            deadEmitters.add(emitter);
         }
-    }
-    public void notifyStatusChange(String status) {
-        List<SseEmitter> deadEmitters = new ArrayList<>();
-        emitters.forEach(emitter -> {
-            try {
-                String jsonStatus = objectMapper.writeValueAsString(new StatusUpdate(status));
-                emitter.send(SseEmitter.event().data(jsonStatus));
-                log.info("이미터는"+SseEmitter.event().data(jsonStatus));
-            } catch (IOException e) {
-                deadEmitters.add(emitter);
-            }
-        });
-        emitters.removeAll(deadEmitters);
-    }
+    });
 
+    emitters.removeAll(deadEmitters);
+}
 
 
     @Transactional
@@ -80,9 +79,9 @@ public class SubscriptionService {
                 .member(member)
                 .status(Subscription.SubscriptionStatus.ACTIVE)
                 .paymentDate(LocalDateTime.now())
-//                .nextBillingDate(LocalDateTime.now().plusMonths(1))
+                .nextBillingDate(LocalDateTime.now().plusMonths(1))
 //                .nextBillingDate(LocalDateTime.now().plusDays(1))
-                .nextBillingDate(LocalDateTime.now().plusMinutes(1))
+//                .nextBillingDate(LocalDateTime.now().plusMinutes(1))
                 .createdAt(LocalDateTime.now())
                 .build();
         subscriptionRepository.save(subscription);
@@ -120,43 +119,30 @@ public class SubscriptionService {
                 .build();
     }
 //@Scheduled(fixedRate = 10000) // 매 10초마다 실행
-@Scheduled(fixedRate = 3600000)
+@Scheduled(fixedRate = 86400000) // 24시간
 @Transactional
-    public void checkAndCancelSubscriptions() {
-        LocalDateTime now = LocalDateTime.now();
-        log.info("현재시간은"+now);
-        List<Subscription.SubscriptionStatus> statusList = Arrays.asList(
-                Subscription.SubscriptionStatus.ACTIVE,
-                Subscription.SubscriptionStatus.PAUSED
-        );
-//        List<Subscription> expiredSubscriptions = subscriptionRepository.findByNextBillingDateBeforeAndStatusIn(now,statusList);
+public void checkAndCancelSubscriptions() {
+    LocalDateTime now = LocalDateTime.now();
+    List<Subscription.SubscriptionStatus> statusList = Arrays.asList(
+            Subscription.SubscriptionStatus.ACTIVE,
+            Subscription.SubscriptionStatus.PAUSED
+    );
     List<Subscription> expiredSubscriptions = new ArrayList<>(subscriptionRepository.findByNextBillingDateBeforeAndStatusIn(now, statusList));
-        log.info("expiredSubscriptions는" + expiredSubscriptions);
-        for (Subscription subscription : expiredSubscriptions) {
-            subscription.setStatus(Subscription.SubscriptionStatus.CANCELLED);
-            subscriptionRepository.save(subscription);  // 명시적으로 저장
-            notifyStatusChange("USER");
-            log.info("Subscription cancelled: " + subscription.getId());
-            Member member = memberRepository.findById(subscription.getMember().getId()).orElse(null);
-            if (member != null) {
-                member.removeType(MemberType.SUB_USER);
-                memberRepository.save(member);
-                log.info("SUB_USER role removed from member: " + member.getId());
-            }
-        }
+    log.info("expiredSubscriptions는" + expiredSubscriptions);
+    List<Member> membersToUpdate = new ArrayList<>();
 
-//    List<Subscription> expiredSubscriptions = new ArrayList<>(subscriptionRepository.findByNextBillingDateBeforeAndStatusIn(now, statusList));
-//    log.info("expiredSubscriptions는" + expiredSubscriptions);
-//    for (Subscription subscription : expiredSubscriptions) {
-//        subscription.setStatus(Subscription.SubscriptionStatus.CANCELLED);
-//        subscriptionRepository.save(subscription);  // 명시적으로 저장
-//        log.info("Subscription cancelled: " + subscription.getId());
-//        Member member = memberRepository.findById(subscription.getMember().getId()).orElse(null);
-//        if (member != null) {
-//            member.removeType(MemberType.SUB_USER);
-//            memberRepository.save(member);
-//            log.info("SUB_USER role removed from member: " + member.getId());
-//        }
-//    }
+    for (Subscription subscription : expiredSubscriptions) {
+        subscription.setStatus(Subscription.SubscriptionStatus.CANCELLED);
+        Member member = subscription.getMember();
+        if (member != null) {
+            member.removeType(MemberType.SUB_USER);
+            membersToUpdate.add(member);
+        }
+    }
+    subscriptionRepository.saveAll(expiredSubscriptions);
+    memberRepository.saveAll(membersToUpdate);
+    for (Member member : membersToUpdate) {
+        notifyStatusChange("SUB_USER", member.getId());
+    }
 }
 }
