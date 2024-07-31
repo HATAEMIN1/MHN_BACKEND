@@ -11,6 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 import com.project.mhnbackend.member.domain.MemberType;
+import com.project.mhnbackend.subscription.domain.Subscription;
+import com.project.mhnbackend.subscription.repository.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,12 +33,14 @@ public class MemberService {
 
     @Autowired
     private MemberRepository memberRepository;
-
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RegisterMail registerMail;
-    
+
+
     @Value("${com.study.spring.upload.path}")
     private String uploadPath;
     
@@ -241,13 +245,14 @@ public class MemberService {
     public MemberEditResponseDTO getMemberEditResponse(Long id) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new CustomException("Member not found for this id :: " + id));
-        
+        Optional<Subscription> subscription = subscriptionRepository.findByMemberId(id);
         return new MemberEditResponseDTO(
                 member.getEmail(),
                 member.getNickName(),
                 member.getProfileImageUrl(),
                 member.getTel(),
-                member.getName()
+                member.getName(),
+                subscription.map(Subscription::getNextBillingDate).orElse(null)
         );
     }
 
