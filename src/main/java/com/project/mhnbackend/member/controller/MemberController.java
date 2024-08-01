@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +25,15 @@ import org.springframework.web.multipart.MultipartFile;
 import com.project.mhnbackend.common.exception.ex.CustomException;
 import com.project.mhnbackend.common.util.FileUploadUtil;
 import com.project.mhnbackend.common.util.JWTUtil;
+import com.project.mhnbackend.member.domain.Member;
 import com.project.mhnbackend.member.dto.request.LoginRequestDTO;
 import com.project.mhnbackend.member.dto.request.MemberDTO;
 import com.project.mhnbackend.member.dto.request.SignUpRequestDTO;
 import com.project.mhnbackend.member.dto.response.MemberEditResponseDTO;
 import com.project.mhnbackend.member.service.MemberService;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnails;
 
@@ -64,7 +68,6 @@ public class MemberController {
 		}
 	}
 
-	
 	// 이메일 중복체크 - 필요함
 	@GetMapping("/users/check-email")
 	public ResponseEntity<Boolean> checkEmailExists(@RequestParam("email") String email) {
@@ -117,7 +120,7 @@ public class MemberController {
 //            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이메일 인증 중 오류가 발생했습니다.");
 //        }
 //    }
-	
+
 	// 회원가입 - 필요함
 	@PostMapping("/register")
 	public ResponseEntity<String> register(@RequestBody SignUpRequestDTO signUpRequestDTO) {
@@ -224,44 +227,55 @@ public class MemberController {
 
 		return ResponseEntity.ok(fileUrl);
 	}
-	
-	
+
 	@GetMapping("/members/edit")
 	public ResponseEntity<MemberEditResponseDTO> getMemberEditResponse(@RequestParam("id") Long id) {
-        MemberEditResponseDTO responseDTO = memberService.getMemberEditResponse(id);
-        return ResponseEntity.ok(responseDTO);
-    }
+		MemberEditResponseDTO responseDTO = memberService.getMemberEditResponse(id);
+		return ResponseEntity.ok(responseDTO);
+	}
+
+	@GetMapping("/files")
+	public ResponseEntity<Resource> getFile(@RequestParam("fileName") String fileName) {
+		try {
+			Path filePath = Paths.get(uploadPath).resolve(fileName).normalize();
+			Resource resource = new UrlResource(filePath.toUri());
+
+			if (!resource.exists()) {
+				throw new FileNotFoundException("File not found " + fileName);
+			}
+
+			return ResponseEntity.ok().contentType(MediaType.parseMediaType(Files.probeContentType(filePath)))
+					.body(resource);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+	}
+
+	@GetMapping("/member/kakao")
+	public Map<String, Object> getMemberFromKakao(@RequestParam("accessToken") String accessToken) {
+		log.info(accessToken);
+
+		MemberDTO memberDTO = memberService.getKakaoMember(accessToken);
+
+		Map<String, Object> claims = memberDTO.getClaims();
+		String jwtAccessToken = JWTUtil.generateToken(claims, 10);
+		String jwtRefreshToken = JWTUtil.generateToken(claims, 60 * 24);
+
+		claims.put("accessToken", jwtAccessToken);
+		claims.put("refreshToken", jwtRefreshToken);
+
+		return claims;
+	}
+	 @PutMapping("/updateName")
+	    public ResponseEntity<Member> updateMemberName(@RequestParam("memberId") Long id, @RequestParam("name") @Valid @Size(min = 2, max = 5) String name) {
+	        Member updatedMember = memberService.updateName(id, name);
+	        return ResponseEntity.ok(updatedMember);
+	    }
+
+	    @PutMapping("/updateTel")
+	    public ResponseEntity<Member> updateMemberTel(@RequestParam("memberId") Long id, @RequestParam("tel") @Valid @Size(min = 11, max = 11) String tel) {
+	        Member updatedMember = memberService.updateTel(id, tel);
+	        return ResponseEntity.ok(updatedMember);
+	    }
 	
-	 @GetMapping("/files")
-	    public ResponseEntity<Resource> getFile(@RequestParam("fileName") String fileName) {
-	        try {
-	            Path filePath = Paths.get(uploadPath).resolve(fileName).normalize();
-	            Resource resource = new UrlResource(filePath.toUri());
-
-	            if (!resource.exists()) {
-	                throw new FileNotFoundException("File not found " + fileName);
-	            }
-
-	            return ResponseEntity.ok()
-	                    .contentType(MediaType.parseMediaType(Files.probeContentType(filePath)))
-	                    .body(resource);
-	        } catch (Exception e) {
-	            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-	        }
-	    }
-	 @GetMapping("/member/kakao")
-	    public Map<String, Object> getMemberFromKakao(@RequestParam("accessToken") String accessToken) {
-	        log.info(accessToken);
-
-	        MemberDTO memberDTO = memberService.getKakaoMember(accessToken);
-
-	        Map<String, Object> claims = memberDTO.getClaims();
-	        String jwtAccessToken = JWTUtil.generateToken(claims, 10);
-	        String jwtRefreshToken = JWTUtil.generateToken(claims, 60 * 24);
-
-	        claims.put("accessToken", jwtAccessToken);
-	        claims.put("refreshToken", jwtRefreshToken);
-
-	        return claims;
-	    }
 }

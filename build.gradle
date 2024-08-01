@@ -61,7 +61,7 @@ dependencies {
     implementation 'org.springframework:spring-context:6.1.10' // 최신 버전으로 변경
     implementation 'org.springframework:spring-messaging:6.1.10' // 최신 버전으로 변경
     implementation 'com.sun.mail:jakarta.mail:2.0.1'
-
+implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-parameters"
