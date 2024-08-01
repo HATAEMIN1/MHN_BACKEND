@@ -26,4 +26,5 @@ public interface ChartRepository extends JpaRepository<MedicalChart,Long> {
             "ORDER BY mc.createdAt DESC")
     List<ChartResponseDTO> findMedicalCharts(@Param("id") Long memberId);
 
+    void deleteByPetId(Long id);
 }

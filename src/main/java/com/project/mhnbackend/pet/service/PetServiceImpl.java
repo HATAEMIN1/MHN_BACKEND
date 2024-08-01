@@ -1,5 +1,6 @@
 package com.project.mhnbackend.pet.service;
 
+import com.project.mhnbackend.chart.repository.ChartRepository;
 import com.project.mhnbackend.common.util.FileUploadUtil;
 import com.project.mhnbackend.member.domain.Member;
 import com.project.mhnbackend.member.repository.MemberRepository;
@@ -22,7 +23,7 @@ public class PetServiceImpl implements PetService {
 	private final PetRepository petRepository;
 	private final FileUploadUtil fileUploadUtil;
 	private final MemberRepository memberRepository;
-	
+	private final ChartRepository chartRepository;
 	//파일 업로드 로직
 	public List<String> uploadFile(PetRequestDTO petRequestDTO){
 		List<MultipartFile> files = petRequestDTO.getFiles ();
@@ -64,10 +65,11 @@ public class PetServiceImpl implements PetService {
                          .build()
                  ).toList();
     }
-	
+
+	@Transactional
 	public String deletePet (Long id) {
+		chartRepository.deleteByPetId(id);
 		petRepository.deleteById (id);
-		
 		return "삭제가 완료되었습니다";
 	}
 }
