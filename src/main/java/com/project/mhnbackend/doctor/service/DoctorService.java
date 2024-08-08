@@ -119,6 +119,7 @@ public class DoctorService {
 				.collect(Collectors.toList());
 	}
 	
+	// 수의사 상태값 put
 	public DoctorStatusPutResponseDTO patchDoctorStatus(Long id) {
 		Optional<Doctor> doctor = doctorRepository.findById(id);
 		doctor.get().setDoctorStatus(Doctor.DoctorStatus.FULFILLED);

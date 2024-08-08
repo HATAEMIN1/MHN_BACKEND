@@ -74,6 +74,7 @@ public class HospitalService {
 		// 간단한 유클리드 거리 계산 (정확하지는 않지만 정렬 목적으로는 충분)
 		double dx = lat1 - lat2;
 		double dy = lon1 - lon2;
+		// 피타고라스의 정의 사용해서 직선거리 대략적으로 구함 - 곡률은 생각 안하는 간단한 계산
 		return Math.sqrt (dx * dx + dy * dy);
 	}
 
@@ -110,7 +111,7 @@ public class HospitalService {
 	// 병원 코멘트 작성 (post)
 	//	public void createHospitalComment (Long userId, Long hospitalId...로 각각쓰는대신 HospitalCommentRequestDTO hospitalCommentRequestDTO로 퉁침) {
 	public void createHospitalComment (HospitalCommentRequestDTO hospitalCommentRequestDTO) {
-		
+			
 		Hospital hospital = hospitalRepository.findById (hospitalCommentRequestDTO.getHospitalId ()).orElseThrow ();
 		Member member = memberRepository.findById (hospitalCommentRequestDTO.getMemberId ()).orElseThrow ();
 		
