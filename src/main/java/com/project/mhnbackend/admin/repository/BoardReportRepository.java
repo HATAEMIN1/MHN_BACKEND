@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BoardReportRepository extends JpaRepository<BoardReport,Long> {
 	boolean existsByMemberAndFreeBoard(Member member, FreeBoard freeBoard);
+	
+	void deleteAllByFreeBoardId (Long freeBoardId);
 }

@@ -235,20 +235,39 @@ public class FreeBoardService {
 //                .orElseThrow(() -> new RuntimeException("게시판 아이디가 없음"));
 //        freeBoardRepository.delete(freeBoard);
 //    }
-    public void deleteFreeBoard(Long freeBoardId, Long memberId) {
-        FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId)
-                .orElseThrow(() -> new RuntimeException("게시판 아이디가 없음"));
-
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("회원 아이디가 없음"));
-
-        // 작성자인지 확인
-        if (!freeBoard.getMember().getId().equals(member.getId())) {
-            throw new AccessDeniedException("작성자가 아닙니다.");
-        }
-        
-        freeBoardRepository.delete(freeBoard);
+//    public void deleteFreeBoard(Long freeBoardId, Long memberId) {
+//        FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId)
+//                .orElseThrow(() -> new RuntimeException("게시판 아이디가 없음"));
+//
+//        Member member = memberRepository.findById(memberId)
+//                .orElseThrow(() -> new RuntimeException("회원 아이디가 없음"));
+//
+//        // 작성자인지 확인
+//        if (!freeBoard.getMember().getId().equals(member.getId())) {
+//            throw new AccessDeniedException("작성자가 아닙니다.");
+//        }
+//
+//        freeBoardRepository.delete(freeBoard);
+//    }
+@Transactional
+public void deleteFreeBoard(Long freeBoardId, Long memberId) {
+    FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId)
+            .orElseThrow(() -> new RuntimeException("게시판 아이디가 없음"));
+    
+    Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new RuntimeException("회원 아이디가 없음"));
+    
+    // 작성자인지 확인
+    if (!freeBoard.getMember().getId().equals(member.getId())) {
+        throw new AccessDeniedException("작성자가 아닙니다.");
     }
+    
+    // 연관된 board_report 데이터를 먼저 삭제
+    boardReportRepository.deleteAllByFreeBoardId(freeBoardId);
+    
+    // 그 다음 free_board 데이터를 삭제
+    freeBoardRepository.delete(freeBoard);
+}
     
 
     public FreeBoard postFreeBoard(FreeBoardDTO freeBoardDTO, Member member) {
