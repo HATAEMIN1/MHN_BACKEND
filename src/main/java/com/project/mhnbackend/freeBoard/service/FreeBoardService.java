@@ -1,5 +1,8 @@
 package com.project.mhnbackend.freeBoard.service;
 
+import com.project.mhnbackend.admin.domain.BoardReport;
+import com.project.mhnbackend.admin.dto.request.BoardReportRequestDTO;
+import com.project.mhnbackend.admin.repository.BoardReportRepository;
 import com.project.mhnbackend.common.util.FileUploadUtil;
 import com.project.mhnbackend.freeBoard.domain.BoardImage;
 import com.project.mhnbackend.freeBoard.domain.FreeBoard;
@@ -15,6 +18,7 @@ import com.project.mhnbackend.freeBoard.repository.FreeBoardRepository;
 import com.project.mhnbackend.member.domain.Member;
 import com.project.mhnbackend.member.repository.MemberRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -25,10 +29,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +47,9 @@ public class FreeBoardService {
     private final FreeBoardLikesRepository freeBoardLikesRepository;
     @Autowired
     private final FileUploadUtil fileUploadUtil;
+    
+    @Autowired
+    private final BoardReportRepository boardReportRepository;
 
     public Long register(FreeBoardRequestDTO freeBoardRequestDTO) {
         FreeBoard freeBoard = dtoToEntity(freeBoardRequestDTO);
@@ -230,20 +235,39 @@ public class FreeBoardService {
 //                .orElseThrow(() -> new RuntimeException("게시판 아이디가 없음"));
 //        freeBoardRepository.delete(freeBoard);
 //    }
-    public void deleteFreeBoard(Long freeBoardId, Long memberId) {
-        FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId)
-                .orElseThrow(() -> new RuntimeException("게시판 아이디가 없음"));
-
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("회원 아이디가 없음"));
-
-        // 작성자인지 확인
-        if (!freeBoard.getMember().getId().equals(member.getId())) {
-            throw new AccessDeniedException("작성자가 아닙니다.");
-        }
-        
-        freeBoardRepository.delete(freeBoard);
+//    public void deleteFreeBoard(Long freeBoardId, Long memberId) {
+//        FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId)
+//                .orElseThrow(() -> new RuntimeException("게시판 아이디가 없음"));
+//
+//        Member member = memberRepository.findById(memberId)
+//                .orElseThrow(() -> new RuntimeException("회원 아이디가 없음"));
+//
+//        // 작성자인지 확인
+//        if (!freeBoard.getMember().getId().equals(member.getId())) {
+//            throw new AccessDeniedException("작성자가 아닙니다.");
+//        }
+//
+//        freeBoardRepository.delete(freeBoard);
+//    }
+@Transactional
+public void deleteFreeBoard(Long freeBoardId, Long memberId) {
+    FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId)
+            .orElseThrow(() -> new RuntimeException("게시판 아이디가 없음"));
+    
+    Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new RuntimeException("회원 아이디가 없음"));
+    
+    // 작성자인지 확인
+    if (!freeBoard.getMember().getId().equals(member.getId())) {
+        throw new AccessDeniedException("작성자가 아닙니다.");
     }
+    
+    // 연관된 board_report 데이터를 먼저 삭제
+    boardReportRepository.deleteAllByFreeBoardId(freeBoardId);
+    
+    // 그 다음 free_board 데이터를 삭제
+    freeBoardRepository.delete(freeBoard);
+}
     
 
     public FreeBoard postFreeBoard(FreeBoardDTO freeBoardDTO, Member member) {
@@ -445,4 +469,35 @@ public class FreeBoardService {
                     .build();
         });
     }
+	
+//	public BoardReport boardReport (BoardReportResponseDTO boardReportResponseDTO) {
+//        FreeBoard freeBoard = freeBoardRepository.findById (boardReportResponseDTO.getFreeBoardId ()).orElseThrow ();
+//        Member member = memberRepository.findById (boardReportResponseDTO.getMemberId ()).orElseThrow ();
+//        BoardReport boardReport = BoardReport.builder ()
+//                .member (member)
+//                .freeBoard (freeBoard)
+//                .createdAt (LocalDateTime.now ())
+//                .build ();
+//        return boardReportRepository.save (boardReport);
+//	}
+public BoardReport boardReport(BoardReportRequestDTO boardReportRequestDTO) {
+    FreeBoard freeBoard = freeBoardRepository.findById(boardReportRequestDTO.getFreeBoardId())
+            .orElseThrow(() -> new EntityNotFoundException ("게시글을 찾을 수 없습니다."));
+    Member member = memberRepository.findById(boardReportRequestDTO.getMemberId())
+            .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
+    
+    // 이미 해당 사용자가 같은 게시글을 신고했는지 확인
+    boolean alreadyReported = boardReportRepository.existsByMemberAndFreeBoard(member, freeBoard);
+    if (alreadyReported) {
+        throw new IllegalStateException("이미 이 게시글을 신고하셨습니다.");
+    }
+    
+    BoardReport boardReport = BoardReport.builder()
+            .member(member)
+            .freeBoard(freeBoard)
+            .createdAt(LocalDateTime.now())
+            .build();
+    
+    return boardReportRepository.save(boardReport);
+}
 }

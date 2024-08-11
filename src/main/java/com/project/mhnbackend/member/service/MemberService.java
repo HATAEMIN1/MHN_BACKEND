@@ -13,6 +13,10 @@ import java.util.stream.Collectors;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.project.mhnbackend.admin.dto.response.StatsResponseForMemberDTO;
+import com.project.mhnbackend.doctor.domain.Doctor;
+import com.project.mhnbackend.doctor.dto.response.DoctorListResponseDTO;
+import com.project.mhnbackend.hospital.domain.Hospital;
 import com.project.mhnbackend.member.domain.MemberType;
 import com.project.mhnbackend.subscription.domain.Subscription;
 import com.project.mhnbackend.subscription.repository.SubscriptionRepository;
@@ -363,4 +367,19 @@ public class MemberService {
         member.changeTel(tel);
         return memberRepository.save(member);
     }
+    
+    
+    // admin페이지에서 모든 유저 가져오려고 만든거임
+    public List<StatsResponseForMemberDTO> getAllMemberLists() {
+        List<Member> members = memberRepository.findAll();
+        return members.stream()
+                .map(member -> {
+                    return StatsResponseForMemberDTO.builder()
+                            .id(member.getId())
+                            .member(member)
+                            .build();
+                })
+                .collect(Collectors.toList());
+    }
+
 }

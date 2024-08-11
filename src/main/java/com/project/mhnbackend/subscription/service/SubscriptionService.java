@@ -1,6 +1,8 @@
 package com.project.mhnbackend.subscription.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.mhnbackend.admin.dto.response.StatsResponseForMemberDTO;
+import com.project.mhnbackend.admin.dto.response.StatsResponseForSubMemberDTO;
 import com.project.mhnbackend.member.domain.Member;
 import com.project.mhnbackend.member.domain.MemberType;
 import com.project.mhnbackend.member.repository.MemberRepository;
@@ -29,6 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +48,9 @@ public class SubscriptionService {
     public void removeEmitter(SseEmitter emitter) {
         emitters.remove(emitter);
     }
-    private static class StatusUpdate {
+	
+
+	private static class StatusUpdate {
         public String status;
         public Long userId;  //추가
 
@@ -145,4 +150,22 @@ public void checkAndCancelSubscriptions() {
         notifyStatusChange("SUB_USER", member.getId());
     }
 }
-}
+    
+    // 구독 유저 수 가져오는로직:(
+    
+    public List<StatsResponseForSubMemberDTO> getAllSubMemberLists () {
+        List<Subscription> subscriptions = subscriptionRepository.findAll ();
+        
+        return subscriptions.stream()
+                .map(subMember -> {
+                    return StatsResponseForSubMemberDTO.builder()
+                            .id(subMember.getId())
+                            .createdAt (subMember.getCreatedAt ())
+                            .memberId (subMember.getMember ().getId ())
+                            .build();
+                })
+                .collect(Collectors.toList());
+    }
+    }
+    
+
