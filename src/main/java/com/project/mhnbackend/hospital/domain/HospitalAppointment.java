@@ -2,6 +2,10 @@ package com.project.mhnbackend.hospital.domain;
 
 import com.project.mhnbackend.member.domain.Member;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -9,6 +13,10 @@ import java.time.LocalDateTime;
 @Table(name = "hospital_appointment", uniqueConstraints = {
 		@UniqueConstraint(columnNames = {"appointmentDateTime", "hospital_id"})
 })
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 public class HospitalAppointment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,12 +35,14 @@ public class HospitalAppointment {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
+	@Builder.Default
+	// null값 말고 기본으로 생성해주는거인듯?
 	private AppointmentStatus status = AppointmentStatus.PENDING;
 	
 	@Column(nullable = false)
 	private LocalDateTime createdAt;
 	
-	@Column(nullable = false)
+//	@Column(nullable = false)
 	private LocalDateTime updatedAt;
 	
 	// Simplified Enum for AppointmentStatus
