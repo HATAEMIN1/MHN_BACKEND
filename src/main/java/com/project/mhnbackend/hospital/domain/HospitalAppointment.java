@@ -1,5 +1,6 @@
 package com.project.mhnbackend.hospital.domain;
 
+//import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.project.mhnbackend.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class HospitalAppointment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +27,12 @@ public class HospitalAppointment {
 	@Column(nullable = false)
 	private LocalDateTime appointmentDateTime;
 	
+//	@ManyToOne
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id", nullable = false)
 	private Member member;
 	
+//	@ManyToOne
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "hospital_id", nullable = false)
 	private Hospital hospital;
