@@ -4,6 +4,7 @@ package com.project.mhnbackend.hospital.controller;
 import com.project.mhnbackend.hospital.domain.HospitalAppointment;
 import com.project.mhnbackend.hospital.dto.request.HospitalAppointmentRequestDTO;
 import com.project.mhnbackend.hospital.dto.response.HospitalAppointmentResponseDTO;
+import com.project.mhnbackend.hospital.dto.response.HospitalAppointmentStatusPutResponseDTO;
 import com.project.mhnbackend.hospital.service.HospitalAppointmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -32,5 +33,13 @@ public class HospitalAppointmentController {
 //			@RequestParam("memberId") Long memberId
 	){
 		return hospitalAppointmentService.getAppointments(hospitalId);
+	}
+	
+	@PutMapping("/hospital/appointment/statusmodi")
+	public HospitalAppointmentStatusPutResponseDTO patchAppointmentStatus(
+			@RequestParam("id") Long id,
+			 @RequestParam("status") HospitalAppointment.AppointmentStatus status
+	){
+		return hospitalAppointmentService.patchAppointmentStatus(id,status);
 	}
 }

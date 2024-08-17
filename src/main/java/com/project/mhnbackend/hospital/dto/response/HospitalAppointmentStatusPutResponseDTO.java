@@ -18,18 +18,23 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class HospitalAppointmentResponseDTO {
+public class HospitalAppointmentStatusPutResponseDTO {
 	
-	private Long id;
+		private Long id;
+		
+		private LocalDateTime appointmentDateTime;
+		
+		@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+		private Member member;
+		
+		@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+		private Hospital hospital;
+		
+		private LocalDateTime updatedAt;
+		
+		@Enumerated(EnumType.STRING)
+		private HospitalAppointment.AppointmentStatus appointStatus;
+	}
 	
-	private LocalDateTime appointmentDateTime;
 	
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	private Member member;
-	
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	private Hospital hospital;
-	
-	@Enumerated(EnumType.STRING)
-	private HospitalAppointment.AppointmentStatus status;
-}
+

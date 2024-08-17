@@ -1,13 +1,17 @@
 package com.project.mhnbackend.hospital.service;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.project.mhnbackend.hospital.domain.Hospital;
 import com.project.mhnbackend.hospital.domain.HospitalAppointment;
 import com.project.mhnbackend.hospital.dto.request.HospitalAppointmentRequestDTO;
 import com.project.mhnbackend.hospital.dto.response.HospitalAppointmentResponseDTO;
+import com.project.mhnbackend.hospital.dto.response.HospitalAppointmentStatusPutResponseDTO;
 import com.project.mhnbackend.hospital.repository.HospitalAppointmentRepository;
 import com.project.mhnbackend.hospital.repository.HospitalRepository;
 import com.project.mhnbackend.member.domain.Member;
 import com.project.mhnbackend.member.repository.MemberRepository;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -68,6 +73,7 @@ public class HospitalAppointmentService {
 		// 3. 각 예약에 대해 DTO 생성 및 추가
 		for (HospitalAppointment appointment : appointments) {
 			HospitalAppointmentResponseDTO dto = new HospitalAppointmentResponseDTO(
+					appointment.getId (),
 					appointment.getAppointmentDateTime(),
 					appointment.getMember(),
 					appointment.getHospital(),
@@ -78,5 +84,29 @@ public class HospitalAppointmentService {
 		
 		// 4. 결과 반환
 		return result;
+	}
+	
+
+//
+//	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//	private Hospital hospital;
+//
+//	private LocalDateTime updatedAt;
+//
+//	@Enumerated(EnumType.STRING)
+//	private HospitalAppointment.AppointmentStatus status;
+	
+	public HospitalAppointmentStatusPutResponseDTO patchAppointmentStatus (Long id, HospitalAppointment.AppointmentStatus status) {
+		Optional<HospitalAppointment> appointment = hospitalAppointmentRepository.findById(id);
+		appointment.get().setStatus (status);
+		hospitalAppointmentRepository.save(appointment.get ());
+		return HospitalAppointmentStatusPutResponseDTO.builder()
+				.id(id)
+				.appointmentDateTime (appointment.get ().getAppointmentDateTime ())
+				.member(appointment.get ().getMember ())
+				.hospital (appointment.get ().getHospital ())
+				.updatedAt (LocalDateTime.now ())
+				.appointStatus(status)
+				.build();
 	}
 }

@@ -3,10 +3,7 @@ package com.project.mhnbackend.hospital.domain;
 //import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.project.mhnbackend.member.domain.Member;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -40,6 +37,7 @@ public class HospitalAppointment {
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	@Builder.Default
+	@Setter
 	// null값 말고 기본으로 생성해주는거인듯?
 	private AppointmentStatus status = AppointmentStatus.PENDING;
 	
