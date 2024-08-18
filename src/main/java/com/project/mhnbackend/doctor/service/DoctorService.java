@@ -119,6 +119,8 @@ public class DoctorService {
 				.collect(Collectors.toList());
 	}
 	
+	
+	// 닥터 회원가입 신청 승인 - 어드민
 	public DoctorStatusPutResponseDTO patchDoctorStatus(Long id) {
 		Optional<Doctor> doctor = doctorRepository.findById(id);
 		doctor.get().setDoctorStatus(Doctor.DoctorStatus.FULFILLED);
