@@ -22,7 +22,9 @@ public interface ChartRepository extends JpaRepository<MedicalChart,Long> {
             "JOIN mc.medicalChartImage mcmci " +
             "JOIN mc.pet p " +
             "JOIN p.member m " +
-            "WHERE mcmci.ord=0 AND m.id=:id")
+            "WHERE mcmci.ord=0 AND m.id=:id "+
+            "ORDER BY mc.createdAt DESC")
     List<ChartResponseDTO> findMedicalCharts(@Param("id") Long memberId);
 
+    void deleteByPetId(Long id);
 }

@@ -2,9 +2,10 @@ package com.project.mhnbackend.freeBoard.controller;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.project.mhnbackend.admin.domain.BoardReport;
+import com.project.mhnbackend.admin.dto.request.BoardReportRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,10 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.mhnbackend.common.exception.CMRespDTO;
 import com.project.mhnbackend.common.util.FileUploadUtil;
-import com.project.mhnbackend.common.util.JWTUtil;
 import com.project.mhnbackend.freeBoard.domain.FreeBoard;
 import com.project.mhnbackend.freeBoard.dto.request.EditFreeBoardDTO;
-import com.project.mhnbackend.freeBoard.dto.request.FreeBoardDTO;
 import com.project.mhnbackend.freeBoard.dto.request.FreeBoardRequestDTO;
 import com.project.mhnbackend.freeBoard.dto.response.FreeBoardResponseDTO;
 import com.project.mhnbackend.freeBoard.dto.response.FreeBoardResponseWithCommentsDTO;
@@ -30,7 +29,6 @@ import com.project.mhnbackend.freeBoard.service.FreeBoardService;
 import com.project.mhnbackend.member.domain.Member;
 import com.project.mhnbackend.member.repository.MemberRepository;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -254,4 +252,12 @@ public class FreeBoardController {
 	     Page<FreeBoardResponseDTO> freeBoards = freeBoardService.getFreeBoardsByUser(memberId, pageable);
 	     return new ResponseEntity<>(new CMRespDTO<>(1, "성공", freeBoards), HttpStatus.OK);
 	 }
+	 
+	 
+	 // 신고기능을 위한 컨트롤러
+	@PostMapping("/boards/report")
+	public BoardReport boardReport(@RequestBody BoardReportRequestDTO boardReportRequestDTO) {
+		return freeBoardService.boardReport(boardReportRequestDTO);
+	}
+	
 }

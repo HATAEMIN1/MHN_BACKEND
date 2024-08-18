@@ -3,6 +3,7 @@ package com.project.mhnbackend.chart.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,8 +12,9 @@ import java.util.List;
 
 
 @AllArgsConstructor
-@Getter
+@Data
 @Builder
+@NoArgsConstructor
 public class ChartRequestDTO {
     private Long petId;
     private String hospitalName;

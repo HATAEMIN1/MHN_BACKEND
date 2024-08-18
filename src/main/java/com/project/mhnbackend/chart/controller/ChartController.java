@@ -18,7 +18,7 @@ public class ChartController {
     private final ChartService chartService;
 
     @PostMapping("/charts")
-    public MedicalChart createCharts(ChartRequestDTO chartRequestDTO){
+    public MedicalChart createCharts(@ModelAttribute ChartRequestDTO chartRequestDTO){
         return chartService.createChart(chartRequestDTO);
     }
 

@@ -14,7 +14,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Configuration
-@PropertySource("classpath:mailAuth.properties")
+@PropertySource("classpath:mailAuth_.properties")
 @ConfigurationProperties(prefix = "mail")
 @Getter
 @Setter
