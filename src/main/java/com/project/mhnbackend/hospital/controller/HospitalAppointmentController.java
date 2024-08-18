@@ -30,7 +30,6 @@ public class HospitalAppointmentController {
 	@GetMapping("/hospital/appointment")
 	public List<HospitalAppointmentResponseDTO> getAppointments(
 			@RequestParam("hospitalId") Long hospitalId      // axios경로에서 쓸 param임,,, 프론트 url이랑은 다름
-//			@RequestParam("memberId") Long memberId
 	){
 		return hospitalAppointmentService.getAppointments(hospitalId);
 	}
