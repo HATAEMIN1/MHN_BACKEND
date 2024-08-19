@@ -31,4 +31,9 @@ public class ChartController {
     public @ResponseBody ChartViewResponseDTO viewChart(@RequestParam("id") Long id){
         return  chartService.getViewChart(id);
     }
+    @PutMapping("/charts/view")
+    public ChartViewResponseDTO updateViewChart(ChartRequestDTO chartRequestDTO, @RequestParam("id") Long id){
+        return chartService.updateViewChart(chartRequestDTO,id);
+    }
+
 }

@@ -15,4 +15,6 @@ public interface ChartService {
 
 
     ChartViewResponseDTO getViewChart(Long id);
+
+    ChartViewResponseDTO updateViewChart(ChartRequestDTO chartRequestDTO,Long id);
 }

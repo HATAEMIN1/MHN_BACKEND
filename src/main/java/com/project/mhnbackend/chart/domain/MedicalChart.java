@@ -42,4 +42,27 @@ public class MedicalChart {
         addImage(medicalChartImage);
     }
 
+    public void changeHospitalName(String hospitalName) {
+        this.hospitalName = hospitalName;
+    }
+
+    public void changeDiagnosis(String diagnosis) {
+        this.diagnosis = diagnosis;
+    }
+
+    public void changeDescription(String description) {
+        this.description = description;
+    }
+
+    public void changeTreatmentDate(String treatmentDate) {
+        this.treatmentDate = treatmentDate;
+    }
+
+    public void changeCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void changeMedicalChartImage(List<MedicalChartImage> medicalChartImage) {
+        this.medicalChartImage = medicalChartImage;
+    }
 }

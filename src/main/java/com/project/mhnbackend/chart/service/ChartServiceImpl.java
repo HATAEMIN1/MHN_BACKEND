@@ -85,5 +85,35 @@ public class ChartServiceImpl implements ChartService {
         return responseDTO;
     }
 
+    @Override
+    public ChartViewResponseDTO updateViewChart(ChartRequestDTO chartRequestDTO,Long id) {
+        Optional<MedicalChart> chart = chartRepository.findById(id);
+        List<String> uploadFileNames = uploadFile(chartRequestDTO);
+        List<MedicalChartImage> imageList = chart.get().getMedicalChartImage();
+        List<String> fileNameList = imageList.stream().map(
+                MedicalChartImage -> MedicalChartImage.getFileName()
+        ).toList();
+        Pet pet = petRepository.findById(chartRequestDTO.getPetId())
+                .orElseThrow(() -> new EntityNotFoundException("Pet not found"));
+        chart.get().changeDiagnosis(chartRequestDTO.getDiseaseName());
+        chart.get().changeDescription(chartRequestDTO.getDescription());
+        chart.get().changeHospitalName(chartRequestDTO.getHospitalName());
+        chart.get().changeTreatmentDate(chartRequestDTO.getVisitDate());
+        chart.get().changeCreatedAt(LocalDateTime.now());
+        for (String fileName : uploadFileNames) {
+            chart.get().addImageString(fileName);
+        }
+        chartRepository.save(chart.get());
+        ChartViewResponseDTO responseDTO = ChartViewResponseDTO.builder()
+                .hospitalName(chartRequestDTO.getHospitalName())
+                .petName(pet.getName())
+                .description(chartRequestDTO.getDescription())
+                .treatmentDate(chartRequestDTO.getVisitDate())
+                .diagnosis(chart.get().getDiagnosis())
+                .build();
+        responseDTO.setUploadFileNames(fileNameList);
+        return  responseDTO;
+    }
+
 
 }
