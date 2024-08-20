@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,10 +30,8 @@ public class ChartServiceImpl implements ChartService {
 
     //파일 업로드 로직
     public List<String> uploadFile(ChartRequestDTO chartRequestDTO){
-
         List<MultipartFile> files = chartRequestDTO.getFiles();
         return fileUploadUtil.saveFiles(files);
-
     }
     @Transactional
     @Override
@@ -88,18 +87,28 @@ public class ChartServiceImpl implements ChartService {
     @Override
     public ChartViewResponseDTO updateViewChart(ChartRequestDTO chartRequestDTO,Long id) {
         Optional<MedicalChart> chart = chartRepository.findById(id);
-        List<String> uploadFileNames = uploadFile(chartRequestDTO);
+//        List<MedicalChartImage> imageList = chart.get().getMedicalChartImage();
+//        List<String> fileNameList = imageList.stream().map(
+//                MedicalChartImage -> MedicalChartImage.getFileName()
+//        ).toList();
+//
         List<MedicalChartImage> imageList = chart.get().getMedicalChartImage();
-        List<String> fileNameList = imageList.stream().map(
-                MedicalChartImage -> MedicalChartImage.getFileName()
-        ).toList();
-        Pet pet = petRepository.findById(chartRequestDTO.getPetId())
+        List<String> existingFileNames = imageList.stream()
+                .map(MedicalChartImage->MedicalChartImage.getFileName())
+                .collect(Collectors.toList());
+        fileUploadUtil.deleteFiles(existingFileNames);
+
+        Pet pet = petRepository.findByName(chartRequestDTO.getPetName())
                 .orElseThrow(() -> new EntityNotFoundException("Pet not found"));
+
         chart.get().changeDiagnosis(chartRequestDTO.getDiseaseName());
         chart.get().changeDescription(chartRequestDTO.getDescription());
         chart.get().changeHospitalName(chartRequestDTO.getHospitalName());
         chart.get().changeTreatmentDate(chartRequestDTO.getVisitDate());
         chart.get().changeCreatedAt(LocalDateTime.now());
+
+        List<String> uploadFileNames = uploadFile(chartRequestDTO);
+        chart.get().getMedicalChartImage().clear();
         for (String fileName : uploadFileNames) {
             chart.get().addImageString(fileName);
         }
@@ -111,9 +120,7 @@ public class ChartServiceImpl implements ChartService {
                 .treatmentDate(chartRequestDTO.getVisitDate())
                 .diagnosis(chart.get().getDiagnosis())
                 .build();
-        responseDTO.setUploadFileNames(fileNameList);
+        responseDTO.setUploadFileNames(uploadFileNames);
         return  responseDTO;
     }
-
-
 }
