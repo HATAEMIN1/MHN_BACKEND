@@ -6,6 +6,7 @@ import com.project.mhnbackend.chart.dto.response.ChartResponseDTO;
 import com.project.mhnbackend.chart.dto.response.ChartViewResponseDTO;
 import com.project.mhnbackend.chart.service.ChartService;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.apache.bcel.generic.RET;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,10 @@ public class ChartController {
     @PutMapping("/charts/view")
     public ChartViewResponseDTO updateViewChart(ChartRequestDTO chartRequestDTO, @RequestParam("id") Long id){
         return chartService.updateViewChart(chartRequestDTO,id);
+    }
+    @DeleteMapping("/charts/view")
+    public String deleteViewChart(@RequestParam("id") Long id){
+        return chartService.deleteViewChart(id);
     }
 
 }

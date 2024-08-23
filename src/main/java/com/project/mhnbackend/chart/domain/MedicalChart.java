@@ -61,8 +61,4 @@ public class MedicalChart {
     public void changeCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
-
-    public void changeMedicalChartImage(List<MedicalChartImage> medicalChartImage) {
-        this.medicalChartImage = medicalChartImage;
-    }
 }

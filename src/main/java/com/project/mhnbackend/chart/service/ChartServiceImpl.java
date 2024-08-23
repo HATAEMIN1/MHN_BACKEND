@@ -113,6 +113,7 @@ public class ChartServiceImpl implements ChartService {
             chart.get().addImageString(fileName);
         }
         chartRepository.save(chart.get());
+
         ChartViewResponseDTO responseDTO = ChartViewResponseDTO.builder()
                 .hospitalName(chartRequestDTO.getHospitalName())
                 .petName(pet.getName())
@@ -123,4 +124,18 @@ public class ChartServiceImpl implements ChartService {
         responseDTO.setUploadFileNames(uploadFileNames);
         return  responseDTO;
     }
+    @Transactional
+    @Override
+    public String deleteViewChart(Long id) {
+        Optional<MedicalChart> chart = chartRepository.findById(id);
+        List<MedicalChartImage> imageList = chart.get().getMedicalChartImage();
+        List<String> existingFileNames = imageList.stream()
+                .map(MedicalChartImage->MedicalChartImage.getFileName())
+                .collect(Collectors.toList());
+        fileUploadUtil.deleteFiles(existingFileNames);
+        chartRepository.deleteById(id);
+        return "삭제되었습니다";
+    }
+
+
 }
