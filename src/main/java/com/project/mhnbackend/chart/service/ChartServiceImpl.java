@@ -13,6 +13,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
@@ -61,8 +63,8 @@ public class ChartServiceImpl implements ChartService {
     }
 
     @Override
-    public List<ChartResponseDTO> getCharts(Long memberId) {
-        return chartRepository.findMedicalCharts(memberId);
+    public Page<ChartResponseDTO> getCharts(Long memberId, Pageable pageable) {
+        return chartRepository.findMedicalCharts(memberId,pageable);
     }
 
     @Override

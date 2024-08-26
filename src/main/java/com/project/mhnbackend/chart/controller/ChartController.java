@@ -7,7 +7,12 @@ import com.project.mhnbackend.chart.dto.response.ChartViewResponseDTO;
 import com.project.mhnbackend.chart.service.ChartService;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.apache.bcel.generic.RET;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,8 +29,8 @@ public class ChartController {
     }
 
     @GetMapping("/charts")
-    public List<ChartResponseDTO> getCharts(@RequestParam("memberId") Long memberId){
-        return chartService.getCharts(memberId);
+    public Page<ChartResponseDTO> getCharts(@RequestParam("memberId") Long memberId, @PageableDefault(size = 4, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable){
+        return chartService.getCharts(memberId,pageable);
     }
 
     @GetMapping("/charts/view")
