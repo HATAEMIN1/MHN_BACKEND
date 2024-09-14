@@ -19,33 +19,18 @@ import java.time.Duration;
 @Configuration
 @EnableCaching
 public class RedisCacheConfig {
-@Bean
-public ObjectMapper objectMapper() {
-    ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.registerModule(new JavaTimeModule());
-    objectMapper.registerModule(new SimpleModule().addDeserializer(Page.class, new PageDeserializer()));
-    objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-    return objectMapper;
-}
-//    @Bean
-//    public ObjectMapper objectMapper() {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        SimpleModule module = new SimpleModule();
-//        module.addDeserializer(Page.class, new PageDeserializer());
-//        objectMapper.registerModule(module);
-//        return objectMapper;
-//    }
-@Bean
-public RedisSerializer<Object> springSessionDefaultRedisSerializer(ObjectMapper objectMapper) {
-    return new GenericJackson2JsonRedisSerializer(objectMapper);
-}
-//    @Bean
-//    public RedisCacheConfiguration cacheConfiguration(RedisSerializer<Object> redisSerializer) {
-//        return RedisCacheConfiguration.defaultCacheConfig()
-//                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
-//                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer))
-//                .entryTtl(Duration.ofMinutes(1L));
-//    }
+    @Bean
+    public ObjectMapper objectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.registerModule(new SimpleModule().addDeserializer(Page.class, new PageDeserializer()));
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        return objectMapper;
+    }
+    @Bean
+    public RedisSerializer<Object> springSessionDefaultRedisSerializer(ObjectMapper objectMapper) {
+        return new GenericJackson2JsonRedisSerializer(objectMapper);
+    }
     @Bean
     public RedisCacheConfiguration cacheConfiguration(ObjectMapper objectMapper) {
         return RedisCacheConfiguration.defaultCacheConfig()
@@ -53,10 +38,14 @@ public RedisSerializer<Object> springSessionDefaultRedisSerializer(ObjectMapper 
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer(objectMapper)))
                 .entryTtl(Duration.ofMinutes(5));
     }
-
     @Bean
-    public CacheManager chartCacheManager(RedisConnectionFactory redisConnectionFactory, RedisCacheConfiguration cacheConfiguration) {
-        return RedisCacheManager.builder(redisConnectionFactory)
+    public RedisCacheManager chartCacheManager(RedisConnectionFactory connectionFactory) {
+        PageRedisSerializer pageRedisSerializer = new PageRedisSerializer();
+
+        RedisCacheConfiguration cacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(pageRedisSerializer));
+
+        return RedisCacheManager.builder(connectionFactory)
                 .cacheDefaults(cacheConfiguration)
                 .build();
     }
