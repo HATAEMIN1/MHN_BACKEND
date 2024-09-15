@@ -43,7 +43,8 @@ public class RedisCacheConfig {
         PageRedisSerializer pageRedisSerializer = new PageRedisSerializer();
 
         RedisCacheConfiguration cacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(pageRedisSerializer));
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(pageRedisSerializer))
+                .entryTtl(Duration.ofSeconds(30));
 
         return RedisCacheManager.builder(connectionFactory)
                 .cacheDefaults(cacheConfiguration)
