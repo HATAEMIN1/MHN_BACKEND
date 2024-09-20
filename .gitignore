@@ -38,6 +38,7 @@ out/
 
 ### application.properties ###
 application.properties
+src/main/resources/application.properties
 mailAuth_.properties
 #### .DS_Store ####
 .DS_Store
