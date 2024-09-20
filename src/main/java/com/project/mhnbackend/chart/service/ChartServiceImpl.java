@@ -67,11 +67,11 @@ public class ChartServiceImpl implements ChartService {
     }
 
     @Override
-    @Cacheable(cacheNames = "getCharts",
-            key = "'Charts:memberId:' + #memberId + ':page:' + #pageable.pageNumber + ':size:' + #pageable.pageSize",
-            cacheManager = "chartCacheManager",
-            unless = "#result.content.isEmpty()",
-            condition = "#memberId != null")
+//    @Cacheable(cacheNames = "getCharts",
+//            key = "'Charts:memberId:' + #memberId + ':page:' + #pageable.pageNumber + ':size:' + #pageable.pageSize",
+//            cacheManager = "chartCacheManager",
+//            unless = "#result.content.isEmpty()",
+//            condition = "#memberId != null")
     public Page<ChartResponseDTO> getCharts(Long memberId, Pageable pageable) {
         log.info("Fetching charts for memberId: {}, page: {}, size: {}", memberId, pageable.getPageNumber(), pageable.getPageSize());
 

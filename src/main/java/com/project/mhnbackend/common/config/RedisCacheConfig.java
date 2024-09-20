@@ -36,7 +36,7 @@ public class RedisCacheConfig {
         return RedisCacheConfiguration.defaultCacheConfig()
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer(objectMapper)))
-                .entryTtl(Duration.ofMinutes(5));
+                .entryTtl(Duration.ofMinutes(30));
     }
     @Bean
     public RedisCacheManager chartCacheManager(RedisConnectionFactory connectionFactory) {
@@ -44,7 +44,8 @@ public class RedisCacheConfig {
 
         RedisCacheConfiguration cacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(pageRedisSerializer))
-                .entryTtl(Duration.ofSeconds(30));
+//                .entryTtl(Duration.ofSeconds(30));
+                .entryTtl(Duration.ofMinutes(5));
 
         return RedisCacheManager.builder(connectionFactory)
                 .cacheDefaults(cacheConfiguration)
