@@ -55,6 +55,7 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
+            aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
             docker stop mhnapiserver || true
             docker rm mhnapiserver || true
             docker pull ${{ steps.login-ecr.outputs.registry }}/mhnapiserver:latest
