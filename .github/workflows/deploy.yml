@@ -55,8 +55,40 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
-            docker stop mhnapiserver || true
-            docker rm mhnapiserver || true
-            docker pull ${{ steps.login-ecr.outputs.registry }}/mhnapiserver:latest
-            docker run -d --name mhnapiserver -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/mhnapiserver:latest
- ##########
+            echo "===== Debugging Information ====="
+            echo "1. AWS CLI Version:"
+            aws --version
+            
+            echo "2. Docker Version:"
+            docker --version
+            
+            echo "3. Current AWS Identity:"
+            aws sts get-caller-identity
+            
+            echo "4. ECR Login Attempt:"
+            aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }} || echo "ECR Login Failed"
+            
+            echo "5. Docker Images:"
+            docker images
+            
+            echo "6. Attempting to pull the image:"
+            docker pull ${{ steps.login-ecr.outputs.registry }}/mhnapiserver:latest || echo "Docker Pull Failed"
+            
+            echo "7. Stopping and removing existing container:"
+            docker stop mhnapiserver || echo "No container to stop"
+            docker rm mhnapiserver || echo "No container to remove"
+            
+            echo "8. Running new container:"
+            docker run -d --name mhnapiserver -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/mhnapiserver:latest || echo "Docker Run Failed"
+            
+            echo "9. Docker PS:"
+            docker ps -a
+            
+            echo "===== End of Debugging Information ====="
+            
+
+#            docker stop mhnapiserver || true
+#            docker rm mhnapiserver || true
+#            docker pull ${{ steps.login-ecr.outputs.registry }}/mhnapiserver:latest
+#            docker run -d --name mhnapiserver -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/mhnapiserver:latest
+# ##########
