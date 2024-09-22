@@ -55,24 +55,8 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
-            echo "===== Deployment Process ====="
-
-                       echo "1. Pulling the latest image:"
-                       docker pull ${{ steps.login-ecr.outputs.registry }}/mhnapiserver:latest
-
-                       echo "2. Stopping and removing existing container (if any):"
-                       docker stop mhnapiserver || true
-                       docker rm mhnapiserver || true
-
-                       echo "3. Running new container:"
-                       docker run -d --name mhnapiserver -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/mhnapiserver:latest
-
-                       echo "4. Verifying deployment:"
-                       docker ps -a | grep mhnapiserver
-
-                       echo "===== Deployment Complete ====="
-#            docker stop mhnapiserver || true
-#            docker rm mhnapiserver || true
-#            docker pull ${{ steps.login-ecr.outputs.registry }}/mhnapiserver:latest
-#            docker run -d --name mhnapiserver -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/mhnapiserver:latest
+            docker stop mhnapiserver || true
+            docker rm mhnapiserver || true
+            docker pull ${{ steps.login-ecr.outputs.registry }}/mhnapiserver:latest
+            docker run -d --name mhnapiserver -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/mhnapiserver:latest
  ##########
