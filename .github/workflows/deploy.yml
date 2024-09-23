@@ -62,4 +62,4 @@ jobs:
             docker rm mhnapiserver || true
             docker pull ${{ steps.login-ecr.outputs.registry }}/mhnapiserver:latest
             docker run -d --name mhnapiserver -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/mhnapiserver:latest
- #####
+ #
