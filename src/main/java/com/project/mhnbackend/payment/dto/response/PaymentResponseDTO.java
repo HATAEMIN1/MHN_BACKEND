@@ -19,3 +19,4 @@ public class PaymentResponseDTO {
         private int amount;
         private String customer_uid;
     }
+}
