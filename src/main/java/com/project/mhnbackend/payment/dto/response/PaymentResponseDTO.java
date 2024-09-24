@@ -15,5 +15,6 @@ public class PaymentResponseDTO {
         private String imp_uid;
         private String merchant_uid;
         private int amount;
+        private String customer_uid;
     }
 }
