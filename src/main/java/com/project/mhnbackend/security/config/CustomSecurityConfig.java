@@ -27,7 +27,7 @@ import lombok.extern.log4j.Log4j2;
 @Configuration
 @EnableMethodSecurity
 public class CustomSecurityConfig {
-   @Value("${spring.web.cors.allowed-origins}")
+   @Value("${cors.allowed-origins}")
    private String[] allowedOrigins;
    
    @Bean
