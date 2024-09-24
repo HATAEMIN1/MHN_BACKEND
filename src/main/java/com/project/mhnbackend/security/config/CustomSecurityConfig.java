@@ -27,8 +27,8 @@ import lombok.extern.log4j.Log4j2;
 @Configuration
 @EnableMethodSecurity
 public class CustomSecurityConfig {
-   @Value("${cors.allowed-origins}")
-   private List<String> allowedOrigins;
+//   @Value("${cors.allowed-origins}")
+//   private List<String> allowedOrigins;
    
    @Bean
    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -77,8 +77,8 @@ public class CustomSecurityConfig {
    @Bean
    public CorsConfigurationSource corsConfigurationSource() {
       CorsConfiguration configuration = new CorsConfiguration();
-//      configuration.setAllowedOriginPatterns(List.of("http://localhost:3000","http://mhnbucket.s3-website.ap-northeast-2.amazonaws.com")); // 프론트엔드 주소 허용
-      configuration.setAllowedOriginPatterns(allowedOrigins);
+      configuration.setAllowedOriginPatterns(List.of("http://43.202.41.211","http://mhnbucket.s3-website.ap-northeast-2.amazonaws.com")); // 프론트엔드 주소 허용
+//      configuration.setAllowedOriginPatterns(allowedOrigins);
       configuration.setAllowedMethods(List.of("HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS")); // 모든 HTTP 메소드 허용
       configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type")); // 모든 헤더 허용
       configuration.setAllowCredentials(true); // 자격 증명 허용
