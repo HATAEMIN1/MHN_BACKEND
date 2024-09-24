@@ -14,5 +14,5 @@ public class PaymentRequestDTO {
     private String buyerName;
     private int amount;
     private String buyerTel;
-
+    private String nextBillingDate;
 }
