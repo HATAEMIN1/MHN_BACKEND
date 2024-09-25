@@ -31,9 +31,6 @@ public class ChartServiceImpl implements ChartService {
     private final ChartRepository chartRepository;
     private final FileUploadUtil fileUploadUtil;
     private final PetRepository petRepository;
-    @Autowired
-    private CacheManager cacheManager;
-
     //파일 업로드 로직
     public List<String> uploadFile(ChartRequestDTO chartRequestDTO){
         List<MultipartFile> files = chartRequestDTO.getFiles();
@@ -67,13 +64,13 @@ public class ChartServiceImpl implements ChartService {
     }
 
     @Override
-//    @Cacheable(cacheNames = "getCharts",
-//            key = "'Charts:memberId:' + #memberId + ':page:' + #pageable.pageNumber + ':size:' + #pageable.pageSize",
-//            cacheManager = "chartCacheManager",
-//            unless = "#result.content.isEmpty()",
-//            condition = "#memberId != null")
+    @Cacheable(cacheNames = "getCharts",
+            key = "'Charts:memberId:' + #memberId + ':page:' + #pageable.pageNumber + ':size:' + #pageable.pageSize",
+            cacheManager = "chartCacheManager",
+            unless = "#result.content.isEmpty()",
+            condition = "#memberId != null")
     public Page<ChartResponseDTO> getCharts(Long memberId, Pageable pageable) {
-        log.info("Fetching charts for memberId: {}, page: {}, size: {}", memberId, pageable.getPageNumber(), pageable.getPageSize());
+//        log.info("Fetching charts for memberId: {}, page: {}, size: {}", memberId, pageable.getPageNumber(), pageable.getPageSize());
 
         Page<ChartResponseDTO> result = chartRepository.findMedicalCharts(memberId, pageable);
 
@@ -81,10 +78,10 @@ public class ChartServiceImpl implements ChartService {
         if (!(result instanceof PageImpl)) {
             result = new PageImpl<>(result.getContent(), result.getPageable(), result.getTotalElements());
         }
-
-        log.info("Fetched result type: {}, total elements: {}", result.getClass().getName(), result.getTotalElements());
-        // 캐시에 저장되기 전 데이터 로깅
-        log.debug("Data to be cached: {}", result);
+//
+//        log.info("Fetched result type: {}, total elements: {}", result.getClass().getName(), result.getTotalElements());
+//        // 캐시에 저장되기 전 데이터 로깅
+//        log.debug("Data to be cached: {}", result);
 
         return result;
     }
