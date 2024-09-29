@@ -158,6 +158,4 @@ public class ChartServiceImpl implements ChartService {
         chartRepository.deleteById(id);
         return "삭제되었습니다";
     }
-
-
 }
