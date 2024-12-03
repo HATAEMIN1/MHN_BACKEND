@@ -77,7 +77,7 @@ public class CustomSecurityConfig {
    @Bean
    public CorsConfigurationSource corsConfigurationSource() {
       CorsConfiguration configuration = new CorsConfiguration();
-      configuration.setAllowedOriginPatterns(List.of("http://3.38.105.11")); // 프론트엔드 주소 허용
+      configuration.setAllowedOriginPatterns(List.of("http://52.78.143.235")); // 프론트엔드 주소 허용
 //      configuration.setAllowedOriginPatterns(allowedOrigins);
       configuration.setAllowedMethods(List.of("HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS")); // 모든 HTTP 메소드 허용
       configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type")); // 모든 헤더 허용
