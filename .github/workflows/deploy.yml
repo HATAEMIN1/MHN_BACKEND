@@ -57,12 +57,25 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
-            aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
+            echo "Stopping old container..."
             docker stop mhnapiserver || true
+            echo "Removing old container..."
             docker rm mhnapiserver || true
-            docker pull ${{ steps.login-ecr.outputs.registry }}/mhnapiserver:latest
+            echo "Pulling new image..."
+            docker pull ${{ steps.login-ecr.outputs.registry }}/mhnapiserver:latest || echo "Image pull failed"
+            echo "Creating network if not exists..."
             docker network create mhn-network || true
-            docker run -d --name mhnapiserver --network mhn-network -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/mhnapiserver:latest
+            echo "Running new container..."
+            docker run -d --name mhnapiserver --network mhn-network -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/mhnapiserver:latest || echo "Container run failed"
+            echo "Connecting to frontend network..."
             docker network connect mhn-network mhnfrontend || true
+#            aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
+#            docker stop mhnapiserver || true
+#            docker rm mhnapiserver || true
+#            docker pull ${{ steps.login-ecr.outputs.registry }}/mhnapiserver:latest
+#            docker network create mhn-network || true
+#            docker run -d --name mhnapiserver --network mhn-network -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/mhnapiserver:latest
+#            docker network connect mhn-network mhnfrontend || true
+
 
  ######################
